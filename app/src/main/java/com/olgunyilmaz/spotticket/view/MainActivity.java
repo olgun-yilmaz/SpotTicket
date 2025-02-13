@@ -1,30 +1,29 @@
 package com.olgunyilmaz.spotticket.view;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.olgunyilmaz.ChangeCityFragment;
 import com.olgunyilmaz.spotticket.R;
-import com.olgunyilmaz.spotticket.adapter.EventAdapter;
 import com.olgunyilmaz.spotticket.databinding.ActivityMainBinding;
-import com.olgunyilmaz.spotticket.model.EventResponse;
-import com.olgunyilmaz.spotticket.service.RetrofitClient;
-import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
 
-import java.io.IOException;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
-    private EventAdapter eventAdapter;
+
+    private FragmentManager fragmentManager;
+    private SharedPreferences sharedPreferences;
+
     public static String BASE_URL;
     public static String API_KEY;
 
@@ -35,41 +34,50 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         API_KEY = getString(R.string.api_key);
         BASE_URL = getString(R.string.base_url);
 
-        TicketmasterApiService apiService = RetrofitClient.getApiService();
-        apiService.getEvents(API_KEY, "London")
-                .enqueue(new Callback<EventResponse>() {
-                    @Override
-                    public void onResponse(Call<EventResponse> call, Response<EventResponse> response) {
-                        if (response.isSuccessful()) {
-                            List<EventResponse.Event> events = response.body().getEmbedded().getEvents();
-                            eventAdapter = new EventAdapter(events);
-                            binding.recyclerView.setAdapter(eventAdapter);
-                        } else {
-                            try {
-                                String errorMessage = "Hata: " + response.code() + " - " + response.message();
-                                if (response.errorBody() != null) {
-                                    errorMessage += "\n" + response.errorBody().string();
-                                }
-                                Log.e("API Error", errorMessage);
-                                Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
+        fragmentManager = getSupportFragmentManager();
+        sharedPreferences = getSharedPreferences("com.olgunyilmaz.spotticket.view", MODE_PRIVATE);
+
+        getSupportActionBar().setTitle(sharedPreferences.getString("city","Ankara"));
 
 
-                    @Override
-                    public void onFailure(Call<EventResponse> call, Throwable t) {
-                        Toast.makeText(MainActivity.this, "Hata: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.city_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        String city = "Miami";
+        if(item.getItemId() == R.id.tokat){
+            city = "Tokat";
+        } else if (item.getItemId() == R.id.istanbul) {
+            city = "İstanbul";
+        }else if (item.getItemId() == R.id.berlin) {
+            city = "Berlin";
+        }else if (item.getItemId() == R.id.london) {
+            city = "London";
+        }else if (item.getItemId() == R.id.ankara) {
+            city = "Ankara";
+        }else if (item.getItemId() == R.id.new_york) {
+            city = "New York";
+        }
+
+        sharedPreferences.edit().putString("city",city).apply();
+        getSupportActionBar().setTitle(city);
+
+        ChangeCityFragment changeCityFragment = new ChangeCityFragment();
+
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainerView,changeCityFragment).commit();
+
+        return super.onOptionsItemSelected(item);
+    }
 }
