@@ -23,11 +23,19 @@ public class EventResponse {
     }
 
     public class Event {
+
+        @SerializedName("id")
+        private String id;
+
         @SerializedName("name")
         private String name;
 
         @SerializedName("images")
         private List<Image> images;
+
+        public String getId() {
+            return id;
+        }
 
         public String getName() {
             return name;

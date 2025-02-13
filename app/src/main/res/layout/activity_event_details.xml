@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.EventDetailsActivity">
+
+    <ImageView
+        android:id="@+id/detailsImage"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/alert_dark_frame" />
+
+    <TextView
+        android:id="@+id/detailsNameText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Event Name"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/detailsImage"
+        app:layout_constraintStart_toStartOf="@+id/detailsImage"
+        app:layout_constraintTop_toBottomOf="@+id/detailsImage" />
+
+    <TextView
+        android:id="@+id/detailsDescriptionText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:text="Description"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/buyTicketButton"
+        app:layout_constraintEnd_toEndOf="@+id/detailsDateText"
+        app:layout_constraintStart_toStartOf="@+id/detailsDateText"
+        app:layout_constraintTop_toBottomOf="@+id/detailsDateText" />
+
+    <TextView
+        android:id="@+id/detailsDateText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Date"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/detailsNameText"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/detailsNameText"
+        app:layout_constraintTop_toBottomOf="@+id/detailsNameText" />
+
+    <Button
+        android:id="@+id/buyTicketButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:background="#611F1F"
+        android:onClick="buyTicket"
+        android:shadowColor="#835656"
+        android:text="Buy Ticket"
+        android:textColor="#BD1515"
+        android:textColorHighlight="#BD8F8F"
+        android:textColorHint="#DEB3B3"
+        android:textColorLink="#DE1E1E"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/detailsDescriptionText"
+        app:layout_constraintStart_toStartOf="@+id/detailsDescriptionText"
+        app:strokeColor="#BFA2A2" />
+</androidx.constraintlayout.widget.ConstraintLayout>

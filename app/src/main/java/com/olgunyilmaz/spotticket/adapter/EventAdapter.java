@@ -1,5 +1,6 @@
 package com.olgunyilmaz.spotticket.adapter;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.EventItemBinding;
 import com.olgunyilmaz.spotticket.model.EventResponse;
+import com.olgunyilmaz.spotticket.view.EventDetailsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -46,7 +48,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(holder.itemView.getContext(),event.getName()+" clicked.",Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(holder.itemView.getContext(), EventDetailsActivity.class);
+                intent.putExtra("eventID",event.getId());
+                intent.putExtra("imageUrl",event.getImages().get(0).getUrl());
+                holder.itemView.getContext().startActivity(intent);
             }
         });
     }

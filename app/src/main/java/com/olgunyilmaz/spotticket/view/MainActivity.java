@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private EventAdapter eventAdapter;
     public static String BASE_URL;
+    public static String API_KEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +37,11 @@ public class MainActivity extends AppCompatActivity {
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        final String API_KEY = getString(R.string.api_key);
+        API_KEY = getString(R.string.api_key);
         BASE_URL = getString(R.string.base_url);
 
         TicketmasterApiService apiService = RetrofitClient.getApiService();
-        apiService.getEvents(API_KEY, "Ankara")
+        apiService.getEvents(API_KEY, "London")
                 .enqueue(new Callback<EventResponse>() {
                     @Override
                     public void onResponse(Call<EventResponse> call, Response<EventResponse> response) {
