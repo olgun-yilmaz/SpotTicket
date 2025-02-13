@@ -17,6 +17,7 @@ import com.olgunyilmaz.spotticket.view.EventDetailsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Random;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
 
@@ -50,10 +51,18 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             public void onClick(View view) {
                 Intent intent = new Intent(holder.itemView.getContext(), EventDetailsActivity.class);
                 intent.putExtra("eventID",event.getId());
-                intent.putExtra("imageUrl",event.getImages().get(0).getUrl());
+
+                String imageUrl = event.getImages().get(getRandomIdx(event.getImages())).getUrl();
+
+                intent.putExtra("imageUrl",imageUrl);
                 holder.itemView.getContext().startActivity(intent);
             }
         });
+    }
+
+    private int getRandomIdx(List imageList){
+        Random random = new Random();
+        return random.nextInt(imageList.size());
     }
 
     @Override

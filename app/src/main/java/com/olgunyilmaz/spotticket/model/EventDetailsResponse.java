@@ -2,29 +2,27 @@ package com.olgunyilmaz.spotticket.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class EventDetailsResponse {
     @SerializedName("name")
     private String name;
-
-    @SerializedName("description")
-    private String description; // Etkinlik açıklaması
 
     @SerializedName("dates")
     private Dates dates;
 
     @SerializedName("url")
-    private String url; // Etkinlik ile ilgili web bağlantısı
+    private String url;
 
-    @SerializedName("info")
-    private String info; // Ekstra bilgiler
+    @SerializedName("venues")
+    private List<Venue> venues;
+
+    @SerializedName("classifications")
+    private List<Classification> classifications;
 
     // Getter'lar
     public String getName() {
         return name;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public Dates getDates() {
@@ -35,8 +33,68 @@ public class EventDetailsResponse {
         return url;
     }
 
-    public String getInfo() {
-        return info;
+    public List<Classification> getClassifications() {
+        return classifications;
+    }
+
+    @SerializedName("_embedded")
+    private Embedded embedded;
+
+    public Embedded getEmbedded() {
+        return embedded;
+    }
+
+    public class Embedded {
+        @SerializedName("venues")
+        private List<Venue> venues;
+
+        public List<Venue> getVenues() {
+            return venues;
+        }
+    }
+
+    public class Venue {
+        @SerializedName("name")
+        private String name;
+
+        @SerializedName("city")
+        private City city;
+
+        public String getName() {
+            return name;
+        }
+
+        public City getCity() {
+            return city;
+        }
+
+        public class City {
+            @SerializedName("name")
+            private String name;
+
+            public String getName() {
+                return name;
+            }
+        }
+    }
+
+    // Classification sınıfı (Etkinlik Türü)
+    public class Classification {
+        @SerializedName("segment")
+        private Segment segment;
+
+        public Segment getSegment() {
+            return segment;
+        }
+
+        public class Segment {
+            @SerializedName("name")
+            private String name;
+
+            public String getName() {
+                return name;
+            }
+        }
     }
 
     public class Dates {
