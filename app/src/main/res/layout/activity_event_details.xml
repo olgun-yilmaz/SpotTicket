@@ -10,53 +10,55 @@
 
     <ImageView
         android:id="@+id/detailsImage"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginBottom="50dp"
-        app:layout_constraintBottom_toTopOf="@+id/detailsNameText"
-        app:layout_constraintEnd_toEndOf="@+id/detailsNameText"
-        app:layout_constraintStart_toStartOf="@+id/detailsNameText"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/alert_dark_frame" />
+
 
     <TextView
         android:id="@+id/detailsNameText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        android:layout_marginTop="20dp"
         android:text="Event Name"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/detailsDateText"
-        app:layout_constraintEnd_toEndOf="@+id/detailsDateText"
-        app:layout_constraintStart_toStartOf="@+id/detailsDateText" />
+        app:layout_constraintEnd_toEndOf="@+id/detailsImage"
+        app:layout_constraintStart_toStartOf="@+id/detailsImage"
+        app:layout_constraintTop_toBottomOf="@+id/detailsImage" />
 
     <TextView
         android:id="@+id/detailsDescriptionText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        android:layout_marginTop="20dp"
         android:text="Description"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/buyTicketButton"
-        app:layout_constraintEnd_toEndOf="@+id/buyTicketButton"
-        app:layout_constraintStart_toStartOf="@+id/buyTicketButton" />
+        app:layout_constraintEnd_toEndOf="@+id/detailsDateText"
+        app:layout_constraintStart_toStartOf="@+id/detailsDateText"
+        app:layout_constraintTop_toBottomOf="@+id/detailsDateText" />
 
     <TextView
         android:id="@+id/detailsDateText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        android:layout_marginTop="20dp"
         android:text="Date"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/detailsDescriptionText"
-        app:layout_constraintEnd_toEndOf="@+id/detailsDescriptionText"
-        app:layout_constraintStart_toStartOf="@+id/detailsDescriptionText" />
+        app:layout_constraintEnd_toEndOf="@+id/detailsNameText"
+        app:layout_constraintStart_toStartOf="@+id/detailsNameText"
+        app:layout_constraintTop_toBottomOf="@+id/detailsNameText" />
+
 
     <Button
         android:id="@+id/buyTicketButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
         android:layout_marginBottom="50dp"
         android:background="#611F1F"
         android:onClick="buyTicket"
@@ -67,7 +69,22 @@
         android:textColorHint="#DEB3B3"
         android:textColorLink="#DE1E1E"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:strokeColor="#BFA2A2" />
+        app:layout_constraintEnd_toEndOf="@+id/mapButton"
+        app:layout_constraintStart_toStartOf="@+id/mapButton"
+        app:strokeColor="#BFA2A2"
+        tools:ignore="OnClick" />
+
+    <ImageView
+        android:id="@+id/mapButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:onClick="goToEvent"
+        app:layout_constraintBottom_toTopOf="@+id/buyTicketButton"
+        app:layout_constraintEnd_toEndOf="@+id/detailsDescriptionText"
+        app:layout_constraintStart_toStartOf="@+id/detailsDescriptionText"
+        app:layout_constraintTop_toBottomOf="@+id/detailsDescriptionText"
+        app:srcCompat="@drawable/map_button_icon" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

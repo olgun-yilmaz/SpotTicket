@@ -38,24 +38,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class EventDetailsActivity extends AppCompatActivity {
     private ActivityEventDetailsBinding binding;
 
-    public double getVenueLongitude() {
-        return venueLongitude;
-    }
-
-    public void setVenueLongitude(double venueLongitude) {
-        this.venueLongitude = venueLongitude;
-    }
-
-    public double getVenueLatitude() {
-        return venueLatitude;
-    }
-
-    public void setVenueLatitude(double venueLatitude) {
-        this.venueLatitude = venueLatitude;
-    }
-
     private double venueLatitude = 40.98780984859083;
     private double venueLongitude = 29.03689029646077;
+    private String venueName = "Ülker Stadyumu";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +52,12 @@ public class EventDetailsActivity extends AppCompatActivity {
         String eventId = getIntent().getStringExtra("eventID");
         String imageUrl = getIntent().getStringExtra("imageUrl");
 
+
         TicketmasterApiService apiService = RetrofitClient.getApiService();
+        findEventDetails(apiService,eventId,imageUrl);
+    }
+
+    private void findEventDetails(TicketmasterApiService apiService,String eventId, String imageUrl){
         apiService.getEventDetails(eventId, TICKETMASTER_API_KEY)
                 .enqueue(new Callback<EventDetailsResponse>() {
                     @Override
@@ -87,9 +77,10 @@ public class EventDetailsActivity extends AppCompatActivity {
 
                             String info = "";
 
-                            info += "Etkinlik Mekanı : "+getVenueInfo(eventDetails,eventDetails.getEmbedded().getVenues());
+                            info += "Etkinlik türü : " + getEventSegmentInfo(eventDetails,eventDetails.getClassifications());
 
-                            info += "\n\nEtkinlik türü : " + getEventSegmentInfo(eventDetails,eventDetails.getClassifications());
+                            info += "\n\nEtkinlik Mekanı : "+getVenueInfo(eventDetails,eventDetails.getEmbedded().getVenues());
+
 
                             binding.detailsDescriptionText.setText(info);
 
@@ -108,6 +99,8 @@ public class EventDetailsActivity extends AppCompatActivity {
                         t.printStackTrace();
                     }
                 });
+
+
     }
 
     private String getFormattedDate(String eventDate){
@@ -125,12 +118,34 @@ public class EventDetailsActivity extends AppCompatActivity {
     private String getVenueInfo(EventDetailsResponse eventDetails,List venues){
         if (venues != null){
             EventDetailsResponse.Venue venue = eventDetails.getEmbedded().getVenues().get(0);
-            String encodedAddress = URLEncoder.encode(venue.getName() + " " + venue.getCity().getName(), StandardCharsets.UTF_8);
-            findVenueLocation(encodedAddress);
 
-            return venue.getName()+ "/"+venue.getCity().getName();
+            venueName = venue.getName() + " " + venue.getCity().getName();
+
+            findVenueLocation(getSearchAddress(venueName));
+
+            return venueName;
         }
         return "";
+    }
+
+    private String getSearchAddress(String address) {
+        try{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                return URLEncoder.encode(address, StandardCharsets.UTF_8);
+            } else {
+                return URLEncoder.encode(address, "UTF-8");
+            }
+        } catch (Exception e) {
+            return address;
+        }
+    }
+    public void goToEvent(View view){
+        Intent intent = new Intent(EventDetailsActivity.this,MapsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("venueLatitude",venueLatitude);
+        intent.putExtra("venueLongitude",venueLongitude);
+        intent.putExtra("venueName",venueName);
+        startActivity(intent);
     }
 
     private String getEventSegmentInfo(EventDetailsResponse eventDetails,List classifications){
@@ -158,9 +173,8 @@ public class EventDetailsActivity extends AppCompatActivity {
                     if (geocodingResponse != null && !geocodingResponse.getResults().isEmpty()) {
                         double lat = geocodingResponse.getResults().get(0).getGeometry().getLocation().getLat();
                         double lng = geocodingResponse.getResults().get(0).getGeometry().getLocation().getLng();
-                        setVenueLatitude(lat);
-                        setVenueLongitude(lng);
-                        System.out.println("Lat and Long : "+lat+" "+lng);
+                        venueLatitude = lat;
+                        venueLongitude = lng;
                     }
                 }
             }
