@@ -26,8 +26,10 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private SharedPreferences sharedPreferences;
 
-    public static String BASE_URL;
-    public static String API_KEY;
+    public static String TICKETMASTER_BASE_URL;
+    public static String TICKETMASTER_API_KEY;
+    public static String MAPS_BASE_URL;
+    public static String MAPS_API_KEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +39,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
 
-        API_KEY = getString(R.string.api_key);
-        BASE_URL = getString(R.string.base_url);
+        TICKETMASTER_API_KEY = getString(R.string.ticketmaster_api_key);
+        TICKETMASTER_BASE_URL = getString(R.string.ticketmaster_base_url);
+        MAPS_BASE_URL = getString(R.string.maps_base_url);
+        MAPS_API_KEY = getString(R.string.maps_api_key);
 
         fragmentManager = getSupportFragmentManager();
         sharedPreferences = getSharedPreferences("com.olgunyilmaz.spotticket.view", MODE_PRIVATE);

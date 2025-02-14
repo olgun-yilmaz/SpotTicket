@@ -2,7 +2,7 @@ package com.olgunyilmaz.spotticket.view;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import static com.olgunyilmaz.spotticket.view.MainActivity.API_KEY;
+import static com.olgunyilmaz.spotticket.view.MainActivity.TICKETMASTER_API_KEY;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -73,7 +73,7 @@ public class ChangeCityFragment extends Fragment {
     }
 
     private void findEventByCity(TicketmasterApiService apiService,String city){
-        apiService.getEvents(API_KEY, city)
+        apiService.getEvents(TICKETMASTER_API_KEY, city)
                 .enqueue(new Callback<EventResponse>() {
                     @Override
                     public void onResponse(Call<EventResponse> call, Response<EventResponse> response) {
