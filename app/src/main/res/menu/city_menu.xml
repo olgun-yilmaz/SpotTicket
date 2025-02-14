@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/maps" android:title="Maps"></item>
     <item android:id="@+id/ankara" android:title="Ankara"></item>
     <item android:id="@+id/istanbul" android:title="İstanbul"></item>
     <item android:id="@+id/berlin" android:title="Berlin"></item>
     <item android:id="@+id/london" android:title="London"></item>
     <item android:id="@+id/new_york" android:title="New York"></item>
     <item android:id="@+id/tokat" android:title="Tokat"></item>
+    <item android:id="@+id/oslo" android:title="Oslo"></item>
 
 </menu>

@@ -1,4 +1,4 @@
-package com.olgunyilmaz;
+package com.olgunyilmaz.spotticket.view;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -11,25 +11,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.adapter.EventAdapter;
 import com.olgunyilmaz.spotticket.databinding.FragmentChangeCityBinding;
 import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.service.RetrofitClient;
 import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
-import com.olgunyilmaz.spotticket.view.MainActivity;
 
 import java.io.IOException;
 import java.util.List;
@@ -74,6 +68,11 @@ public class ChangeCityFragment extends Fragment {
         System.out.println(city);
 
         TicketmasterApiService apiService = RetrofitClient.getApiService();
+        findEventByCity(apiService,city);
+
+    }
+
+    private void findEventByCity(TicketmasterApiService apiService,String city){
         apiService.getEvents(API_KEY, city)
                 .enqueue(new Callback<EventResponse>() {
                     @Override
@@ -103,5 +102,7 @@ public class ChangeCityFragment extends Fragment {
                         Toast.makeText(getContext(), "Hata: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+
     }
+
 }

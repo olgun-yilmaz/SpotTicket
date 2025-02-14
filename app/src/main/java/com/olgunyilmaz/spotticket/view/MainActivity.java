@@ -1,21 +1,24 @@
 package com.olgunyilmaz.spotticket.view;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.olgunyilmaz.ChangeCityFragment;
+import com.olgunyilmaz.MapsActivity;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityMainBinding;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -55,29 +58,33 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        String city = "Miami";
-        if(item.getItemId() == R.id.tokat){
-            city = "Tokat";
-        } else if (item.getItemId() == R.id.istanbul) {
-            city = "İstanbul";
-        }else if (item.getItemId() == R.id.berlin) {
-            city = "Berlin";
-        }else if (item.getItemId() == R.id.london) {
-            city = "London";
-        }else if (item.getItemId() == R.id.ankara) {
-            city = "Ankara";
-        }else if (item.getItemId() == R.id.new_york) {
-            city = "New York";
+        if (item.getItemId() == R.id.maps){
+            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+            startActivity(intent);
+
+        }else{
+            Map<Integer, String> cityMap = new HashMap<>();
+            cityMap.put(R.id.tokat, "Tokat");
+            cityMap.put(R.id.istanbul, "İstanbul");
+            cityMap.put(R.id.berlin, "Berlin");
+            cityMap.put(R.id.london, "London");
+            cityMap.put(R.id.ankara, "Ankara");
+            cityMap.put(R.id.new_york, "New York");
+            cityMap.put(R.id.oslo,"Oslo");
+
+            String city = cityMap.getOrDefault(item.getItemId(), "Miami");
+
+            sharedPreferences.edit().putString("city",city).apply();
+            getSupportActionBar().setTitle(city);
+
+            replaceFragment(new ChangeCityFragment());
         }
 
-        sharedPreferences.edit().putString("city",city).apply();
-        getSupportActionBar().setTitle(city);
-
-        ChangeCityFragment changeCityFragment = new ChangeCityFragment();
-
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentContainerView,changeCityFragment).commit();
-
         return super.onOptionsItemSelected(item);
+    }
+
+    private void replaceFragment(Fragment fragment){
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
     }
 }
