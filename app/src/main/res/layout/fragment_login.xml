@@ -1,0 +1,66 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.fragments.LoginFragment">
+
+    <EditText
+        android:id="@+id/editTextText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:ems="10"
+        android:hint="Kullanıcı Adı :"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/editTextTextPassword"
+        app:layout_constraintEnd_toEndOf="@+id/editTextTextPassword"
+        app:layout_constraintStart_toStartOf="@+id/editTextTextPassword" />
+
+    <EditText
+        android:id="@+id/editTextTextPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:ems="10"
+        android:hint="Şifre :"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/resetPasswordText"
+        app:layout_constraintEnd_toEndOf="@+id/resetPasswordText"
+        app:layout_constraintStart_toStartOf="@+id/resetPasswordText" />
+
+    <TextView
+        android:id="@+id/resetPasswordText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:text="- - - - - Şifreni mi unuttun? - - - - -"
+        android:textAlignment="center"
+        android:textColor="#03A9F4"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/loginButton2"
+        app:layout_constraintEnd_toEndOf="@+id/loginButton2"
+        app:layout_constraintStart_toStartOf="@+id/loginButton2" />
+
+    <Button
+        android:id="@+id/loginButton2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:text="GİRİŞ YAP"
+        app:layout_constraintBottom_toTopOf="@+id/loginSignUpButton"
+        app:layout_constraintEnd_toEndOf="@+id/loginSignUpButton"
+        app:layout_constraintStart_toStartOf="@+id/loginSignUpButton" />
+
+    <Button
+        android:id="@+id/loginSignUpButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="50dp"
+        android:text="KAYIT OL"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

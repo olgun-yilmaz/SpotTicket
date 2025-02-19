@@ -1,8 +1,8 @@
-package com.olgunyilmaz.spotticket.view;
+package com.olgunyilmaz.spotticket.view.fragments;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import static com.olgunyilmaz.spotticket.view.MainActivity.TICKETMASTER_API_KEY;
+import static com.olgunyilmaz.spotticket.view.activities.MainActivity.TICKETMASTER_API_KEY;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;

@@ -1,9 +1,9 @@
-package com.olgunyilmaz.spotticket.view;
+package com.olgunyilmaz.spotticket.view.activities;
 
 import static android.content.ContentValues.TAG;
-import static com.olgunyilmaz.spotticket.view.MainActivity.MAPS_API_KEY;
-import static com.olgunyilmaz.spotticket.view.MainActivity.MAPS_BASE_URL;
-import static com.olgunyilmaz.spotticket.view.MainActivity.TICKETMASTER_API_KEY;
+import static com.olgunyilmaz.spotticket.view.activities.MainActivity.MAPS_API_KEY;
+import static com.olgunyilmaz.spotticket.view.activities.MainActivity.MAPS_BASE_URL;
+import static com.olgunyilmaz.spotticket.view.activities.MainActivity.TICKETMASTER_API_KEY;
 
 import android.content.Intent;
 import android.net.Uri;

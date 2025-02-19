@@ -1,4 +1,4 @@
-package com.olgunyilmaz.spotticket.view;
+package com.olgunyilmaz.spotticket.view.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.olgunyilmaz.spotticket.databinding.ActivityOnBoardingBinding;

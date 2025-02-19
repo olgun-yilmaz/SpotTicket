@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragments.SignUpFragment">
+
+    <EditText
+        android:id="@+id/signUpUserNameText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:ems="10"
+        android:hint="Kullanıcı Adı :"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/signUpEmailText"
+        app:layout_constraintEnd_toEndOf="@+id/signUpEmailText"
+        app:layout_constraintStart_toStartOf="@+id/signUpEmailText" />
+
+    <EditText
+        android:id="@+id/signUpEmailText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:ems="10"
+        android:hint="E mail :"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toTopOf="@+id/signUpPasswordText"
+        app:layout_constraintEnd_toEndOf="@+id/signUpPasswordText"
+        app:layout_constraintStart_toStartOf="@+id/signUpPasswordText" />
+
+    <EditText
+        android:id="@+id/signUpPasswordText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:ems="10"
+        android:hint="Şifre :"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/signUpPasswordValidText"
+        app:layout_constraintEnd_toEndOf="@+id/signUpPasswordValidText"
+        app:layout_constraintStart_toStartOf="@+id/signUpPasswordValidText" />
+
+    <EditText
+        android:id="@+id/signUpPasswordValidText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:ems="10"
+        android:hint="Şifre Tekrar"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/signUpButton2"
+        app:layout_constraintEnd_toEndOf="@+id/signUpButton2"
+        app:layout_constraintStart_toStartOf="@+id/signUpButton2" />
+
+    <Button
+        android:id="@+id/signUpButton2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="50dp"
+        android:text="Kayıt Ol"
+        app:layout_constraintBottom_toTopOf="@+id/signUpLoginButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/signUpLoginButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:text="GİRİŞ YAP"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/signUpButton2"
+        app:layout_constraintStart_toStartOf="@+id/signUpButton2" />
+</androidx.constraintlayout.widget.ConstraintLayout>

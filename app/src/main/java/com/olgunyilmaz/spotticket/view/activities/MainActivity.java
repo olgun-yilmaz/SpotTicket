@@ -1,4 +1,4 @@
-package com.olgunyilmaz.spotticket.view;
+package com.olgunyilmaz.spotticket.view.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.firebase.auth.FirebaseAuth;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityMainBinding;
+import com.olgunyilmaz.spotticket.view.fragments.ChangeCityFragment;
 
 import java.util.HashMap;
 import java.util.Map;
