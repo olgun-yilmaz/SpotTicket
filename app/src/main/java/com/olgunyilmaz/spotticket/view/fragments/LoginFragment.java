@@ -58,6 +58,7 @@ public class LoginFragment extends Fragment {
 
         fragmentManager = getActivity().getSupportFragmentManager();
         auth = FirebaseAuth.getInstance();
+        auth.setLanguageCode("tr");
 
         binding.loginButton2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,7 +97,7 @@ public class LoginFragment extends Fragment {
                                 FirebaseUser currentUser = auth.getCurrentUser();
 
                                 if (currentUser != null){
-                                    Toast.makeText(getContext(),"Hoşgeldin : "+currentUser.getEmail()
+                                    Toast.makeText(getContext(),"Hoşgeldin : "+currentUser.getDisplayName()
                                             ,Toast.LENGTH_LONG).show();
                                     Intent intent = new Intent(getContext(), MainActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -125,7 +126,9 @@ public class LoginFragment extends Fragment {
     }
 
     private void resetPassword(View view){
-        System.out.println("clicked reset password");
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        ResetPasswordFragment resetPasswordFragment = new ResetPasswordFragment();
+        fragmentTransaction.replace(R.id.loginFragmentContainer, resetPasswordFragment).commit();
     }
 
 }

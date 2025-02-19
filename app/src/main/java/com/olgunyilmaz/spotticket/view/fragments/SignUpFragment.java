@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentSignUpBinding;
 
@@ -62,6 +63,7 @@ public class SignUpFragment extends Fragment {
 
         fragmentManager = getActivity().getSupportFragmentManager();
         auth = FirebaseAuth.getInstance();
+        auth.setLanguageCode("tr");
 
         binding.signUpButton2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +92,23 @@ public class SignUpFragment extends Fragment {
                                     Log.d(TAG, "Başarıyla kayıt oldunuz");
                                     FirebaseUser user = auth.getCurrentUser();
                                     if (user != null) {
+                                        // update username
+
+                                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                                .setDisplayName(username)
+                                                .build();
+
+                                        user.updateProfile(profileUpdates)
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            Log.d(TAG, "User profile updated.");
+                                                        }
+                                                    }
+                                                });
+
+
                                         login(view);
                                     }
                                 } else {

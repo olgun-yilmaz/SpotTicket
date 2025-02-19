@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         MAPS_API_KEY = getString(R.string.maps_api_key);
 
         auth = FirebaseAuth.getInstance();
+        auth.setLanguageCode("tr");
 
         fragmentManager = getSupportFragmentManager();
         sharedPreferences = getSharedPreferences("com.olgunyilmaz.spotticket.view", MODE_PRIVATE);
