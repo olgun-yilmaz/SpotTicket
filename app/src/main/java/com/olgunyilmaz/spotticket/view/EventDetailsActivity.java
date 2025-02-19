@@ -54,10 +54,10 @@ public class EventDetailsActivity extends AppCompatActivity {
 
 
         TicketmasterApiService apiService = RetrofitClient.getApiService();
-        findEventDetails(apiService,eventId,imageUrl);
+        findEventDetails(apiService, eventId, imageUrl);
     }
 
-    private void findEventDetails(TicketmasterApiService apiService,String eventId, String imageUrl){
+    private void findEventDetails(TicketmasterApiService apiService, String eventId, String imageUrl) {
         apiService.getEventDetails(eventId, TICKETMASTER_API_KEY)
                 .enqueue(new Callback<EventDetailsResponse>() {
                     @Override
@@ -71,15 +71,15 @@ public class EventDetailsActivity extends AppCompatActivity {
 
                             String eventDate = eventDetails.getDates().getStart().getDateTime();
 
-                            binding.detailsDateText.setText("Tarih : "+getFormattedDate(eventDate));
+                            binding.detailsDateText.setText("Tarih : " + getFormattedDate(eventDate));
 
                             Picasso.get().load(imageUrl).into(binding.detailsImage);
 
                             String info = "";
 
-                            info += "Etkinlik türü : " + getEventSegmentInfo(eventDetails,eventDetails.getClassifications());
+                            info += "Etkinlik türü : " + getEventSegmentInfo(eventDetails, eventDetails.getClassifications());
 
-                            info += "\n\nEtkinlik Mekanı : "+getVenueInfo(eventDetails,eventDetails.getEmbedded().getVenues());
+                            info += "\n\nEtkinlik Mekanı : " + getVenueInfo(eventDetails, eventDetails.getEmbedded().getVenues());
 
 
                             binding.detailsDescriptionText.setText(info);
@@ -87,7 +87,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                             binding.buyTicketButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    buyTicket(view,eventDetails.getUrl());
+                                    buyTicket(view, eventDetails.getUrl());
                                 }
                             });
 
@@ -103,8 +103,8 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     }
 
-    private String getFormattedDate(String eventDate){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+    private String getFormattedDate(String eventDate) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
             ZonedDateTime dateTime = ZonedDateTime.parse(eventDate, formatter);
             ZonedDateTime localDateTime = dateTime.withZoneSameInstant(ZoneId.systemDefault());
@@ -115,8 +115,8 @@ public class EventDetailsActivity extends AppCompatActivity {
         return eventDate;
     }
 
-    private String getVenueInfo(EventDetailsResponse eventDetails,List venues){
-        if (venues != null){
+    private String getVenueInfo(EventDetailsResponse eventDetails, List venues) {
+        if (venues != null) {
             EventDetailsResponse.Venue venue = eventDetails.getEmbedded().getVenues().get(0);
 
             venueName = venue.getName() + " " + venue.getCity().getName();
@@ -129,7 +129,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     }
 
     private String getSearchAddress(String address) {
-        try{
+        try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 return URLEncoder.encode(address, StandardCharsets.UTF_8);
             } else {
@@ -139,24 +139,25 @@ public class EventDetailsActivity extends AppCompatActivity {
             return address;
         }
     }
-    public void goToEvent(View view){
-        Intent intent = new Intent(EventDetailsActivity.this,MapsActivity.class);
+
+    public void goToEvent(View view) {
+        Intent intent = new Intent(EventDetailsActivity.this, MapsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("venueLatitude",venueLatitude);
-        intent.putExtra("venueLongitude",venueLongitude);
-        intent.putExtra("venueName",venueName);
+        intent.putExtra("venueLatitude", venueLatitude);
+        intent.putExtra("venueLongitude", venueLongitude);
+        intent.putExtra("venueName", venueName);
         startActivity(intent);
     }
 
-    private String getEventSegmentInfo(EventDetailsResponse eventDetails,List classifications){
-        if (classifications != null){
+    private String getEventSegmentInfo(EventDetailsResponse eventDetails, List classifications) {
+        if (classifications != null) {
             EventDetailsResponse.Classification classification = eventDetails.getClassifications().get(0);
             return classification.getSegment().getName();
         }
         return "";
     }
 
-    private void findVenueLocation(String address){
+    private void findVenueLocation(String address) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MAPS_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -186,9 +187,9 @@ public class EventDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void buyTicket(View view, String url){
+    private void buyTicket(View view, String url) {
         Uri uri = Uri.parse(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
     }
 }
