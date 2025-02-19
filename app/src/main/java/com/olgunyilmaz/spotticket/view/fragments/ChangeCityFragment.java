@@ -10,7 +10,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
@@ -37,7 +36,6 @@ public class ChangeCityFragment extends Fragment {
     private FragmentChangeCityBinding binding;
     private EventAdapter eventAdapter;
 
-    FragmentManager fragmentManager;
     SharedPreferences sharedPreferences;
 
 
@@ -60,12 +58,9 @@ public class ChangeCityFragment extends Fragment {
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        fragmentManager = getActivity().getSupportFragmentManager();
         sharedPreferences = getActivity().getSharedPreferences("com.olgunyilmaz.spotticket.view", MODE_PRIVATE);
 
         String city = sharedPreferences.getString("city","ankara");
-
-        System.out.println(city);
 
         TicketmasterApiService apiService = RetrofitClient.getApiService();
         findEventByCity(apiService,city);

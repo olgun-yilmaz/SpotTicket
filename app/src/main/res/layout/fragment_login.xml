@@ -6,19 +6,19 @@
     tools:context=".view.fragments.LoginFragment">
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/loginUsernameText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
         android:ems="10"
         android:hint="Kullanıcı Adı :"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextPassword"
-        app:layout_constraintEnd_toEndOf="@+id/editTextTextPassword"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPassword" />
+        app:layout_constraintBottom_toTopOf="@+id/loginPasswordText"
+        app:layout_constraintEnd_toEndOf="@+id/loginPasswordText"
+        app:layout_constraintStart_toStartOf="@+id/loginPasswordText" />
 
     <EditText
-        android:id="@+id/editTextTextPassword"
+        android:id="@+id/loginPasswordText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"

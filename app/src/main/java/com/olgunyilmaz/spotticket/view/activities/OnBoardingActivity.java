@@ -31,7 +31,7 @@ public class OnBoardingActivity extends AppCompatActivity {
                 if (currentUser != null){
                     goToActivity(MainActivity.class);
                 }else{
-                    goToActivity(LoginActivity.class);
+                    goToActivity(EmailPasswordActivity.class);
                 }
             }
         });
