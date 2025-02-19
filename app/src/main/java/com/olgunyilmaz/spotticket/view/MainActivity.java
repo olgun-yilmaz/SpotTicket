@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityMainBinding;
 
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     public static String MAPS_BASE_URL;
     public static String MAPS_API_KEY;
 
+    private FirebaseAuth auth;
+
 
 
     @Override
@@ -45,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
         MAPS_BASE_URL = getString(R.string.maps_base_url);
         MAPS_API_KEY = getString(R.string.maps_api_key);
+
+        auth = FirebaseAuth.getInstance();
 
         fragmentManager = getSupportFragmentManager();
         sharedPreferences = getSharedPreferences("com.olgunyilmaz.spotticket.view", MODE_PRIVATE);
@@ -61,23 +66,27 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        Map<Integer, String> cityMap = new HashMap<>();
-        cityMap.put(R.id.tokat, "Tokat");
-        cityMap.put(R.id.istanbul, "İstanbul");
-        cityMap.put(R.id.berlin, "Berlin");
-        cityMap.put(R.id.london, "London");
-        cityMap.put(R.id.ankara, "Ankara");
-        cityMap.put(R.id.new_york, "New York");
-        cityMap.put(R.id.oslo, "Oslo");
 
-        String city = cityMap.getOrDefault(item.getItemId(), "Miami");
+        if (R.id.exit == item.getItemId()){
+            auth.signOut();
+            goToLoginActivity();
+        }else{
+            Map<Integer, String> cityMap = new HashMap<>();
+            cityMap.put(R.id.tokat, "Tokat");
+            cityMap.put(R.id.istanbul, "İstanbul");
+            cityMap.put(R.id.berlin, "Berlin");
+            cityMap.put(R.id.london, "London");
+            cityMap.put(R.id.ankara, "Ankara");
+            cityMap.put(R.id.new_york, "New York");
+            cityMap.put(R.id.oslo, "Oslo");
 
-        sharedPreferences.edit().putString("city", city).apply();
-        getSupportActionBar().setTitle(city);
+            String city = cityMap.getOrDefault(item.getItemId(), "Miami");
 
-        replaceFragment(new ChangeCityFragment());
+            sharedPreferences.edit().putString("city", city).apply();
+            getSupportActionBar().setTitle(city);
 
-
+            replaceFragment(new ChangeCityFragment());
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -85,4 +94,11 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
     }
+
+    private void goToLoginActivity(){
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
 }

@@ -16,6 +16,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -77,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+                                System.out.println("baiaşrılı");
                                 Log.d(TAG, "Kullanıcı girişi başarılı");
                                 FirebaseUser currentUser = auth.getCurrentUser();
 
@@ -85,13 +87,12 @@ public class LoginActivity extends AppCompatActivity {
                                             ,Toast.LENGTH_LONG).show();
                                     goToMainActivity(currentUser);
                                 }
-
-
-                            } else {
-                                Log.w(TAG, "Giriş yapılamadı", task.getException());
-                                Toast.makeText(LoginActivity.this, "Giriş yapılamadı",
-                                        Toast.LENGTH_SHORT).show();
                             }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(LoginActivity.this,e.getLocalizedMessage(),Toast.LENGTH_LONG).show();
                         }
                     });
 
