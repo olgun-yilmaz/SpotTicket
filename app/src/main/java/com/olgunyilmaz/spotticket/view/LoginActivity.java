@@ -50,14 +50,14 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "createUserWithEmail:success");
+                            Log.d(TAG, "Başarıyla kayıt oldunuz");
                             FirebaseUser user = auth.getCurrentUser();
                             if (user != null){
                                 goToMainActivity(user);
                             }
                         } else {
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Log.w(TAG, "Kayıt olunamadı!", task.getException());
+                            Toast.makeText(LoginActivity.this, "Kayıt olunamadı!",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -67,6 +67,37 @@ public class LoginActivity extends AppCompatActivity {
 
     public void login(View view){
 
+        email = binding.emailText.getText().toString();
+        password = binding.passwordText.getText().toString();
+
+        if (!email.isEmpty() && !password.isEmpty()){
+
+            auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "Kullanıcı girişi başarılı");
+                                FirebaseUser currentUser = auth.getCurrentUser();
+
+                                if (currentUser != null){
+                                    Toast.makeText(LoginActivity.this,"Hoşgeldin : "+currentUser.getEmail()
+                                            ,Toast.LENGTH_LONG).show();
+                                    goToMainActivity(currentUser);
+                                }
+
+
+                            } else {
+                                Log.w(TAG, "Giriş yapılamadı", task.getException());
+                                Toast.makeText(LoginActivity.this, "Giriş yapılamadı",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+        }else{
+            Toast.makeText(LoginActivity.this,"Lütfen email ve parolanızı girin.",Toast.LENGTH_LONG).show();
+        }
     }
 
     private void goToMainActivity(FirebaseUser user){
