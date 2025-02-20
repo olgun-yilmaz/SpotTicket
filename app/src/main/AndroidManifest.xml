@@ -14,20 +14,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SpotTicket"
         tools:targetApi="31">
+        <activity
+            android:name=".view.activities.EmailPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.activities.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.activities.MainActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
 
         <activity
-            android:name=".view.MapsActivity"
+            android:name=".view.activities.MapsActivity"
             android:exported="false"
             android:label="@string/title_activity_maps" />
         <activity
-            android:name=".view.EventDetailsActivity"
+            android:name=".view.activities.EventDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".view.MainActivity"
+            android:name=".view.activities.OnBoardingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

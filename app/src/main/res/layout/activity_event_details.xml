@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.EventDetailsActivity">
+    tools:context=".view.activities.EventDetailsActivity">
 
     <ImageView
         android:id="@+id/detailsImage"
