@@ -97,11 +97,22 @@ public class LoginFragment extends Fragment {
                                 FirebaseUser currentUser = auth.getCurrentUser();
 
                                 if (currentUser != null){
-                                    Toast.makeText(getContext(),"Hoşgeldin : "+currentUser.getDisplayName()
+
+                                    String msg;
+
+                                    if(currentUser.isEmailVerified()){
+                                        Intent intent = new Intent(getContext(), MainActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+                                        getActivity().finish();
+                                        msg = "Hoşgeldin : ";
+                                    }else{
+                                        msg = "Giriş yapabilmek için gönderilen linkten e-posta adresinizi doğrulamanız gerekmektedir.";
+                                    }
+                                    Toast.makeText(getContext(),msg+currentUser.getDisplayName()
                                             ,Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(getContext(), MainActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(intent);
+
+
                                 }
                             }
                         }

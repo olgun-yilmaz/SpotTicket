@@ -93,7 +93,6 @@ public class SignUpFragment extends Fragment {
                                     FirebaseUser user = auth.getCurrentUser();
                                     if (user != null) {
                                         // update username
-
                                         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                                 .setDisplayName(username)
                                                 .build();
@@ -108,6 +107,19 @@ public class SignUpFragment extends Fragment {
                                                     }
                                                 });
 
+                                        user.sendEmailVerification()
+                                                .addOnCompleteListener(task1 -> {
+                                                    String msg;
+                                                    if (task1.isSuccessful()) {
+                                                        msg = "Doğrulama e-postası gönderildi!";
+
+                                                    } else {
+                                                        msg = "Doğrulama e-postası gönderilemedi";
+                                                    }
+                                                    Toast.makeText(getContext(),
+                                                            msg,
+                                                            Toast.LENGTH_LONG).show();
+                                                });
 
                                         login(view);
                                     }
