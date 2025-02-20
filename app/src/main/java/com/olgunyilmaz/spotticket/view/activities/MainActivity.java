@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         auth.setLanguageCode("tr");
 
         fragmentManager = getSupportFragmentManager();
-        sharedPreferences = getSharedPreferences("com.olgunyilmaz.spotticket.view", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);
 
         binding.profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
