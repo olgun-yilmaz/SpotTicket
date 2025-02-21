@@ -16,11 +16,15 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityEventDetailsBinding;
 import com.olgunyilmaz.spotticket.model.EventDetailsResponse;
@@ -51,9 +55,14 @@ public class EventDetailsActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth auth;
 
+    private String collectionPath;
+    private String eventId;
+
     private double venueLatitude = 40.98780984859083;
     private double venueLongitude = 29.03689029646077;
     private String venueName = "Ülker Stadyumu";
+
+    private String eventName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,17 +75,20 @@ public class EventDetailsActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         auth.setLanguageCode("tr");
 
-        String eventId = getIntent().getStringExtra("eventID");
+        String userEmail = auth.getCurrentUser().getEmail().toString();
+        collectionPath = userEmail+"_Events";
+
+        eventId = getIntent().getStringExtra("eventID");
         String imageUrl = getIntent().getStringExtra("imageUrl");
 
         binding.favCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             int imgId;
             if (isChecked) {
                 imgId = R.drawable.fav_filled_icon;
-                addToMyEvents(eventId,imageUrl);
+                addToMyEvents(eventId,imageUrl,eventName);
             } else {
                 imgId = R.drawable.fav_empty_icon;
-                deleteFromMyEvents();
+                deleteFromMyEvents(eventId);
             }
             binding.favCheckBox.setButtonDrawable(imgId);
         });
@@ -86,14 +98,13 @@ public class EventDetailsActivity extends AppCompatActivity {
         findEventDetails(apiService, eventId, imageUrl);
     }
 
-    private void addToMyEvents(String eventId, String imgUrl){
-        String userEmail = auth.getCurrentUser().getEmail().toString();
-
+    private void addToMyEvents(String eventId, String imgUrl, String eventName){
         Map<String, Object> userEvent = new HashMap<>();
         userEvent.put("eventID", eventId);
         userEvent.put("imageUrl", imgUrl);
+        userEvent.put("eventName",eventName);
 
-        db.collection(userEmail+"_Events").add(userEvent).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        db.collection(collectionPath).add(userEvent).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
@@ -108,8 +119,8 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     }
 
-    private void deleteFromMyEvents(){
-
+    private void deleteFromMyEvents(String eventId){
+        System.out.println("will be deleted.");
     }
 
     private void findEventDetails(TicketmasterApiService apiService, String eventId, String imageUrl) {
@@ -120,7 +131,9 @@ public class EventDetailsActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             EventDetailsResponse eventDetails = response.body();
 
-                            binding.detailsNameText.setText(eventDetails.getName());
+                            eventName = eventDetails.getName();
+
+                            binding.detailsNameText.setText(eventName);
 
                             binding.detailsDescriptionText.setText(eventId);
 

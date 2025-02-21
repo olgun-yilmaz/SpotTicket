@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityMainBinding;
 import com.olgunyilmaz.spotticket.view.fragments.ChangeCityFragment;
+import com.olgunyilmaz.spotticket.view.fragments.MyEventsFragment;
 import com.olgunyilmaz.spotticket.view.fragments.ProfileFragment;
 
 
@@ -70,6 +71,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 signOut();
+            }
+        });
+
+        binding.myEventsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                replaceFragment(new MyEventsFragment());
             }
         });
     }

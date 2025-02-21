@@ -26,7 +26,6 @@ import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
