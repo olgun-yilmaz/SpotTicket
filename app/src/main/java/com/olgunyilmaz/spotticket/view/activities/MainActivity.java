@@ -65,11 +65,23 @@ public class MainActivity extends AppCompatActivity {
                 replaceFragment(new ChangeCityFragment());
             }
         });
+
+        binding.signOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signOut();
+            }
+        });
     }
 
     private void replaceFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
+    }
+
+    private void signOut(){
+        auth.signOut();
+        goToLoginActivity();
     }
 
     private void goToLoginActivity(){

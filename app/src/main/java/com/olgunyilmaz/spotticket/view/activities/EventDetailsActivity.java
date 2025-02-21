@@ -6,6 +6,7 @@ import static com.olgunyilmaz.spotticket.view.activities.MainActivity.MAPS_BASE_
 import static com.olgunyilmaz.spotticket.view.activities.MainActivity.TICKETMASTER_API_KEY;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityEventDetailsBinding;
 import com.olgunyilmaz.spotticket.model.EventDetailsResponse;
 import com.olgunyilmaz.spotticket.model.GeocodingResponse;
@@ -51,6 +53,17 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         String eventId = getIntent().getStringExtra("eventID");
         String imageUrl = getIntent().getStringExtra("imageUrl");
+
+        binding.favCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            int imgId;
+            if (isChecked) {
+                imgId = R.drawable.fav_filled_icon;
+                System.out.println("id : "+eventId);
+            } else {
+                imgId = R.drawable.fav_empty_icon;
+            }
+            binding.favCheckBox.setButtonDrawable(imgId);
+        });
 
 
         TicketmasterApiService apiService = RetrofitClient.getApiService();
