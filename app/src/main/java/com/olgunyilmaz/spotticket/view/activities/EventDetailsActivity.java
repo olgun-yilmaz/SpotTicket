@@ -13,8 +13,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityEventDetailsBinding;
 import com.olgunyilmaz.spotticket.model.EventDetailsResponse;
@@ -29,7 +35,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,6 +47,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class EventDetailsActivity extends AppCompatActivity {
     private ActivityEventDetailsBinding binding;
+
+    private FirebaseFirestore db;
+    private FirebaseAuth auth;
 
     private double venueLatitude = 40.98780984859083;
     private double venueLongitude = 29.03689029646077;
@@ -51,6 +62,10 @@ public class EventDetailsActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+        auth.setLanguageCode("tr");
+
         String eventId = getIntent().getStringExtra("eventID");
         String imageUrl = getIntent().getStringExtra("imageUrl");
 
@@ -58,9 +73,10 @@ public class EventDetailsActivity extends AppCompatActivity {
             int imgId;
             if (isChecked) {
                 imgId = R.drawable.fav_filled_icon;
-                System.out.println("id : "+eventId);
+                addToMyEvents(eventId,imageUrl);
             } else {
                 imgId = R.drawable.fav_empty_icon;
+                deleteFromMyEvents();
             }
             binding.favCheckBox.setButtonDrawable(imgId);
         });
@@ -68,6 +84,32 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         TicketmasterApiService apiService = RetrofitClient.getApiService();
         findEventDetails(apiService, eventId, imageUrl);
+    }
+
+    private void addToMyEvents(String eventId, String imgUrl){
+        String userEmail = auth.getCurrentUser().getEmail().toString();
+
+        Map<String, Object> userEvent = new HashMap<>();
+        userEvent.put("eventID", eventId);
+        userEvent.put("imageUrl", imgUrl);
+
+        db.collection(userEmail+"_Events").add(userEvent).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+
+    }
+
+    private void deleteFromMyEvents(){
+
     }
 
     private void findEventDetails(TicketmasterApiService apiService, String eventId, String imageUrl) {
