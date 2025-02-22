@@ -45,6 +45,7 @@ public class MyEventAdapter extends RecyclerView.Adapter<MyEventAdapter.MyEventH
                 Intent intent = new Intent(holder.itemView.getContext(), EventDetailsActivity.class);
                 intent.putExtra("eventID",myEvent.getEventId());
                 intent.putExtra("imageUrl",myEvent.getImageUrl());
+                intent.putExtra("isLiked",true);
                 holder.itemView.getContext().startActivity(intent);
             }
         });

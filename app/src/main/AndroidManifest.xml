@@ -18,9 +18,6 @@
             android:name=".view.activities.EmailPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".view.activities.LoginActivity"
-            android:exported="false" />
-        <activity
             android:name=".view.activities.MainActivity"
             android:exported="false" />
 

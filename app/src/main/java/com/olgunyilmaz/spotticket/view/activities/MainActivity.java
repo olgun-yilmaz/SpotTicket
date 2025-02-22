@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
         sharedPreferences = getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);
+        sharedPreferences.edit().putString("city","Denver").apply();
 
         binding.profileButton.setOnClickListener(new View.OnClickListener() {
             @Override

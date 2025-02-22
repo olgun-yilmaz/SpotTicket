@@ -78,7 +78,6 @@ public class EventDetailsResponse {
         }
     }
 
-    // Classification sınıfı (Etkinlik Türü)
     public class Classification {
         @SerializedName("segment")
         private Segment segment;

@@ -76,19 +76,25 @@ public class EventDetailsActivity extends AppCompatActivity {
         auth.setLanguageCode("tr");
 
         String userEmail = auth.getCurrentUser().getEmail().toString();
-        collectionPath = userEmail+"_Events";
+        collectionPath = userEmail + "_Events";
 
         eventId = getIntent().getStringExtra("eventID");
         String imageUrl = getIntent().getStringExtra("imageUrl");
+        boolean isLiked = getIntent().getBooleanExtra("isLiked",false);
+
+        if (isLiked){
+            binding.favCheckBox.setChecked(true);
+            binding.favCheckBox.setButtonDrawable(R.drawable.fav_filled_icon);
+        }
 
         binding.favCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             int imgId;
             if (isChecked) {
                 imgId = R.drawable.fav_filled_icon;
-                addToMyEvents(eventId,imageUrl,eventName);
+                likeEvent(eventId, imageUrl, eventName);
             } else {
                 imgId = R.drawable.fav_empty_icon;
-                deleteFromMyEvents(eventId);
+                unLikeEvent(eventId);
             }
             binding.favCheckBox.setButtonDrawable(imgId);
         });
@@ -98,11 +104,11 @@ public class EventDetailsActivity extends AppCompatActivity {
         findEventDetails(apiService, eventId, imageUrl);
     }
 
-    private void addToMyEvents(String eventId, String imgUrl, String eventName){
+    private void likeEvent(String eventId, String imgUrl, String eventName) {
         Map<String, Object> userEvent = new HashMap<>();
         userEvent.put("eventID", eventId);
         userEvent.put("imageUrl", imgUrl);
-        userEvent.put("eventName",eventName);
+        userEvent.put("eventName", eventName);
 
         db.collection(collectionPath).add(userEvent).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -119,8 +125,26 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     }
 
-    private void deleteFromMyEvents(String eventId){
-        System.out.println("will be deleted.");
+    private void unLikeEvent(String eventId) {
+        db.collection(collectionPath)
+                .whereEqualTo("eventID", eventId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                document.getReference().delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "Etkinlik başarıyla kaldırıldı");
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
     }
 
     private void findEventDetails(TicketmasterApiService apiService, String eventId, String imageUrl) {
