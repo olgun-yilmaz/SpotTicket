@@ -6,14 +6,26 @@ import static com.olgunyilmaz.spotticket.view.activities.MainActivity.MAPS_BASE_
 import static com.olgunyilmaz.spotticket.view.activities.MainActivity.TICKETMASTER_API_KEY;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityEventDetailsBinding;
 import com.olgunyilmaz.spotticket.model.EventDetailsResponse;
 import com.olgunyilmaz.spotticket.model.GeocodingResponse;
@@ -27,7 +39,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,9 +52,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class EventDetailsActivity extends AppCompatActivity {
     private ActivityEventDetailsBinding binding;
 
+    private FirebaseFirestore db;
+    private FirebaseAuth auth;
+
+    private String collectionPath;
+    private String eventId;
+
     private double venueLatitude = 40.98780984859083;
     private double venueLongitude = 29.03689029646077;
     private String venueName = "Ülker Stadyumu";
+
+    private String eventName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +71,80 @@ public class EventDetailsActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        String eventId = getIntent().getStringExtra("eventID");
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+        auth.setLanguageCode("tr");
+
+        String userEmail = auth.getCurrentUser().getEmail().toString();
+        collectionPath = userEmail + "_Events";
+
+        eventId = getIntent().getStringExtra("eventID");
         String imageUrl = getIntent().getStringExtra("imageUrl");
+        boolean isLiked = getIntent().getBooleanExtra("isLiked",false);
+
+        if (isLiked){
+            binding.favCheckBox.setChecked(true);
+            binding.favCheckBox.setButtonDrawable(R.drawable.fav_filled_icon);
+        }
+
+        binding.favCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            int imgId;
+            if (isChecked) {
+                imgId = R.drawable.fav_filled_icon;
+                likeEvent(eventId, imageUrl, eventName);
+            } else {
+                imgId = R.drawable.fav_empty_icon;
+                unLikeEvent(eventId);
+            }
+            binding.favCheckBox.setButtonDrawable(imgId);
+        });
 
 
         TicketmasterApiService apiService = RetrofitClient.getApiService();
         findEventDetails(apiService, eventId, imageUrl);
+    }
+
+    private void likeEvent(String eventId, String imgUrl, String eventName) {
+        Map<String, Object> userEvent = new HashMap<>();
+        userEvent.put("eventID", eventId);
+        userEvent.put("imageUrl", imgUrl);
+        userEvent.put("eventName", eventName);
+
+        db.collection(collectionPath).add(userEvent).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+
+    }
+
+    private void unLikeEvent(String eventId) {
+        db.collection(collectionPath)
+                .whereEqualTo("eventID", eventId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                document.getReference().delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "Etkinlik başarıyla kaldırıldı");
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
     }
 
     private void findEventDetails(TicketmasterApiService apiService, String eventId, String imageUrl) {
@@ -65,7 +155,9 @@ public class EventDetailsActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             EventDetailsResponse eventDetails = response.body();
 
-                            binding.detailsNameText.setText(eventDetails.getName());
+                            eventName = eventDetails.getName();
+
+                            binding.detailsNameText.setText(eventName);
 
                             binding.detailsDescriptionText.setText(eventId);
 

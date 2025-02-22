@@ -58,9 +58,10 @@ public class ChangeCityFragment extends Fragment {
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        sharedPreferences = getActivity().getSharedPreferences("com.olgunyilmaz.spotticket.view", MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);
 
         String city = sharedPreferences.getString("city","ankara");
+        binding.fragmentCityText.setText(city);
 
         TicketmasterApiService apiService = RetrofitClient.getApiService();
         findEventByCity(apiService,city);
