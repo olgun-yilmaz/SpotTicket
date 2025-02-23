@@ -1,4 +1,4 @@
-package com.olgunyilmaz.spotticket.view.activities;
+package com.olgunyilmaz.spotticket.view.fragments;
 
 import static android.content.ContentValues.TAG;
 import static com.olgunyilmaz.spotticket.view.activities.MainActivity.MAPS_API_KEY;
@@ -6,32 +6,34 @@ import static com.olgunyilmaz.spotticket.view.activities.MainActivity.MAPS_BASE_
 import static com.olgunyilmaz.spotticket.view.activities.MainActivity.TICKETMASTER_API_KEY;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnCompleteListener;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.olgunyilmaz.spotticket.R;
-import com.olgunyilmaz.spotticket.databinding.ActivityEventDetailsBinding;
+import com.olgunyilmaz.spotticket.databinding.FragmentEventDetailsBinding;
 import com.olgunyilmaz.spotticket.model.EventDetailsResponse;
 import com.olgunyilmaz.spotticket.model.GeocodingResponse;
 import com.olgunyilmaz.spotticket.service.GeocodingService;
 import com.olgunyilmaz.spotticket.service.RetrofitClient;
 import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
+import com.olgunyilmaz.spotticket.view.activities.MapsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.net.URLEncoder;
@@ -49,9 +51,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class EventDetailsActivity extends AppCompatActivity {
-    private ActivityEventDetailsBinding binding;
+public class EventDetailsFragment extends Fragment {
 
+    private FragmentEventDetailsBinding binding;
     private FirebaseFirestore db;
     private FirebaseAuth auth;
 
@@ -64,13 +66,28 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     private String eventName;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityEventDetailsBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
-        setContentView(view);
 
+    public EventDetailsFragment() {
+        // Required empty public constructor
+    }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        binding = FragmentEventDetailsBinding.inflate(getLayoutInflater(),container,false);
+        View view = binding.getRoot();
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         auth.setLanguageCode("tr");
@@ -78,33 +95,35 @@ public class EventDetailsActivity extends AppCompatActivity {
         String userEmail = auth.getCurrentUser().getEmail().toString();
         collectionPath = userEmail + "_Events";
 
-        eventId = getIntent().getStringExtra("eventID");
-        String imageUrl = getIntent().getStringExtra("imageUrl");
-        boolean isLiked = getIntent().getBooleanExtra("isLiked",false);
+        Bundle args = getArguments();
+        if (args != null) {
+            eventId = args.getString("eventID");
+            String imageUrl = args.getString("imageUrl");
+            boolean isLiked = args.getBoolean("isLiked", false);
 
-        if (isLiked){
-            binding.favCheckBox.setChecked(true);
-            binding.favCheckBox.setButtonDrawable(R.drawable.fav_filled_icon);
-        }
-
-        binding.favCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            int imgId;
-            if (isChecked) {
-                imgId = R.drawable.fav_filled_icon;
-                likeEvent(eventId, imageUrl, eventName);
-            } else {
-                imgId = R.drawable.fav_empty_icon;
-                unLikeEvent(eventId);
+            if (isLiked) {
+                binding.favCheckBox1.setChecked(true);
+                binding.favCheckBox1.setButtonDrawable(R.drawable.fav_filled_icon);
             }
-            binding.favCheckBox.setButtonDrawable(imgId);
-        });
 
+            binding.favCheckBox1.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                int imgId;
+                if (isChecked) {
+                    imgId = R.drawable.fav_filled_icon;
+                    addFavorite(eventId, imageUrl, eventName);
+                } else {
+                    imgId = R.drawable.fav_empty_icon;
+                    removeFavorite(eventId);
+                }
+                binding.favCheckBox1.setButtonDrawable(imgId);
+            });
 
-        TicketmasterApiService apiService = RetrofitClient.getApiService();
-        findEventDetails(apiService, eventId, imageUrl);
+            TicketmasterApiService apiService = RetrofitClient.getApiService();
+            findEventDetails(apiService, eventId, imageUrl);
+        }
     }
 
-    private void likeEvent(String eventId, String imgUrl, String eventName) {
+    private void addFavorite(String eventId, String imgUrl, String eventName) {
         Map<String, Object> userEvent = new HashMap<>();
         userEvent.put("eventID", eventId);
         userEvent.put("imageUrl", imgUrl);
@@ -125,7 +144,7 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     }
 
-    private void unLikeEvent(String eventId) {
+    private void removeFavorite(String eventId) {
         db.collection(collectionPath)
                 .whereEqualTo("eventID", eventId)
                 .get()
@@ -157,15 +176,15 @@ public class EventDetailsActivity extends AppCompatActivity {
 
                             eventName = eventDetails.getName();
 
-                            binding.detailsNameText.setText(eventName);
+                            binding.detailsNameText1.setText(eventName);
 
-                            binding.detailsDescriptionText.setText(eventId);
+                            binding.detailsDescriptionText1.setText(eventId);
 
                             String eventDate = eventDetails.getDates().getStart().getDateTime();
 
-                            binding.detailsDateText.setText("Tarih : " + getFormattedDate(eventDate));
+                            binding.detailsDateText1.setText("Tarih : " + getFormattedDate(eventDate));
 
-                            Picasso.get().load(imageUrl).into(binding.detailsImage);
+                            Picasso.get().load(imageUrl).into(binding.detailsImage1);
 
                             String info = "";
 
@@ -174,9 +193,9 @@ public class EventDetailsActivity extends AppCompatActivity {
                             info += "\n\nEtkinlik Mekanı : " + getVenueInfo(eventDetails, eventDetails.getEmbedded().getVenues());
 
 
-                            binding.detailsDescriptionText.setText(info);
+                            binding.detailsDescriptionText1.setText(info);
 
-                            binding.buyTicketButton.setOnClickListener(new View.OnClickListener() {
+                            binding.buyTicketButton1.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     buyTicket(view, eventDetails.getUrl());
@@ -233,7 +252,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     }
 
     public void goToEvent(View view) {
-        Intent intent = new Intent(EventDetailsActivity.this, MapsActivity.class);
+        Intent intent = new Intent(getContext(), MapsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("venueLatitude", venueLatitude);
         intent.putExtra("venueLongitude", venueLongitude);

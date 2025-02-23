@@ -20,24 +20,23 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.olgunyilmaz.spotticket.adapter.MyEventAdapter;
-import com.olgunyilmaz.spotticket.databinding.FragmentMyEventsBinding;
-import com.olgunyilmaz.spotticket.model.MyEventModel;
+import com.olgunyilmaz.spotticket.adapter.FavoriteEventAdapter;
+import com.olgunyilmaz.spotticket.databinding.FragmentFavoritesBinding;
+import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
-public class MyEventsFragment extends Fragment {
-    FragmentMyEventsBinding binding;
+public class FavoritesFragment extends Fragment {
+    FragmentFavoritesBinding binding;
     private FirebaseFirestore db;
     private FirebaseAuth auth;
-    private ArrayList<MyEventModel> myEventList;
+    private ArrayList<FavoriteEventModel> myEventList;
 
-    private MyEventAdapter myEventAdapter;
+    private FavoriteEventAdapter favoriteEventAdapter;
 
 
-    public MyEventsFragment() {
+    public FavoritesFragment() {
         // Required empty public constructor
     }
 
@@ -50,7 +49,7 @@ public class MyEventsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentMyEventsBinding.inflate(getLayoutInflater(),container,false);
+        binding = FragmentFavoritesBinding.inflate(getLayoutInflater(), container, false);
         View view = binding.getRoot();
         return view;
     }
@@ -75,8 +74,8 @@ public class MyEventsFragment extends Fragment {
 
     }
 
-    private void getEvents(String userEmail){
-        String path = userEmail+"_Events";
+    private void getEvents(String userEmail) {
+        String path = userEmail + "_Events";
         db.collection(path).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -90,15 +89,15 @@ public class MyEventsFragment extends Fragment {
                                 String imageUrl = (String) document.get("imageUrl");
                                 String eventName = (String) document.get("eventName");
 
-                                MyEventModel myEventModel = new MyEventModel(eventID,imageUrl,eventName);
+                                FavoriteEventModel myEventModel = new FavoriteEventModel(eventID, imageUrl, eventName);
                                 myEventList.add(myEventModel);
                             }
-                            myEventAdapter = new MyEventAdapter(myEventList);
-                            binding.myEventsRecyclerView.setAdapter(myEventAdapter);
+                            favoriteEventAdapter = new FavoriteEventAdapter(myEventList);
+                            binding.myEventsRecyclerView.setAdapter(favoriteEventAdapter);
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
-                        myEventAdapter.notifyDataSetChanged();
+                        favoriteEventAdapter.notifyDataSetChanged();
                     }
                 });
 

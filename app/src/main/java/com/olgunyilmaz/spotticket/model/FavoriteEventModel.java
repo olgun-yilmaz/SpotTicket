@@ -1,7 +1,7 @@
 package com.olgunyilmaz.spotticket.model;
 
-public class MyEventModel {
-    public MyEventModel(String eventId, String imageUrl, String eventName) {
+public class FavoriteEventModel {
+    public FavoriteEventModel(String eventId, String imageUrl, String eventName) {
         this.eventId = eventId;
         this.imageUrl = imageUrl;
         this.eventName = eventName;

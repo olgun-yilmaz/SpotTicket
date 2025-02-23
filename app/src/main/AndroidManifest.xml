@@ -30,9 +30,6 @@
             android:exported="false"
             android:label="@string/title_activity_maps" />
         <activity
-            android:name=".view.activities.EventDetailsActivity"
-            android:exported="false" />
-        <activity
             android:name=".view.activities.OnBoardingActivity"
             android:exported="true">
             <intent-filter>

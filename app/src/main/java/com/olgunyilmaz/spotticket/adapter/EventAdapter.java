@@ -1,19 +1,21 @@
 package com.olgunyilmaz.spotticket.adapter;
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.olgunyilmaz.spotticket.view.activities.MainActivity;
+import com.olgunyilmaz.spotticket.view.fragments.EventDetailsFragment;
+import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.EventItemBinding;
 import com.olgunyilmaz.spotticket.model.EventResponse;
-import com.olgunyilmaz.spotticket.view.activities.EventDetailsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-import java.util.Random;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
 
@@ -21,10 +23,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
     public EventAdapter(List<EventResponse.Event> eventList) {
         this.eventList = eventList;
-    }
-
-    public void updateData(List<EventResponse.Event> newEvents) {
-        this.eventList = newEvents;
     }
 
     @Override
@@ -45,20 +43,20 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(holder.itemView.getContext(), EventDetailsActivity.class);
-                intent.putExtra("eventID",event.getId());
+                EventDetailsFragment fragment = new EventDetailsFragment();
+                Bundle args = new Bundle();
+                args.putString("eventID", event.getId());
+                args.putString("imageUrl", event.getImages().get(0).getUrl());
+                fragment.setArguments(args);
 
-                String imageUrl = event.getImages().get(getRandomIdx(event.getImages())).getUrl();
-
-                intent.putExtra("imageUrl",imageUrl);
-                holder.itemView.getContext().startActivity(intent);
+                ((MainActivity) holder.itemView.getContext())
+                    .getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainerView, fragment)
+                    .addToBackStack(null)
+                    .commit();
             }
         });
-    }
-
-    private int getRandomIdx(List imageList){
-        Random random = new Random();
-        return random.nextInt(imageList.size());
     }
 
     @Override

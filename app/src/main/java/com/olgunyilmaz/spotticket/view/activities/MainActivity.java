@@ -14,9 +14,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityMainBinding;
 import com.olgunyilmaz.spotticket.view.fragments.ChangeCityFragment;
-import com.olgunyilmaz.spotticket.view.fragments.MyEventsFragment;
+import com.olgunyilmaz.spotticket.view.fragments.FavoritesFragment;
 import com.olgunyilmaz.spotticket.view.fragments.ProfileFragment;
-
 
 
 public class MainActivity extends AppCompatActivity {
@@ -31,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     public static String MAPS_API_KEY;
 
     private FirebaseAuth auth;
-
 
 
     @Override
@@ -52,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
         sharedPreferences = getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);
-        sharedPreferences.edit().putString("city","Denver").apply();
 
         binding.profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         binding.myEventsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                replaceFragment(new MyEventsFragment());
+                replaceFragment(new FavoritesFragment());
             }
         });
     }
@@ -88,19 +85,19 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
     }
 
-    private void signOut(){
+    private void signOut() {
         auth.signOut();
         goToLoginActivity();
     }
 
-    private void goToLoginActivity(){
+    private void goToLoginActivity() {
         Intent intent = new Intent(MainActivity.this, EmailPasswordActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }
 
-    private void goToProfileScreen(){
+    private void goToProfileScreen() {
         ProfileFragment profileFragment = new ProfileFragment();
         replaceFragment(profileFragment);
     }
