@@ -50,7 +50,6 @@ public class FavoriteEventAdapter extends RecyclerView.Adapter<FavoriteEventAdap
                 Bundle args = new Bundle();
                 args.putString("eventID", favoriteEvent.getEventId());
                 args.putString("imageUrl",favoriteEvent.getImageUrl());
-                args.putBoolean("isLiked",true);
                 fragment.setArguments(args);
 
                 ((MainActivity) holder.itemView.getContext())

@@ -27,8 +27,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.olgunyilmaz.spotticket.R;
+import com.olgunyilmaz.spotticket.service.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.databinding.FragmentEventDetailsBinding;
 import com.olgunyilmaz.spotticket.model.EventDetailsResponse;
+import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.model.GeocodingResponse;
 import com.olgunyilmaz.spotticket.service.GeocodingService;
 import com.olgunyilmaz.spotticket.service.RetrofitClient;
@@ -99,9 +101,8 @@ public class EventDetailsFragment extends Fragment {
         if (args != null) {
             eventId = args.getString("eventID");
             String imageUrl = args.getString("imageUrl");
-            boolean isLiked = args.getBoolean("isLiked", false);
 
-            if (isLiked) {
+            if (isLiked()) {
                 binding.favCheckBox1.setChecked(true);
                 binding.favCheckBox1.setButtonDrawable(R.drawable.fav_filled_icon);
             }
@@ -118,9 +119,26 @@ public class EventDetailsFragment extends Fragment {
                 binding.favCheckBox1.setButtonDrawable(imgId);
             });
 
+            binding.mapButton1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    goToEvent(view);
+                }
+            });
+
             TicketmasterApiService apiService = RetrofitClient.getApiService();
             findEventDetails(apiService, eventId, imageUrl);
         }
+    }
+
+    private boolean isLiked(){
+        for (FavoriteEventModel event : UserFavoritesManager.getInstance().userFavorites){
+            if(eventId.equals(event.getEventId())){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void addFavorite(String eventId, String imgUrl, String eventName) {
@@ -133,6 +151,7 @@ public class EventDetailsFragment extends Fragment {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                        UserFavoritesManager.getInstance().addFavorite(new FavoriteEventModel(eventId,imgUrl,eventName));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -157,6 +176,7 @@ public class EventDetailsFragment extends Fragment {
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
+                                                UserFavoritesManager.getInstance().removeFavorite(eventId);
                                                 Log.d(TAG, "Etkinlik başarıyla kaldırıldı");
                                             }
                                         });
