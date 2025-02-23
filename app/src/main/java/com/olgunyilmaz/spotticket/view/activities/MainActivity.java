@@ -24,6 +24,7 @@ import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.service.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.databinding.ActivityMainBinding;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
+import com.olgunyilmaz.spotticket.service.UserManager;
 import com.olgunyilmaz.spotticket.view.fragments.ChangeCityFragment;
 import com.olgunyilmaz.spotticket.view.fragments.FavoritesFragment;
 import com.olgunyilmaz.spotticket.view.fragments.ProfileFragment;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (!email.isEmpty()) {
             getFavoriteEvents(email);
+            getPp(email);
         }
 
         fragmentManager = getSupportFragmentManager();
@@ -97,6 +99,25 @@ public class MainActivity extends AppCompatActivity {
                 replaceFragment(new FavoritesFragment());
             }
         });
+
+    }
+
+    private void getPp(String email) {
+        db.collection("Users").whereEqualTo("email",email).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            QueryDocumentSnapshot document = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0);
+                            String ppUrl = document.getString("profileImageUrl");
+                            if (ppUrl != null) {
+                                UserManager.getInstance().ppUrl = ppUrl;
+                            }
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -123,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getFavoriteEvents(String userEmail) {
         String path = userEmail + "_Events";
-        db.collection(path).get()
+        db.collection(path).orderBy("eventName").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

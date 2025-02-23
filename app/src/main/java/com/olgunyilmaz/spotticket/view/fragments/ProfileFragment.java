@@ -1,14 +1,13 @@
 package com.olgunyilmaz.spotticket.view.fragments;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,23 +23,41 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.olgunyilmaz.spotticket.databinding.FragmentProfileBinding;
+import com.olgunyilmaz.spotticket.service.UserManager;
+import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfileFragment extends Fragment {
 
     FragmentProfileBinding binding;
     SharedPreferences sharedPreferences;
+    private Uri imgUri;
+    private FirebaseFirestore db;
+    private FirebaseAuth auth;
 
     ActivityResultLauncher<Intent> activityResultLauncher;
     ActivityResultLauncher<String> permissionLauncher;
+    private FirebaseStorage storage;
+    private FirebaseUser user;
 
 
     @Override
@@ -53,6 +70,9 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(getLayoutInflater(), container, false);
         View view = binding.getRoot();
+
+        storage = FirebaseStorage.getInstance();
+
         return view;
     }
 
@@ -64,13 +84,19 @@ public class ProfileFragment extends Fragment {
 
         registerLauncher();
 
+        uploadPp();
+
         sharedPreferences = getActivity().getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+        auth.setLanguageCode("tr");
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         binding.emailText.setText(user.getDisplayName());
         binding.usernameText.setText(user.getEmail());
-        binding.cityText.setText("Şehir : " + sharedPreferences.getString("city", "ankara")); // will be update
+        binding.cityText.setText("Şehir : " + sharedPreferences.getString("city", "Ankara")); // will be update
 
         binding.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +105,12 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+    }
+
+    private void uploadPp(){
+        if (!UserManager.getInstance().ppUrl.isEmpty()){
+            Picasso.get().load(UserManager.getInstance().ppUrl).into(binding.profileImage);
+        }
     }
 
     private void edit() {
@@ -101,7 +133,56 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    private void updateProfileImage(String email, String ppUrl) {
+        Map<String, Object> user = new HashMap<>();
+        user.put("email", email);
+        user.put("profileImageUrl", ppUrl);
+
+        db.collection("Users").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+
+    }
+
+    private void uploadImage2db(){
+        if (imgUri != null){
+            String dir_name = "pp";
+            StorageReference storageRef = storage.getReference();
+            StorageReference imageRef = storageRef.child("images").child(dir_name).child(user.getEmail()+".jpg");
+
+            imageRef.putFile(imgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(getContext(),"Fotoğraf başarıyla değiştirildi!",Toast.LENGTH_LONG).show();
+                    imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    updateProfileImage(auth.getCurrentUser().getEmail().toString(),uri.toString());
+                                }
+                            });
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getContext(),e.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
+    }
+
     private void save(String city) {
+        uploadImage2db();
         String msg;
         displayMode();
         if (!city.isEmpty()) {
@@ -111,7 +192,7 @@ public class ProfileFragment extends Fragment {
             msg = "Lütfen şehir ismini doğru girdiğinizden emin olun!";
         }
 
-        binding.cityText.setText("Şehir : " + sharedPreferences.getString("city", "ankara"));
+        binding.cityText.setText("Şehir : " + sharedPreferences.getString("city", "Ankara"));
         Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
 
     }
@@ -167,9 +248,8 @@ public class ProfileFragment extends Fragment {
                 if (result.getResultCode() == RESULT_OK) {
                     Intent intentFromResult = result.getData();
                     if (intentFromResult != null) {
-                        Uri imgData = intentFromResult.getData();
-                        binding.profileImage.setImageURI(imgData);
-
+                        imgUri = intentFromResult.getData();
+                        binding.profileImage.setImageURI(imgUri);
                     }
 
                 }
