@@ -35,6 +35,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -107,8 +108,8 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    private void uploadPp(){
-        if (!UserManager.getInstance().ppUrl.isEmpty()){
+    private void uploadPp() {
+        if (!UserManager.getInstance().ppUrl.isEmpty()) {
             Picasso.get().load(UserManager.getInstance().ppUrl).into(binding.profileImage);
         }
     }
@@ -134,47 +135,57 @@ public class ProfileFragment extends Fragment {
     }
 
     private void updateProfileImage(String email, String ppUrl) {
-        Map<String, Object> user = new HashMap<>();
-        user.put("email", email);
-        user.put("profileImageUrl", ppUrl);
+        db.collection("Users")
+                .whereEqualTo("email", email)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) { // update
+                        DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                        String documentId = documentSnapshot.getId();
 
-        db.collection("Users").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
+                        db.collection("Users").document(documentId)
+                                .update("profileImageUrl", ppUrl)
+                                .addOnSuccessListener(aVoid -> {
+                                    Log.d(TAG, "Profile image updated successfully.");
+                                });
+                    } else { // add new
+                        Map<String, Object> user = new HashMap<>();
+                        user.put("email", email);
+                        user.put("profileImageUrl", ppUrl);
+
+                        db.collection("Users").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                            }
+                        });
                     }
                 });
-
     }
 
-    private void uploadImage2db(){
-        if (imgUri != null){
+
+    private void uploadImage2db() {
+        if (imgUri != null) {
             String dir_name = "pp";
             StorageReference storageRef = storage.getReference();
-            StorageReference imageRef = storageRef.child("images").child(dir_name).child(user.getEmail()+".jpg");
+            StorageReference imageRef = storageRef.child("images").child(dir_name).child(user.getEmail() + ".jpg");
 
             imageRef.putFile(imgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(getContext(),"Fotoğraf başarıyla değiştirildi!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Fotoğraf başarıyla değiştirildi!", Toast.LENGTH_LONG).show();
                     imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    updateProfileImage(auth.getCurrentUser().getEmail().toString(),uri.toString());
-                                }
-                            });
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            updateProfileImage(auth.getCurrentUser().getEmail().toString(), uri.toString());
+                        }
+                    });
 
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getContext(),e.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -187,14 +198,9 @@ public class ProfileFragment extends Fragment {
         displayMode();
         if (!city.isEmpty()) {
             sharedPreferences.edit().putString("city", city).apply();
-            msg = "Şehriniz başarıyla değiştirildi!";
-        } else {
-            msg = "Lütfen şehir ismini doğru girdiğinizden emin olun!";
+            Toast.makeText(getContext(), "Şehriniz başarıyla değiştirildi!", Toast.LENGTH_LONG).show();
         }
-
         binding.cityText.setText("Şehir : " + sharedPreferences.getString("city", "Ankara"));
-        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
-
     }
 
     private void displayMode() {

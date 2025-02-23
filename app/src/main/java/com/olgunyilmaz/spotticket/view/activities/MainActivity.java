@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.service.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.databinding.ActivityMainBinding;
@@ -108,14 +109,20 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            QueryDocumentSnapshot document = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0);
-                            String ppUrl = document.getString("profileImageUrl");
-                            if (ppUrl != null) {
-                                UserManager.getInstance().ppUrl = ppUrl;
+                            QuerySnapshot result = task.getResult();
+                            if (result != null && !result.isEmpty()) {
+                                QueryDocumentSnapshot document = (QueryDocumentSnapshot) result.getDocuments().get(0);
+                                String ppUrl = document.getString("profileImageUrl");
+                                if (ppUrl != null) {
+                                    UserManager.getInstance().ppUrl = ppUrl;
+                                }
+                            } else {
+                                Log.w(TAG, "No documents found.");
                             }
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
+
                     }
                 });
     }
@@ -128,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
     private void signOut() {
         auth.signOut();
         goToLoginActivity();
+
+        UserManager.getInstance().ppUrl = ""; // clean for next user
     }
 
     private void goToLoginActivity() {
