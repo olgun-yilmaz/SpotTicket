@@ -1,6 +1,5 @@
 package com.olgunyilmaz.spotticket.service;
 
-import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 
 public class UserManager {
     private static UserManager instance;

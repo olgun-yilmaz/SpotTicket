@@ -1,4 +1,5 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,60 +8,94 @@
 
     <EditText
         android:id="@+id/loginUsernameText"
+
+        android:layout_height="0dp"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:ems="10"
+
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintWidth_percent="0.8"
+
+        app:layout_constraintVertical_bias="0.15"
+
         android:hint="Kullanıcı Adı :"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/loginPasswordText"
-        app:layout_constraintEnd_toEndOf="@+id/loginPasswordText"
-        app:layout_constraintStart_toStartOf="@+id/loginPasswordText" />
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/loginPasswordText"
+
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:ems="10"
+        app:layout_constraintHeight_percent="0.1"
+        android:layout_height="0dp"
+
+        app:layout_constraintVertical_bias="0.35"
+
         android:hint="Şifre :"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/resetPasswordText"
-        app:layout_constraintEnd_toEndOf="@+id/resetPasswordText"
-        app:layout_constraintStart_toStartOf="@+id/resetPasswordText" />
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintEnd_toEndOf="@+id/loginUsernameText"
+        app:layout_constraintStart_toStartOf="@+id/loginUsernameText" />
 
     <TextView
         android:id="@+id/resetPasswordText"
+
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:text="- - - - - Şifreni mi unuttun? - - - - -"
+        app:layout_constraintHeight_percent="0.1"
+        android:layout_height="0dp"
+
+        app:layout_constraintVertical_bias="0.55"
+
+        android:text="- - - Şifreni mi unuttun? - - -"
         android:textAlignment="center"
         android:textColor="#03A9F4"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/loginButton2"
-        app:layout_constraintEnd_toEndOf="@+id/loginButton2"
-        app:layout_constraintStart_toStartOf="@+id/loginButton2" />
+        android:gravity="center"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintEnd_toEndOf="@+id/loginPasswordText"
+        app:layout_constraintStart_toStartOf="@+id/loginPasswordText" />
 
     <Button
         android:id="@+id/loginButton2"
+
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        app:layout_constraintHeight_percent="0.1"
+        android:layout_height="0dp"
+
+        app:layout_constraintVertical_bias="0.75"
+
         android:text="GİRİŞ YAP"
-        app:layout_constraintBottom_toTopOf="@+id/loginSignUpButton"
-        app:layout_constraintEnd_toEndOf="@+id/loginSignUpButton"
-        app:layout_constraintStart_toStartOf="@+id/loginSignUpButton" />
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintEnd_toEndOf="@+id/resetPasswordText"
+        app:layout_constraintStart_toStartOf="@+id/resetPasswordText" />
 
     <Button
         android:id="@+id/loginSignUpButton"
+
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="50dp"
+        app:layout_constraintHeight_percent="0.1"
+        android:layout_height="0dp"
+
+        app:layout_constraintVertical_bias="0.95"
+
         android:text="KAYIT OL"
+
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintEnd_toEndOf="@+id/resetPasswordText"
+        app:layout_constraintStart_toStartOf="@+id/resetPasswordText"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
