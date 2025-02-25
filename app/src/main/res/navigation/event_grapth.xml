@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/changeCityFragment"
-        android:name="com.olgunyilmaz.spotticket.view.fragments.ChangeCityFragment"
+        android:name="com.olgunyilmaz.spotticket.view.fragments.DisplayFragment"
         android:label="fragment_change_city"
-        tools:layout="@layout/fragment_change_city" >
+        tools:layout="@layout/fragment_display" >
         <action
             android:id="@+id/action_changeCityFragment_self"
             app:destination="@id/changeCityFragment" />

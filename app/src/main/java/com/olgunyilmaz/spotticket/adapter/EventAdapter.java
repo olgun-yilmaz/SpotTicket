@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.olgunyilmaz.spotticket.databinding.EventRowBinding;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.olgunyilmaz.spotticket.view.fragments.EventDetailsFragment;
 import com.olgunyilmaz.spotticket.R;
-import com.olgunyilmaz.spotticket.databinding.EventItemBinding;
 import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.squareup.picasso.Picasso;
 
@@ -27,7 +27,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
     @Override
     public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        EventItemBinding binding = EventItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        EventRowBinding binding = EventRowBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new EventViewHolder(binding);
     }
 
@@ -65,9 +65,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     }
 
     public class EventViewHolder extends RecyclerView.ViewHolder {
-        private final EventItemBinding binding;
+        private final EventRowBinding binding;
 
-        public EventViewHolder(EventItemBinding binding) {
+        public EventViewHolder(EventRowBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

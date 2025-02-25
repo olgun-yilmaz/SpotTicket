@@ -44,7 +44,10 @@ import com.olgunyilmaz.spotticket.databinding.FragmentProfileBinding;
 import com.olgunyilmaz.spotticket.service.UserManager;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class ProfileFragment extends Fragment {
@@ -85,6 +88,8 @@ public class ProfileFragment extends Fragment {
 
         uploadPp();
 
+        displayMode();
+
         sharedPreferences = getActivity().getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);
 
         db = FirebaseFirestore.getInstance();
@@ -93,8 +98,41 @@ public class ProfileFragment extends Fragment {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+
         binding.emailText.setText(user.getDisplayName());
         binding.usernameText.setText(user.getEmail());
+        binding.creationDateText.setText(getCreationDate());
+
+        binding.editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editMode();
+            }
+        });
+
+    }
+
+    private String getCreationDate(){
+        if (user.getMetadata() != null){
+            long creationTime = user.getMetadata().getCreationTimestamp();
+            Date creationDate = new Date(creationTime);
+            SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", new Locale("tr", "TR"));
+            return sdf.format(creationDate);
+        }
+        return "Tarih bulunamadı!";
+
+    }
+
+    private void uploadPp() {
+        if (!UserManager.getInstance().ppUrl.isEmpty()) {
+            Picasso.get().load(UserManager.getInstance().ppUrl).into(binding.profileImage);
+        }
+    }
+
+    private void editMode(){
+        binding.editButton.setVisibility(View.GONE);
+        binding.saveButton.setVisibility(View.VISIBLE);
+        binding.profileImage.setEnabled(true);
 
         binding.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,12 +141,20 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        binding.saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayMode();
+                uploadImage2db();
+            }
+        });
+
     }
 
-    private void uploadPp() {
-        if (!UserManager.getInstance().ppUrl.isEmpty()) {
-            Picasso.get().load(UserManager.getInstance().ppUrl).into(binding.profileImage);
-        }
+    private void displayMode(){
+        binding.editButton.setVisibility(View.VISIBLE);
+        binding.saveButton.setVisibility(View.GONE);
+        binding.profileImage.setEnabled(false);
     }
 
     private void updateProfileImage(String email, String ppUrl) {
@@ -205,7 +251,6 @@ public class ProfileFragment extends Fragment {
                     if (intentFromResult != null) {
                         imgUri = intentFromResult.getData();
                         binding.profileImage.setImageURI(imgUri);
-                        uploadImage2db();
                     }
 
                 }

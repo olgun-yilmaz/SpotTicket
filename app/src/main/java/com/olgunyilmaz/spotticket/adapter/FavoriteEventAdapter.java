@@ -1,17 +1,16 @@
 package com.olgunyilmaz.spotticket.adapter;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.olgunyilmaz.spotticket.R;
-import com.olgunyilmaz.spotticket.databinding.EventItemBinding;
+
+import com.olgunyilmaz.spotticket.databinding.EventRowBinding;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.olgunyilmaz.spotticket.view.fragments.EventDetailsFragment;
@@ -30,8 +29,8 @@ public class FavoriteEventAdapter extends RecyclerView.Adapter<FavoriteEventAdap
     @NonNull
     @Override
     public FavoriteEventHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        EventItemBinding itemBinding = EventItemBinding.inflate(LayoutInflater.from(parent.getContext()));
-        return new FavoriteEventHolder(itemBinding);
+        EventRowBinding binding = EventRowBinding.inflate(LayoutInflater.from(parent.getContext()));
+        return new FavoriteEventHolder(binding);
     }
 
     @Override
@@ -69,9 +68,9 @@ public class FavoriteEventAdapter extends RecyclerView.Adapter<FavoriteEventAdap
     }
 
     public class FavoriteEventHolder extends RecyclerView.ViewHolder {
-        private EventItemBinding binding;
+        private EventRowBinding binding;
 
-        public FavoriteEventHolder(EventItemBinding binding) {
+        public FavoriteEventHolder(EventRowBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

@@ -6,6 +6,6 @@
     android:layout_height="wrap_content"
     android:padding="16dp"
     android:textSize="16sp"
-    android:text="CITY"
+    android:text="City"
     android:gravity="center"
     android:background="?attr/selectableItemBackground"/>

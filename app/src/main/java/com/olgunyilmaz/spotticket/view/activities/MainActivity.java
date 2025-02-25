@@ -20,21 +20,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.auth.User;
-import com.google.gson.Gson;
 import com.olgunyilmaz.spotticket.R;
-import com.olgunyilmaz.spotticket.model.CitiesResponse;
 import com.olgunyilmaz.spotticket.service.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.databinding.ActivityMainBinding;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.service.UserManager;
-import com.olgunyilmaz.spotticket.view.fragments.ChangeCityFragment;
+import com.olgunyilmaz.spotticket.view.fragments.DisplayFragment;
 import com.olgunyilmaz.spotticket.view.fragments.FavoritesFragment;
 import com.olgunyilmaz.spotticket.view.fragments.ProfileFragment;
-
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -82,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         binding.homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                replaceFragment(new ChangeCityFragment());
+                replaceFragment(new DisplayFragment());
             }
         });
 

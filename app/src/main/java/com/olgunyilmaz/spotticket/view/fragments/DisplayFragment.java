@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.olgunyilmaz.spotticket.adapter.EventAdapter;
-import com.olgunyilmaz.spotticket.databinding.FragmentChangeCityBinding;
+import com.olgunyilmaz.spotticket.databinding.FragmentDisplayBinding;
 import com.olgunyilmaz.spotticket.model.CitiesResponse;
 import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.service.RetrofitClient;
@@ -37,8 +37,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class ChangeCityFragment extends Fragment implements SelectCityFragment.CitySelectListener {
-    private FragmentChangeCityBinding binding;
+public class DisplayFragment extends Fragment implements SelectCityFragment.CitySelectListener {
+    private FragmentDisplayBinding binding;
     private EventAdapter eventAdapter;
 
     SharedPreferences sharedPreferences;
@@ -53,7 +53,7 @@ public class ChangeCityFragment extends Fragment implements SelectCityFragment.C
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentChangeCityBinding.inflate(getLayoutInflater(),container,false);
+        binding = FragmentDisplayBinding.inflate(getLayoutInflater(),container,false);
         View view = binding.getRoot();
         return view;
     }
