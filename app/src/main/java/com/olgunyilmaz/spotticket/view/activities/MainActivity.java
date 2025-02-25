@@ -21,7 +21,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
+import com.google.gson.Gson;
 import com.olgunyilmaz.spotticket.R;
+import com.olgunyilmaz.spotticket.model.CitiesResponse;
 import com.olgunyilmaz.spotticket.service.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.databinding.ActivityMainBinding;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
@@ -29,6 +31,10 @@ import com.olgunyilmaz.spotticket.service.UserManager;
 import com.olgunyilmaz.spotticket.view.fragments.ChangeCityFragment;
 import com.olgunyilmaz.spotticket.view.fragments.FavoritesFragment;
 import com.olgunyilmaz.spotticket.view.fragments.ProfileFragment;
+
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -73,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
         sharedPreferences = getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);
 
+        sharedPreferences.edit().putString("city", getCity()).apply();
+
         binding.profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,8 +111,26 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private String getCity() {
+        try {
+            Reader reader = new InputStreamReader(getAssets().open("cities.json"));
+            Gson gson = new Gson();
+            CitiesResponse response = gson.fromJson(reader, CitiesResponse.class);
+
+            if (response != null && response.getCities() != null) {
+                Random random = new Random();
+                int cityIdx = random.nextInt(response.getCities().size());
+                return response.getCities().get(cityIdx);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Ankara";
+    }
+
     private void getPp(String email) {
-        db.collection("Users").whereEqualTo("email",email).get()
+        db.collection("Users").whereEqualTo("email", email).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

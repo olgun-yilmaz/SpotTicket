@@ -25,6 +25,7 @@ import com.olgunyilmaz.spotticket.service.RetrofitClient;
 import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -60,7 +61,7 @@ public class ChangeCityFragment extends Fragment {
 
         sharedPreferences = getActivity().getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);
 
-        String city = sharedPreferences.getString("city","ankara");
+        String city = sharedPreferences.getString("city","Ankara");
         binding.fragmentCityText.setText(city);
 
         TicketmasterApiService apiService = RetrofitClient.getApiService();
@@ -74,9 +75,15 @@ public class ChangeCityFragment extends Fragment {
                     @Override
                     public void onResponse(Call<EventResponse> call, Response<EventResponse> response) {
                         if (response.isSuccessful()) {
-                            List<EventResponse.Event> events = response.body().getEmbedded().getEvents();
-                            eventAdapter = new EventAdapter(events);
-                            binding.recyclerView.setAdapter(eventAdapter);
+                            if (response.body() != null){
+                                List<EventResponse.Event> events = new ArrayList<>();
+                                if (response.body().getEmbedded() != null) {
+                                    events = response.body().getEmbedded().getEvents();
+                                }
+                                eventAdapter = new EventAdapter(events);
+                                binding.recyclerView.setAdapter(eventAdapter);
+                            }
+
                         } else {
                             try {
                                 String errorMessage = "Hata: " + response.code() + " - " + response.message();
