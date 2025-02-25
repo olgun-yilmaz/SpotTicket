@@ -1,15 +1,15 @@
 package com.olgunyilmaz.spotticket.model;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class CitiesResponse {
-    private List<String> cities;
+    private ArrayList<String> cities;
 
-    public List<String> getCities() {
+    public ArrayList<String> getCities() {
         return cities;
     }
 
-    public void setCities(List<String> cities) {
+    public void setCities(ArrayList<String> cities) {
         this.cities = cities;
     }
 }

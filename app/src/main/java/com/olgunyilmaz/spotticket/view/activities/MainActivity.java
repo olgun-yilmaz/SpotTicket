@@ -79,15 +79,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
         sharedPreferences = getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);
 
-        sharedPreferences.edit().putString("city", getCity()).apply();
-
-        binding.profileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToProfileScreen();
-            }
-        });
-
         binding.homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,12 +86,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        binding.signOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signOut();
-            }
-        });
 
         binding.myEventsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,24 +94,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    private String getCity() {
-        try {
-            Reader reader = new InputStreamReader(getAssets().open("cities.json"));
-            Gson gson = new Gson();
-            CitiesResponse response = gson.fromJson(reader, CitiesResponse.class);
-
-            if (response != null && response.getCities() != null) {
-                Random random = new Random();
-                int cityIdx = random.nextInt(response.getCities().size());
-                return response.getCities().get(cityIdx);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "Ankara";
     }
 
     private void getPp(String email) {
@@ -158,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
     }
 
-    private void signOut() {
+    public void signOut(View view) {
         auth.signOut();
         goToLoginActivity();
 
@@ -172,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    private void goToProfileScreen() {
+    public void goToProfileScreen(View view) {
         ProfileFragment profileFragment = new ProfileFragment();
         replaceFragment(profileFragment);
     }

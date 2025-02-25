@@ -81,8 +81,6 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        displayMode();
-
         registerLauncher();
 
         uploadPp();
@@ -97,12 +95,11 @@ public class ProfileFragment extends Fragment {
 
         binding.emailText.setText(user.getDisplayName());
         binding.usernameText.setText(user.getEmail());
-        binding.cityText.setText("Şehir : " + sharedPreferences.getString("city", "Ankara")); // will be update
 
-        binding.editButton.setOnClickListener(new View.OnClickListener() {
+        binding.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                edit();
+                changeProfileImage(view);
             }
         });
 
@@ -112,26 +109,6 @@ public class ProfileFragment extends Fragment {
         if (!UserManager.getInstance().ppUrl.isEmpty()) {
             Picasso.get().load(UserManager.getInstance().ppUrl).into(binding.profileImage);
         }
-    }
-
-    private void edit() {
-        editMode();
-        binding.cityText.setText("Şehir : ");
-
-        binding.saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                save(binding.editTextCity.getText().toString());
-            }
-        });
-
-        binding.profileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changeProfileImage(view);
-            }
-        });
-
     }
 
     private void updateProfileImage(String email, String ppUrl) {
@@ -189,34 +166,6 @@ public class ProfileFragment extends Fragment {
                 }
             });
         }
-
-    }
-
-    private void save(String city) {
-        uploadImage2db();
-        String msg;
-        displayMode();
-        if (!city.isEmpty()) {
-            sharedPreferences.edit().putString("city", city).apply();
-            Toast.makeText(getContext(), "Şehriniz başarıyla değiştirildi!", Toast.LENGTH_LONG).show();
-        }
-        binding.cityText.setText("Şehir : " + sharedPreferences.getString("city", "Ankara"));
-    }
-
-    private void displayMode() {
-        binding.editButton.setVisibility(View.VISIBLE);
-        binding.editTextCity.setVisibility(View.GONE);
-        binding.saveButton.setVisibility(View.GONE);
-
-        binding.profileImage.setEnabled(false);
-    }
-
-    private void editMode() {
-        binding.editButton.setVisibility(View.GONE);
-        binding.editTextCity.setVisibility(View.VISIBLE);
-        binding.saveButton.setVisibility(View.VISIBLE);
-
-        binding.profileImage.setEnabled(true);
     }
 
     private void changeProfileImage(View view) {
@@ -256,6 +205,7 @@ public class ProfileFragment extends Fragment {
                     if (intentFromResult != null) {
                         imgUri = intentFromResult.getData();
                         binding.profileImage.setImageURI(imgUri);
+                        uploadImage2db();
                     }
 
                 }
@@ -274,8 +224,6 @@ public class ProfileFragment extends Fragment {
                     //permission denied
                     Toast.makeText(getActivity(), "Permission needed!", Toast.LENGTH_LONG).show();
                 }
-
-
             }
         });
     }

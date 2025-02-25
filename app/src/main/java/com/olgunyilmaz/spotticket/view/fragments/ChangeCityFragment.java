@@ -18,13 +18,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.olgunyilmaz.spotticket.adapter.EventAdapter;
 import com.olgunyilmaz.spotticket.databinding.FragmentChangeCityBinding;
+import com.olgunyilmaz.spotticket.model.CitiesResponse;
 import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.service.RetrofitClient;
 import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,11 +37,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class ChangeCityFragment extends Fragment {
+public class ChangeCityFragment extends Fragment implements SelectCityFragment.CitySelectListener {
     private FragmentChangeCityBinding binding;
     private EventAdapter eventAdapter;
 
     SharedPreferences sharedPreferences;
+    TicketmasterApiService apiService;
 
 
     @Override
@@ -64,9 +69,47 @@ public class ChangeCityFragment extends Fragment {
         String city = sharedPreferences.getString("city","Ankara");
         binding.fragmentCityText.setText(city);
 
-        TicketmasterApiService apiService = RetrofitClient.getApiService();
-        findEventByCity(apiService,city);
+        ArrayList<String> cities = getCities();
 
+        binding.fragmentCityText.setOnClickListener(v -> showCityPicker(cities));
+
+        apiService = RetrofitClient.getApiService();
+        findEventByCity(apiService,city);
+    }
+
+    private ArrayList<String> getCities() {
+        try {
+            Reader reader = new InputStreamReader(getActivity().getAssets().open("cities.json"));
+            Gson gson = new Gson();
+            CitiesResponse response = gson.fromJson(reader, CitiesResponse.class);
+
+            if (response != null && response.getCities() != null) {
+                return response.getCities();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void showCityPicker(ArrayList <String> cities) {
+        SelectCityFragment fragment = new SelectCityFragment();
+
+        Bundle args = new Bundle();
+        args.putStringArrayList("cities",cities);
+
+        fragment.setArguments(args);
+        fragment.setListener(this);
+
+        fragment.show(getActivity().getSupportFragmentManager(), "cityPicker");
+    }
+
+    @Override
+    public void onCitySelected(String city) {
+        binding.fragmentCityText.setText(city);
+        findEventByCity(apiService,city);
+        sharedPreferences.edit().putString("city",city).apply();
     }
 
     private void findEventByCity(TicketmasterApiService apiService,String city){
