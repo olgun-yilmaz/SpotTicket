@@ -28,6 +28,7 @@ import com.olgunyilmaz.spotticket.service.UserManager;
 import com.olgunyilmaz.spotticket.view.fragments.DisplayFragment;
 import com.olgunyilmaz.spotticket.view.fragments.FavoritesFragment;
 import com.olgunyilmaz.spotticket.view.fragments.ProfileFragment;
+import com.olgunyilmaz.spotticket.view.fragments.SelectCategoryFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -76,6 +77,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 replaceFragment(new DisplayFragment());
+            }
+        });
+
+        binding.settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                replaceFragment(new SelectCategoryFragment());
             }
         });
 

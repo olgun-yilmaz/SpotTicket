@@ -47,8 +47,6 @@ public class FavoritesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding.myEventsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         displayEvents();
-
-
     }
 
     private void displayEvents() {

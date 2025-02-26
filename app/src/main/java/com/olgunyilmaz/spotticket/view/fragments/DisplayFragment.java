@@ -81,7 +81,7 @@ public class DisplayFragment extends Fragment implements SelectCityFragment.City
 
         binding.fragmentCityText.setOnClickListener(v -> showCityPicker(cities));
 
-        category = "Sanat & Tiyatro";
+        category = sharedPreferences.getString("category","Pop");
 
         apiService = RetrofitClient.getApiService();
         findEvent(apiService, city, category);

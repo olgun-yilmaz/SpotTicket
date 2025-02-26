@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/event_grapth"
-    app:startDestination="@id/changeCityFragment">
+    app:startDestination="@id/selectCategoryFragment">
 
     <fragment
         android:id="@+id/changeCityFragment"
@@ -12,6 +12,33 @@
         tools:layout="@layout/fragment_display" >
         <action
             android:id="@+id/action_changeCityFragment_self"
+            app:destination="@id/changeCityFragment" />
+        <action
+            android:id="@+id/action_changeCityFragment_self2"
+            app:destination="@id/changeCityFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/eventDetailsFragment"
+        android:name="com.olgunyilmaz.spotticket.view.fragments.EventDetailsFragment"
+        android:label="fragment_event_details"
+        tools:layout="@layout/fragment_event_details" />
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.olgunyilmaz.spotticket.view.fragments.FavoritesFragment"
+        android:label="fragment_favorites"
+        tools:layout="@layout/fragment_favorites" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.olgunyilmaz.spotticket.view.fragments.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/selectCategoryFragment"
+        android:name="com.olgunyilmaz.spotticket.view.fragments.SelectCategoryFragment"
+        android:label="fragment_select_category"
+        tools:layout="@layout/fragment_select_category" >
+        <action
+            android:id="@+id/action_selectCategoryFragment_to_changeCityFragment"
             app:destination="@id/changeCityFragment" />
     </fragment>
 </navigation>
