@@ -27,6 +27,7 @@ import com.olgunyilmaz.spotticket.model.CitiesResponse;
 import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.service.RetrofitClient;
 import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
+import com.olgunyilmaz.spotticket.util.Categories;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -48,6 +49,7 @@ public class DisplayFragment extends Fragment implements SelectCityFragment.City
     TicketmasterApiService apiService;
     private Runnable runnable;
     private Handler handler;
+    private String category;
     int counter = 0;
 
 
@@ -79,8 +81,10 @@ public class DisplayFragment extends Fragment implements SelectCityFragment.City
 
         binding.fragmentCityText.setOnClickListener(v -> showCityPicker(cities));
 
+        category = "Sanat & Tiyatro";
+
         apiService = RetrofitClient.getApiService();
-        findEventByCity(apiService, city);
+        findEvent(apiService, city, category);
     }
 
     private void updateLoadingText() {
@@ -131,13 +135,13 @@ public class DisplayFragment extends Fragment implements SelectCityFragment.City
     @Override
     public void onCitySelected(String city) {
         binding.fragmentCityText.setText(city);
-        findEventByCity(apiService, city);
+        findEvent(apiService, city, category);
         sharedPreferences.edit().putString("city", city).apply();
     }
 
-    private void findEventByCity(TicketmasterApiService apiService, String city) {
+    private void findEvent(TicketmasterApiService apiService, String city, String category) {
         updateLoadingText();
-        apiService.getEvents(TICKETMASTER_API_KEY, city)
+        apiService.getEvents(TICKETMASTER_API_KEY, city, Categories.CATEGORIES.get(category))
                 .enqueue(new Callback<EventResponse>() {
                     @Override
                     public void onResponse(Call<EventResponse> call, Response<EventResponse> response) {

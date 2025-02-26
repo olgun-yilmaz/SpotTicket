@@ -12,7 +12,8 @@ public interface TicketmasterApiService {
     @GET("events.json")
     Call<EventResponse> getEvents(
             @Query("apikey") String apiKey,
-            @Query("city") String city
+            @Query("city") String city,
+            @Query("classificationId") String categoryId
     );
     @GET("events/{eventId}.json")
     Call<EventDetailsResponse> getEventDetails(
