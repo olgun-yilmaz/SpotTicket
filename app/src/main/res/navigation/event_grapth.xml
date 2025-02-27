@@ -36,7 +36,7 @@
         android:id="@+id/selectCategoryFragment"
         android:name="com.olgunyilmaz.spotticket.view.fragments.SelectCategoryFragment"
         android:label="fragment_select_category"
-        tools:layout="@layout/fragment_select_category" >
+        tools:layout="@layout/fragment_select_category1" >
         <action
             android:id="@+id/action_selectCategoryFragment_to_changeCityFragment"
             app:destination="@id/changeCityFragment" />
