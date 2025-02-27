@@ -65,31 +65,31 @@ public class SelectCategoryFragment extends Fragment {
 
     private void getCategories() {
         categories.add(new CategoryResponse(R.drawable.family, "Aile"));
-        categories.add(new CategoryResponse(R.drawable.ballet, "Bale"));
-        categories.add(new CategoryResponse(R.drawable.basketball, "Basketbol"));
         categories.add(new CategoryResponse(R.drawable.baseball, "Beyzbol"));
         categories.add(new CategoryResponse(R.drawable.blues, "Blues"));
-        categories.add(new CategoryResponse(R.drawable.ice_show, "Buz Gösterileri"));
+        categories.add(new CategoryResponse(R.drawable.ice_hockey, "Buz Hokeyi"));
         categories.add(new CategoryResponse(R.drawable.dancing, "Dans"));
-        categories.add(new CategoryResponse(R.drawable.fest, "Festivaller"));
+        categories.add(new CategoryResponse(R.drawable.disney, "Disney"));
         categories.add(new CategoryResponse(R.drawable.movie, "Film"));
-
-        categories.add(new CategoryResponse(R.drawable.movie_fest, "Film Festivalleri"));
         categories.add(new CategoryResponse(R.drawable.folk, "Folk"));
         categories.add(new CategoryResponse(R.drawable.soccer, "Futbol"));
-        categories.add(new CategoryResponse(R.drawable.esports, "E-Spor"));
+
+        categories.add(new CategoryResponse(R.drawable.electro, "Elektronik Müzik"));
         categories.add(new CategoryResponse(R.drawable.hip_hop, "Hip-Hop/Rap"));
         categories.add(new CategoryResponse(R.drawable.jazz, "Jazz"));
-        categories.add(new CategoryResponse(R.drawable.comedy, "Komedi"));
+        categories.add(new CategoryResponse(R.drawable.classical_music, "Klasik Müzik"));
+        categories.add(new CategoryResponse(R.drawable.conference, "Konferans"));
         categories.add(new CategoryResponse(R.drawable.cultural, "Kültür Festivali"));
         categories.add(new CategoryResponse(R.drawable.mma, "MMA/Dövüş Sporları"));
-
-        categories.add(new CategoryResponse(R.drawable.motosports, "Motorsporları"));
+        categories.add(new CategoryResponse(R.drawable.music, "Müzik"));
         categories.add(new CategoryResponse(R.drawable.musical, "Müzikal"));
+
         categories.add(new CategoryResponse(R.drawable.opera, "Opera"));
+        categories.add(new CategoryResponse(R.drawable.rb, "R&B"));
         categories.add(new CategoryResponse(R.drawable.rock, "Rock"));
         categories.add(new CategoryResponse(R.drawable.pop_music, "Pop"));
-        categories.add(new CategoryResponse(R.drawable.circus, "Sirk"));
+        categories.add(new CategoryResponse(R.drawable.theater_art, "Sanat & Tiyatro"));
+        categories.add(new CategoryResponse(R.drawable.sports, "Spor"));
         categories.add(new CategoryResponse(R.drawable.tennis, "Tenis"));
         categories.add(new CategoryResponse(R.drawable.theater, "Tiyatro"));
         categories.add(new CategoryResponse(R.drawable.food, "Yemek Festivali"));

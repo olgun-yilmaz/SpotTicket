@@ -10,6 +10,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.CountDownTimer;
@@ -21,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.adapter.EventAdapter;
 import com.olgunyilmaz.spotticket.databinding.FragmentDisplayBinding;
 import com.olgunyilmaz.spotticket.model.CitiesResponse;
@@ -43,6 +46,7 @@ import retrofit2.Response;
 
 public class DisplayFragment extends Fragment implements SelectCityFragment.CitySelectListener {
     private FragmentDisplayBinding binding;
+    private FragmentManager fragmentManager;
     private EventAdapter eventAdapter;
 
     SharedPreferences sharedPreferences;
@@ -72,6 +76,8 @@ public class DisplayFragment extends Fragment implements SelectCityFragment.City
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        fragmentManager = getActivity().getSupportFragmentManager();
+
         sharedPreferences = getActivity().getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);
 
         String city = sharedPreferences.getString("city", "Ankara");
@@ -80,8 +86,10 @@ public class DisplayFragment extends Fragment implements SelectCityFragment.City
         ArrayList<String> cities = getCities();
 
         binding.fragmentCityText.setOnClickListener(v -> showCityPicker(cities));
+        binding.fragmentCategoryText.setOnClickListener(v -> selectCategory());
 
         category = sharedPreferences.getString("category","Pop");
+        binding.fragmentCategoryText.setText(category);
 
         apiService = RetrofitClient.getApiService();
         findEvent(apiService, city, category);
@@ -100,6 +108,12 @@ public class DisplayFragment extends Fragment implements SelectCityFragment.City
             }
         };
         handler.post(runnable);
+    }
+
+    private void selectCategory(){
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        SelectCategoryFragment fragment = new SelectCategoryFragment();
+        fragmentTransaction.replace(R.id.fragmentContainerView,fragment).commit();
     }
 
     private ArrayList<String> getCities() {

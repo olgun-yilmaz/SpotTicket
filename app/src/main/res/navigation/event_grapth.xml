@@ -3,30 +3,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/event_grapth"
-    app:startDestination="@id/selectCategoryFragment">
+    app:startDestination="@id/displayFragment">
 
     <fragment
-        android:id="@+id/changeCityFragment"
+        android:id="@+id/displayFragment"
         android:name="com.olgunyilmaz.spotticket.view.fragments.DisplayFragment"
         android:label="fragment_change_city"
         tools:layout="@layout/fragment_display" >
         <action
             android:id="@+id/action_changeCityFragment_self"
-            app:destination="@id/changeCityFragment" />
+            app:destination="@id/displayFragment" />
         <action
             android:id="@+id/action_changeCityFragment_self2"
-            app:destination="@id/changeCityFragment" />
+            app:destination="@id/displayFragment" />
+        <action
+            android:id="@+id/action_changeCityFragment_to_favoritesFragment"
+            app:destination="@id/favoritesFragment" />
+        <action
+            android:id="@+id/action_changeCityFragment_to_eventDetailsFragment"
+            app:destination="@id/eventDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/eventDetailsFragment"
         android:name="com.olgunyilmaz.spotticket.view.fragments.EventDetailsFragment"
         android:label="fragment_event_details"
-        tools:layout="@layout/fragment_event_details" />
+        tools:layout="@layout/fragment_event_details" >
+        <action
+            android:id="@+id/action_eventDetailsFragment_to_changeCityFragment"
+            app:destination="@id/displayFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.olgunyilmaz.spotticket.view.fragments.FavoritesFragment"
         android:label="fragment_favorites"
-        tools:layout="@layout/fragment_favorites" />
+        tools:layout="@layout/fragment_favorites" >
+        <action
+            android:id="@+id/action_favoritesFragment_to_changeCityFragment"
+            app:destination="@id/displayFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.olgunyilmaz.spotticket.view.fragments.ProfileFragment"
@@ -39,6 +53,6 @@
         tools:layout="@layout/fragment_select_category1" >
         <action
             android:id="@+id/action_selectCategoryFragment_to_changeCityFragment"
-            app:destination="@id/changeCityFragment" />
+            app:destination="@id/displayFragment" />
     </fragment>
 </navigation>

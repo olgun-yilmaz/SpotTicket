@@ -6,21 +6,65 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.fragments.DisplayFragment">
 
-    <TextView
-        android:id="@+id/fragmentCityText"
-
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/selectLayout"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintVertical_bias="0.05"
+        android:layout_height="0dp"
 
-        android:text="Şehir :"
-        android:textAlignment="center"
-        android:textSize="34sp"
-        android:textStyle="bold"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintVertical_bias="0"
+
         app:layout_constraintEnd_toEndOf="@+id/recyclerView"
         app:layout_constraintStart_toStartOf="@+id/recyclerView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+        <TextView
+            android:id="@+id/fragmentCityText"
+
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            app:layout_constraintWidth_percent="0.5"
+            app:layout_constraintHorizontal_bias="0"
+
+            android:text="Şehir :"
+            android:gravity="center"
+            android:textSize="25sp"
+            android:textStyle="bold"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            />
+
+        <TextView
+            android:id="@+id/fragmentCategoryText"
+
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            app:layout_constraintWidth_percent="0.5"
+
+            app:layout_constraintHorizontal_bias="1"
+
+            android:text="Kategori :"
+            android:gravity="center"
+            android:textSize="25sp"
+            android:textStyle="bold"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+
+
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -35,7 +79,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragmentCityText" />
+        app:layout_constraintTop_toBottomOf="@id/selectLayout" />
 
     <TextView
         android:id="@+id/fragmentResultText"
@@ -51,8 +95,8 @@
         android:textSize="15sp"
         android:textStyle="bold"
 
-        app:layout_constraintEnd_toEndOf="@id/fragmentCityText"
-        app:layout_constraintStart_toStartOf="@id/fragmentCityText"
+        app:layout_constraintEnd_toEndOf="@id/selectLayout"
+        app:layout_constraintStart_toStartOf="@id/selectLayout"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"

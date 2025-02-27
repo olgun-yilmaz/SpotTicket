@@ -34,11 +34,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         CategoryRowBinding binding = CategoryRowBinding.inflate(
             LayoutInflater.from(parent.getContext()), parent, false);
-        
-        // Her item için genişlik ve yükseklik ayarı
+
         ViewGroup.LayoutParams params = binding.getRoot().getLayoutParams();
         params.width = itemWidth;
-        params.height = itemWidth; // Kare görünüm için
+        params.height = itemWidth;
         binding.getRoot().setLayoutParams(params);
         
         return new CategoryViewHolder(binding);

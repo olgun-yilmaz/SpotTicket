@@ -80,13 +80,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        binding.settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                replaceFragment(new SelectCategoryFragment());
-            }
-        });
-
 
         binding.myEventsButton.setOnClickListener(new View.OnClickListener() {
             @Override
