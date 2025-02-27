@@ -46,6 +46,8 @@ public class OnBoardingActivity extends AppCompatActivity {
             getPp(email);
         }
 
+        binding.nextButton.setEnabled(false);
+
         binding.nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,6 +74,7 @@ public class OnBoardingActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            binding.nextButton.setEnabled(true); // if pp downloaded u can go
                             QuerySnapshot result = task.getResult();
                             if (result != null && !result.isEmpty()) {
                                 QueryDocumentSnapshot document = (QueryDocumentSnapshot) result.getDocuments().get(0);

@@ -40,6 +40,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentProfileBinding;
 import com.olgunyilmaz.spotticket.service.UserManager;
 import com.squareup.picasso.Picasso;
@@ -134,16 +135,12 @@ public class ProfileFragment extends Fragment {
         binding.saveButton.setVisibility(View.VISIBLE);
         binding.profileImage.setEnabled(true);
 
-        binding.profileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changeProfileImage(view);
-            }
-        });
+        binding.profileImage.setOnClickListener(this::changeProfileImage);
 
         binding.saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                binding.profileImage.setImageResource(R.drawable.loading);
                 displayMode();
                 uploadImage2db();
             }
@@ -201,6 +198,8 @@ public class ProfileFragment extends Fragment {
                         @Override
                         public void onSuccess(Uri uri) {
                             updateProfileImage(auth.getCurrentUser().getEmail().toString(), uri.toString());
+                            UserManager.getInstance().ppUrl = imgUri.toString();
+                            binding.profileImage.setImageURI(imgUri);
                         }
                     });
 
