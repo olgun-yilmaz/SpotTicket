@@ -36,8 +36,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             LayoutInflater.from(parent.getContext()), parent, false);
 
         ViewGroup.LayoutParams params = binding.getRoot().getLayoutParams();
-        params.width = itemWidth;
-        params.height = itemWidth;
+        params.width = itemWidth/2;
+        params.height = itemWidth/2;
         binding.getRoot().setLayoutParams(params);
         
         return new CategoryViewHolder(binding);

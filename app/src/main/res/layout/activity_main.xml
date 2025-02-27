@@ -12,7 +12,6 @@
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="20dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +27,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navGraph="@navigation/event_grapth" />
+            app:navGraph="@navigation/event_graph" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -71,11 +70,11 @@
             app:srcCompat="@drawable/home_icon" />
 
         <ImageView
-            android:id="@+id/settingsButton"
+            android:id="@+id/displayButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:srcCompat="@drawable/settings_icon" />
+            app:srcCompat="@drawable/display_icon" />
 
         <ImageView
             android:id="@+id/signOutButton"

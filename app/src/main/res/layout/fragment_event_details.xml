@@ -8,15 +8,15 @@
     tools:context=".view.fragments.EventDetailsFragment">
 
     <ImageView
-        android:id="@+id/detailsImage1"
+        android:id="@+id/detailsImage"
 
         android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintWidth_percent="0.88"
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.25"
 
         app:layout_constraintVertical_bias="0.05"
-        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintHorizontal_bias="0"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +26,7 @@
         app:srcCompat="@android:drawable/alert_dark_frame" />
 
     <CheckBox
-        android:id="@+id/favCheckBox1"
+        android:id="@+id/favCheckBox"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,50 +34,71 @@
         android:button="@drawable/fav_empty_icon"
 
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/detailsImage1"
-        app:layout_constraintTop_toTopOf="@+id/detailsImage1">
+        app:layout_constraintStart_toEndOf="@+id/detailsImage"
+        app:layout_constraintTop_toTopOf="@+id/detailsImage">
 
     </CheckBox>
 
 
     <TextView
-        android:id="@+id/detailsNameText1"
+        android:id="@+id/detailsNameText"
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintHeight_percent="0.08"
 
         app:layout_constraintVertical_bias="0.35"
 
         android:text="Event Name"
         android:textSize="24sp"
+        android:gravity="center"
 
-        app:layout_constraintEnd_toEndOf="@+id/favCheckBox1"
-        app:layout_constraintStart_toStartOf="@+id/detailsImage1"
+        app:layout_constraintEnd_toEndOf="@+id/favCheckBox"
+        app:layout_constraintStart_toStartOf="@+id/detailsImage"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
-        android:id="@+id/detailsDescriptionText1"
+        android:id="@+id/detailsTypeText"
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintHeight_percent="0.05"
 
-        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintVertical_bias="0.45"
 
-        android:text="Description"
-        android:textSize="20sp"
+        android:text="Event Type"
+        android:textSize="24sp"
+        android:gravity="center"
 
-        app:layout_constraintEnd_toEndOf="@+id/detailsDateText1"
-        app:layout_constraintStart_toStartOf="@+id/detailsDateText1"
+        app:layout_constraintEnd_toEndOf="@+id/detailsDateText"
+        app:layout_constraintStart_toStartOf="@+id/detailsDateText"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
-        android:id="@+id/detailsDateText1"
+        android:id="@+id/detailsVenueText"
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.08"
+
+        app:layout_constraintVertical_bias="0.55"
+
+        android:text="Event Venue"
+        android:textSize="24sp"
+        android:gravity="center"
+
+        app:layout_constraintEnd_toEndOf="@+id/detailsDateText"
+        app:layout_constraintStart_toStartOf="@+id/detailsDateText"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/detailsDateText"
 
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -86,16 +107,17 @@
         app:layout_constraintVertical_bias="0.65"
 
         android:text="Date"
-        android:textSize="25sp"
+        android:textSize="24sp"
+        android:gravity="center"
 
-        app:layout_constraintEnd_toEndOf="@+id/detailsNameText1"
-        app:layout_constraintStart_toStartOf="@+id/detailsNameText1"
+        app:layout_constraintEnd_toEndOf="@+id/detailsNameText"
+        app:layout_constraintStart_toStartOf="@+id/detailsNameText"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <ImageView
-        android:id="@+id/mapButton1"
+        android:id="@+id/mapButton"
 
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -119,29 +141,26 @@
 
 
     <Button
-        android:id="@+id/buyTicketButton1"
+        android:id="@+id/buyTicketButton"
 
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-
-        android:onClick="buyTicket"
-        tools:ignore="OnClick"
 
         android:background="#611F1F"
         android:shadowColor="#835656"
         app:strokeColor="#BFA2A2"
 
-        android:text="Buy Ticket"
+        android:text="Satın Al"
         android:textColor="#BD1515"
         android:textColorHighlight="#BD8F8F"
         android:textColorHint="#DEB3B3"
         android:textColorLink="#DE1E1E"
 
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapButton1"
+        app:layout_constraintTop_toBottomOf="@+id/mapButton"
 
-        app:layout_constraintEnd_toEndOf="@+id/mapButton1"
-        app:layout_constraintStart_toStartOf="@+id/mapButton1"
+        app:layout_constraintEnd_toEndOf="@+id/mapButton"
+        app:layout_constraintStart_toStartOf="@+id/mapButton"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

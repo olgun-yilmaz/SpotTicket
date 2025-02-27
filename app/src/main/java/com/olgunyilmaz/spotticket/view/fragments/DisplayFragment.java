@@ -10,11 +10,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,21 +19,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.adapter.EventAdapter;
 import com.olgunyilmaz.spotticket.databinding.FragmentDisplayBinding;
-import com.olgunyilmaz.spotticket.model.CitiesResponse;
 import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.service.RetrofitClient;
 import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
 import com.olgunyilmaz.spotticket.util.Categories;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -44,16 +35,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class DisplayFragment extends Fragment implements SelectCityFragment.CitySelectListener {
+public class DisplayFragment extends Fragment {
     private FragmentDisplayBinding binding;
-    private FragmentManager fragmentManager;
     private EventAdapter eventAdapter;
 
     SharedPreferences sharedPreferences;
     TicketmasterApiService apiService;
     private Runnable runnable;
     private Handler handler;
-    private String category;
     int counter = 0;
 
 
@@ -76,19 +65,12 @@ public class DisplayFragment extends Fragment implements SelectCityFragment.City
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        fragmentManager = getActivity().getSupportFragmentManager();
-
         sharedPreferences = getActivity().getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);
 
         String city = sharedPreferences.getString("city", "Ankara");
         binding.fragmentCityText.setText(city);
 
-        ArrayList<String> cities = getCities();
-
-        binding.fragmentCityText.setOnClickListener(v -> showCityPicker(cities));
-        binding.fragmentCategoryText.setOnClickListener(v -> selectCategory());
-
-        category = sharedPreferences.getString("category","Pop");
+        String category = sharedPreferences.getString("category","Pop");
         binding.fragmentCategoryText.setText(category);
 
         apiService = RetrofitClient.getApiService();
@@ -108,49 +90,6 @@ public class DisplayFragment extends Fragment implements SelectCityFragment.City
             }
         };
         handler.post(runnable);
-    }
-
-    private void selectCategory(){
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        SelectCategoryFragment fragment = new SelectCategoryFragment();
-        fragmentTransaction.replace(R.id.fragmentContainerView,fragment).commit();
-    }
-
-    private ArrayList<String> getCities() {
-        try {
-            Reader reader = new InputStreamReader(getActivity().getAssets().open("cities.json"));
-            Gson gson = new Gson();
-            CitiesResponse response = gson.fromJson(reader, CitiesResponse.class);
-
-            if (response != null && response.getCities() != null) {
-                ArrayList<String> cities = response.getCities();
-                Collections.sort(cities);
-                return cities;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private void showCityPicker(ArrayList<String> cities) {
-        SelectCityFragment fragment = new SelectCityFragment();
-
-        Bundle args = new Bundle();
-        args.putStringArrayList("cities", cities);
-
-        fragment.setArguments(args);
-        fragment.setListener(this);
-
-        fragment.show(getActivity().getSupportFragmentManager(), "cityPicker");
-    }
-
-    @Override
-    public void onCitySelected(String city) {
-        binding.fragmentCityText.setText(city);
-        findEvent(apiService, city, category);
-        sharedPreferences.edit().putString("city", city).apply();
     }
 
     private void findEvent(TicketmasterApiService apiService, String city, String category) {

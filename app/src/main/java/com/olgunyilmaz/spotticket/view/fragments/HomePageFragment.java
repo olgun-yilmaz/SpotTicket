@@ -1,10 +1,15 @@
 package com.olgunyilmaz.spotticket.view.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.view.LayoutInflater;
@@ -12,18 +17,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
+import com.google.gson.Gson;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.adapter.CategoryAdapter;
-import com.olgunyilmaz.spotticket.databinding.FragmentSelectCategoryBinding;
+import com.olgunyilmaz.spotticket.databinding.FragmentHomePageBinding;
 import com.olgunyilmaz.spotticket.model.CategoryResponse;
+import com.olgunyilmaz.spotticket.model.CitiesResponse;
+import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
+import com.olgunyilmaz.spotticket.service.UserFavoritesManager;
+import com.squareup.picasso.Picasso;
 
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collections;
 
 
-public class SelectCategoryFragment extends Fragment {
-    private FragmentSelectCategoryBinding binding;
+public class HomePageFragment extends Fragment implements SelectCityFragment.CitySelectListener {
+    private FragmentHomePageBinding binding;
+    FragmentManager fragmentManager;
     private CategoryAdapter categoryAdapter;
     private ArrayList<CategoryResponse> categories;
+    private SharedPreferences sharedPreferences;
 
 
     @Override
@@ -34,16 +49,36 @@ public class SelectCategoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentSelectCategoryBinding.inflate(getLayoutInflater(), container, false);
+        binding = FragmentHomePageBinding.inflate(getLayoutInflater(), container, false);
         View view = binding.getRoot();
-        categories = new ArrayList<>();
-        getCategories();
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        categories = new ArrayList<>();
+        getCategories();
+
+        fragmentManager = requireActivity().getSupportFragmentManager();
+
+        if (!UserFavoritesManager.getInstance().userFavorites.isEmpty()) {
+            FavoriteEventModel favoriteEvent = UserFavoritesManager.getInstance().userFavorites.get(0);
+
+            binding.filterEventName.setText(favoriteEvent.getEventName());
+
+            Picasso.get().load(favoriteEvent.getImageUrl()).into(binding.filterEventImage);
+            binding.filterEventImage.setOnClickListener(v -> seeEventDetails(favoriteEvent.getEventId(), favoriteEvent.getImageUrl()));
+        }
+
+        sharedPreferences = requireActivity().getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);
+
+        String city = sharedPreferences.getString("city", "Ankara");
+        binding.selectCityText.setText(city);
+
+        ArrayList<String> cities = getCities();
+        binding.selectCityButton.setOnClickListener(v -> showCityPicker(cities));
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager
                 (requireContext(), 3, GridLayoutManager.HORIZONTAL, false);
@@ -61,6 +96,55 @@ public class SelectCategoryFragment extends Fragment {
                 binding.categoryRecyclerView.setAdapter(categoryAdapter);
             }
         });
+    }
+
+    private void seeEventDetails(String eventID, String imageUrl) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        EventDetailsFragment fragment = new EventDetailsFragment();
+
+        Bundle args = new Bundle();
+        args.putString("eventID", eventID);
+        args.putString("imageUrl", imageUrl);
+        fragment.setArguments(args);
+
+        fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
+    }
+
+    private ArrayList<String> getCities() {
+        try {
+            Reader reader = new InputStreamReader(getActivity().getAssets().open("cities.json"));
+            Gson gson = new Gson();
+            CitiesResponse response = gson.fromJson(reader, CitiesResponse.class);
+
+            if (response != null && response.getCities() != null) {
+                ArrayList<String> cities = response.getCities();
+                Collections.sort(cities);
+                return cities;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void showCityPicker(ArrayList<String> cities) {
+        SelectCityFragment fragment = new SelectCityFragment();
+
+        Bundle args = new Bundle();
+        args.putStringArrayList("cities", cities);
+
+        fragment.setArguments(args);
+        fragment.setListener(this);
+
+        fragment.show(getActivity().getSupportFragmentManager(), "cityPicker");
+    }
+
+    @Override
+    public void onCitySelected(String city) {
+        binding.selectCityText.setText(city);
+        sharedPreferences.edit().putString("city", city).apply();
     }
 
     private void getCategories() {

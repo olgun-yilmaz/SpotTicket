@@ -5,6 +5,7 @@ import static com.olgunyilmaz.spotticket.view.activities.MainActivity.MAPS_API_K
 import static com.olgunyilmaz.spotticket.view.activities.MainActivity.MAPS_BASE_URL;
 import static com.olgunyilmaz.spotticket.view.activities.MainActivity.TICKETMASTER_API_KEY;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -103,11 +104,11 @@ public class EventDetailsFragment extends Fragment {
             String imageUrl = args.getString("imageUrl");
 
             if (isLiked()) {
-                binding.favCheckBox1.setChecked(true);
-                binding.favCheckBox1.setButtonDrawable(R.drawable.fav_filled_icon);
+                binding.favCheckBox.setChecked(true);
+                binding.favCheckBox.setButtonDrawable(R.drawable.fav_filled_icon);
             }
 
-            binding.favCheckBox1.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.favCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 int imgId;
                 if (isChecked) {
                     imgId = R.drawable.fav_filled_icon;
@@ -116,15 +117,10 @@ public class EventDetailsFragment extends Fragment {
                     imgId = R.drawable.fav_empty_icon;
                     removeFavorite(eventId);
                 }
-                binding.favCheckBox1.setButtonDrawable(imgId);
+                binding.favCheckBox.setButtonDrawable(imgId);
             });
 
-            binding.mapButton1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    goToEvent(view);
-                }
-            });
+            binding.mapButton.setOnClickListener(v -> goToEvent());
 
             TicketmasterApiService apiService = RetrofitClient.getApiService();
             findEventDetails(apiService, eventId, imageUrl);
@@ -189,6 +185,7 @@ public class EventDetailsFragment extends Fragment {
     private void findEventDetails(TicketmasterApiService apiService, String eventId, String imageUrl) {
         apiService.getEventDetails(eventId, TICKETMASTER_API_KEY)
                 .enqueue(new Callback<EventDetailsResponse>() {
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void onResponse(Call<EventDetailsResponse> call, Response<EventDetailsResponse> response) {
                         if (response.isSuccessful()) {
@@ -196,32 +193,19 @@ public class EventDetailsFragment extends Fragment {
 
                             eventName = eventDetails.getName();
 
-                            binding.detailsNameText1.setText(eventName);
-
-                            binding.detailsDescriptionText1.setText(eventId);
+                            binding.detailsNameText.setText(eventName);
 
                             String eventDate = eventDetails.getDates().getStart().getDateTime();
 
-                            binding.detailsDateText1.setText("Tarih : " + getFormattedDate(eventDate));
+                            binding.detailsDateText.setText("Tarih : " + getFormattedDate(eventDate));
 
-                            Picasso.get().load(imageUrl).into(binding.detailsImage1);
+                            Picasso.get().load(imageUrl).into(binding.detailsImage);
 
-                            String info = "";
+                            binding.detailsTypeText.setText("Etkinlik türü : " + getEventSegmentInfo(eventDetails, eventDetails.getClassifications()));
 
-                            info += "Etkinlik türü : " + getEventSegmentInfo(eventDetails, eventDetails.getClassifications());
+                            binding.detailsVenueText.setText(getVenueInfo(eventDetails, eventDetails.getEmbedded().getVenues()));
 
-                            info += "\n\nEtkinlik Mekanı : " + getVenueInfo(eventDetails, eventDetails.getEmbedded().getVenues());
-
-
-                            binding.detailsDescriptionText1.setText(info);
-
-                            binding.buyTicketButton1.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    buyTicket(view, eventDetails.getUrl());
-                                }
-                            });
-
+                            binding.buyTicketButton.setOnClickListener(v -> buyTicket(eventDetails.getUrl()));
                         }
                     }
 
@@ -271,7 +255,7 @@ public class EventDetailsFragment extends Fragment {
         }
     }
 
-    public void goToEvent(View view) {
+    public void goToEvent() {
         Intent intent = new Intent(getContext(), MapsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("venueLatitude", venueLatitude);
@@ -318,7 +302,7 @@ public class EventDetailsFragment extends Fragment {
         });
     }
 
-    private void buyTicket(View view, String url) {
+    private void buyTicket(String url) {
         Uri uri = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
