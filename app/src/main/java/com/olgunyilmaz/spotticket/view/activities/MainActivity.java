@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.firebase.auth.FirebaseAuth;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityMainBinding;
+import com.olgunyilmaz.spotticket.service.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.service.UserManager;
 import com.olgunyilmaz.spotticket.view.fragments.DisplayFragment;
 import com.olgunyilmaz.spotticket.view.fragments.FavoritesFragment;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         goToLoginActivity();
 
         UserManager.getInstance().ppUrl = ""; // clean for next user
+        UserFavoritesManager.getInstance().userFavorites = null;
     }
 
     private void goToLoginActivity() {

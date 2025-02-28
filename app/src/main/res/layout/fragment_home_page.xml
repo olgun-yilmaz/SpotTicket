@@ -12,9 +12,9 @@
         android:layout_height="0dp"
         android:id="@+id/filterEventLayout"
 
-        app:layout_constraintHeight_percent="0.4"
+        app:layout_constraintHeight_percent="0.45"
 
-        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintVertical_bias="0"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,23 +23,21 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-
         <ImageView
             android:id="@+id/filterEventImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
 
-            app:layout_constraintHeight_percent="0.8"
-            app:layout_constraintVertical_bias="0"
+            android:src="@drawable/sample_event"
+            app:layout_constraintBottom_toBottomOf="parent"
 
-            android:src="@drawable/sample_profile_image"
-
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
 
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHeight_percent="0.85"
+            app:layout_constraintStart_toStartOf="parent"
+
             app:layout_constraintTop_toTopOf="parent"
-            >
+            app:layout_constraintVertical_bias="0">
 
         </ImageView>
 
@@ -51,12 +49,11 @@
             app:layout_constraintVertical_bias="1"
 
             app:layout_constraintWidth_percent="0.7"
-            app:layout_constraintHeight_percent="0.2"
+            app:layout_constraintHeight_percent="0.15"
 
             android:gravity="center"
             android:text="Event Name"
             android:textSize="17sp"
-
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

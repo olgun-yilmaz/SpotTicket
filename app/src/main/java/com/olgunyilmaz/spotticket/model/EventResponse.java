@@ -44,9 +44,28 @@ public class EventResponse {
         public List<Image> getImages() {
             return images;
         }
+
+        public void setImages(List<Image> images) {
+            this.images = images;
+        }
     }
 
     public class Image {
+        private int width;
+        private int height;
+
+        public int getWidth() {
+            return width;
+        }
+
+        public int getHeight() {
+            return height;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
         @SerializedName("url")
         private String url;
 

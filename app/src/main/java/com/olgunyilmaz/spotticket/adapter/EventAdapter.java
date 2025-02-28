@@ -1,5 +1,6 @@
 package com.olgunyilmaz.spotticket.adapter;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,26 +36,43 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     public void onBindViewHolder(EventViewHolder holder, int position) {
         EventResponse.Event event = eventList.get(position);
         holder.binding.eventName.setText(event.getName());
+
         if (event.getImages() != null && !event.getImages().isEmpty()) {
+            EventResponse.Image selectedImage = null;
+
+            for (EventResponse.Image image : event.getImages()) {
+                if (image.getWidth() > 255 && image.getHeight() > 255) { // high quality image
+                    selectedImage = image;
+                }
+            }
+
+            if (selectedImage == null) {
+                selectedImage = event.getImages().get(0);
+            }
+
+            event.getImages().get(0).setUrl(selectedImage.getUrl()); // make first image selected image
+
             Picasso.get()
-                    .load(event.getImages().get(0).getUrl())
+                    .load(selectedImage.getUrl())
                     .into(holder.binding.eventImage);
         }
+
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EventDetailsFragment fragment = new EventDetailsFragment();
                 Bundle args = new Bundle();
                 args.putString("eventID", event.getId());
-                args.putString("imageUrl", event.getImages().get(0).getUrl());
+                args.putString("imageUrl", event.getImages().get(0).getUrl()); // get first(selected) image
                 fragment.setArguments(args);
 
                 ((MainActivity) holder.itemView.getContext())
-                    .getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragmentContainerView, fragment)
-                    .addToBackStack(null)
-                    .commit();
+                        .getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainerView, fragment)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }
