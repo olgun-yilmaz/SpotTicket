@@ -15,15 +15,15 @@
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.25"
 
+        android:src="@drawable/loading"
+
         app:layout_constraintVertical_bias="0.05"
         app:layout_constraintHorizontal_bias="0"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-
-        app:srcCompat="@android:drawable/alert_dark_frame" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <CheckBox
         android:id="@+id/favCheckBox"
@@ -49,7 +49,7 @@
 
         app:layout_constraintVertical_bias="0.35"
 
-        android:text="Event Name"
+        android:text="Yükleniyor . . ."
         android:textSize="24sp"
         android:gravity="center"
 
@@ -68,7 +68,7 @@
 
         app:layout_constraintVertical_bias="0.45"
 
-        android:text="Event Type"
+        android:text="Yükleniyor . . ."
         android:textSize="24sp"
         android:gravity="center"
 
@@ -87,7 +87,7 @@
 
         app:layout_constraintVertical_bias="0.55"
 
-        android:text="Event Venue"
+        android:text="Yükleniyor . . ."
         android:textSize="24sp"
         android:gravity="center"
 
@@ -106,7 +106,7 @@
 
         app:layout_constraintVertical_bias="0.65"
 
-        android:text="Date"
+        android:text="Yükleniyor . . ."
         android:textSize="24sp"
         android:gravity="center"
 

@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
@@ -25,7 +26,11 @@ import com.olgunyilmaz.spotticket.service.UserManager;
 public class OnBoardingActivity extends AppCompatActivity {
     private ActivityOnBoardingBinding binding;
     private FirebaseAuth auth;
+    private FirebaseUser currentUser;
     private FirebaseFirestore db;
+    private Runnable runnable;
+    private Handler handler;
+    int counter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,31 +44,54 @@ public class OnBoardingActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-        String email = auth.getCurrentUser().getEmail().toString();
+        currentUser = auth.getCurrentUser();
 
-        if (!email.isEmpty()) {
-            getFavoriteEvents(email);
-            getPp(email);
+        if (currentUser != null) {
+
+            if (currentUser.getEmail() != null) {
+
+                String email = currentUser.getEmail().toString();
+                binding.getStartText.setText(email);
+
+                if (!email.isEmpty()) {
+                    binding.nextButton.setEnabled(false);
+                    getFavoriteEvents(email);
+                    getPp(email);
+                }
+
+            }
         }
-
-        binding.nextButton.setEnabled(false);
 
         binding.nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                FirebaseUser currentUser = auth.getCurrentUser();
-                if (currentUser != null){
+                if (currentUser != null) {
                     goToActivity(MainActivity.class);
-                }else{
+                } else {
                     goToActivity(EmailPasswordActivity.class);
                 }
             }
         });
     }
 
-    private void goToActivity(Class<?> activityClass){
-        Intent intent = new Intent(OnBoardingActivity.this,activityClass);
+    private void updateLoadingText() {
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                counter++;
+                int numPoint = counter % 4;
+                String numPointText = ". ".repeat(numPoint) + "  ".repeat(4 - numPoint);
+                binding.getStartText.setText("Yükleniyor " + numPointText);
+                handler.postDelayed(runnable, 1000);
+            }
+        };
+        handler.post(runnable);
+    }
+
+    private void goToActivity(Class<?> activityClass) {
+        Intent intent = new Intent(OnBoardingActivity.this, activityClass);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
@@ -94,11 +122,13 @@ public class OnBoardingActivity extends AppCompatActivity {
     }
 
     private void getFavoriteEvents(String userEmail) {
+        updateLoadingText();
         String path = userEmail + "_Events";
         db.collection(path).orderBy("eventName").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        String msg;
                         if (task.isSuccessful()) {
                             UserFavoritesManager.getInstance().userFavorites.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
@@ -111,9 +141,14 @@ public class OnBoardingActivity extends AppCompatActivity {
                                 FavoriteEventModel myEventModel = new FavoriteEventModel(eventID, imageUrl, eventName);
                                 UserFavoritesManager.getInstance().addFavorite(myEventModel);
                             }
+                            msg = "Haydi Başlayalım !";
+
                         } else {
+                            msg = "Bir Sorun Oluştu :/";
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
+                        binding.getStartText.setText(msg);
+                        handler.removeCallbacks(runnable);
                     }
                 });
     }

@@ -68,7 +68,11 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
 
             binding.filterEventName.setText(favoriteEvent.getEventName());
 
-            Picasso.get().load(favoriteEvent.getImageUrl()).into(binding.filterEventImage);
+            Picasso.get()
+                    .load(favoriteEvent.getImageUrl())
+                    .placeholder(R.drawable.loading)
+                    .error(R.drawable.error)
+                    .into(binding.filterEventImage);
             binding.filterEventImage.setOnClickListener(v -> seeEventDetails(favoriteEvent.getEventId(), favoriteEvent.getImageUrl()));
         }
 
@@ -149,15 +153,15 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
 
     private void getCategories() {
         categories.add(new CategoryResponse(R.drawable.family, "Aile"));
+        categories.add(new CategoryResponse(R.drawable.basketball, "Basketbol"));
         categories.add(new CategoryResponse(R.drawable.baseball, "Beyzbol"));
         categories.add(new CategoryResponse(R.drawable.blues, "Blues"));
         categories.add(new CategoryResponse(R.drawable.ice_hockey, "Buz Hokeyi"));
         categories.add(new CategoryResponse(R.drawable.dancing, "Dans"));
         categories.add(new CategoryResponse(R.drawable.disney, "Disney"));
         categories.add(new CategoryResponse(R.drawable.movie, "Film"));
-        categories.add(new CategoryResponse(R.drawable.folk, "Folk"));
-        categories.add(new CategoryResponse(R.drawable.soccer, "Futbol"));
 
+        categories.add(new CategoryResponse(R.drawable.folk, "Folk"));
         categories.add(new CategoryResponse(R.drawable.electro, "Elektronik Müzik"));
         categories.add(new CategoryResponse(R.drawable.hip_hop, "Hip-Hop/Rap"));
         categories.add(new CategoryResponse(R.drawable.jazz, "Jazz"));

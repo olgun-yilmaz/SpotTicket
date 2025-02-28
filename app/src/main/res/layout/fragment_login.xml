@@ -66,7 +66,7 @@
         app:layout_constraintStart_toStartOf="@+id/loginPasswordText" />
 
     <Button
-        android:id="@+id/loginButton2"
+        android:id="@+id/loginButton"
 
         android:layout_width="0dp"
         app:layout_constraintHeight_percent="0.1"

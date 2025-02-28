@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.olgunyilmaz.spotticket.databinding.EventRowBinding;
@@ -54,6 +53,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
             Picasso.get()
                     .load(selectedImage.getUrl())
+                    .placeholder(R.drawable.loading)
+                    .error(R.drawable.error)
                     .into(holder.binding.eventImage);
         }
 
@@ -64,6 +65,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 EventDetailsFragment fragment = new EventDetailsFragment();
                 Bundle args = new Bundle();
                 args.putString("eventID", event.getId());
+                args.putString("imageUrl", event.getImages().get(0).getUrl()); // get first(selected) image
                 args.putString("imageUrl", event.getImages().get(0).getUrl()); // get first(selected) image
                 fragment.setArguments(args);
 

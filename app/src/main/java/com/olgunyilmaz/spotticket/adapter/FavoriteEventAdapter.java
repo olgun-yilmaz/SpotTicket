@@ -39,7 +39,11 @@ public class FavoriteEventAdapter extends RecyclerView.Adapter<FavoriteEventAdap
         holder.binding.eventName.setText(favoriteEvent.getEventName());
 
         if (!favoriteEvent.getImageUrl().isEmpty()) {
-            Picasso.get().load(favoriteEvent.getImageUrl()).into(holder.binding.eventImage);
+            Picasso.get()
+                    .load(favoriteEvent.getImageUrl())
+                    .placeholder(R.drawable.loading)
+                    .error(R.drawable.error)
+                    .into(holder.binding.eventImage);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

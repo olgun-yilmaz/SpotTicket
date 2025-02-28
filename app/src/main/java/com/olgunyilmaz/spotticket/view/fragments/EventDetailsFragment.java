@@ -83,7 +83,7 @@ public class EventDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentEventDetailsBinding.inflate(getLayoutInflater(),container,false);
+        binding = FragmentEventDetailsBinding.inflate(getLayoutInflater(), container, false);
         View view = binding.getRoot();
         return view;
     }
@@ -127,9 +127,9 @@ public class EventDetailsFragment extends Fragment {
         }
     }
 
-    private boolean isLiked(){
-        for (FavoriteEventModel event : UserFavoritesManager.getInstance().userFavorites){
-            if(eventId.equals(event.getEventId())){
+    private boolean isLiked() {
+        for (FavoriteEventModel event : UserFavoritesManager.getInstance().userFavorites) {
+            if (eventId.equals(event.getEventId())) {
                 return true;
             }
         }
@@ -147,7 +147,7 @@ public class EventDetailsFragment extends Fragment {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                        UserFavoritesManager.getInstance().addFavorite(new FavoriteEventModel(eventId,imgUrl,eventName));
+                        UserFavoritesManager.getInstance().addFavorite(new FavoriteEventModel(eventId, imgUrl, eventName));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -199,7 +199,11 @@ public class EventDetailsFragment extends Fragment {
 
                             binding.detailsDateText.setText("Tarih : " + getFormattedDate(eventDate));
 
-                            Picasso.get().load(imageUrl).into(binding.detailsImage);
+                            Picasso.get().
+                                    load(imageUrl)
+                                    .placeholder(R.drawable.loading)
+                                    .error(R.drawable.error)
+                                    .into(binding.detailsImage);
 
                             binding.detailsTypeText.setText("Etkinlik türü : " + getEventSegmentInfo(eventDetails, eventDetails.getClassifications()));
 

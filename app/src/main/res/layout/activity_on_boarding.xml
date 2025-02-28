@@ -10,46 +10,80 @@
 
     <ImageView
         android:id="@+id/imageView"
+
         android:layout_width="0dp"
         android:layout_height="0dp"
+
+        android:scaleType="centerCrop"
+
         android:src="@drawable/start"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="260dp"
-        android:layout_height="56dp"
-        android:layout_marginBottom="50dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/getStartLayout"
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        app:layout_constraintHeight_percent="0.1"
+
+        app:layout_constraintVertical_bias="0.9"
+
+
         android:background="#33FFFFFF"
-        android:orientation="horizontal"
+
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/getStartText"
-            android:layout_width="wrap_content"
+
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginRight="40dp"
-            android:layout_weight="1"
+
+            app:layout_constraintWidth_percent="0.75"
+            app:layout_constraintHorizontal_bias="0"
+
             android:fontFamily="monospace"
             android:gravity="center"
-            android:text="Get Start"
+            android:text="Haydi Başlayalım !"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+
+
+            />
 
         <ImageView
             android:id="@+id/nextButton"
-            android:layout_width="128dp"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:layout_marginLeft="40dp"
-            android:layout_weight="1"
-            android:src="@drawable/next_icon" />
-    </LinearLayout>
+
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            app:layout_constraintWidth_percent="0.19"
+
+            android:src="@drawable/next_icon"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/getStartText"
+
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

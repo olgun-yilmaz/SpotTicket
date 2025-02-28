@@ -21,7 +21,7 @@ public class Categories {
 
         // Spor ve Alt Kategorileri
         put("Spor", "KZFzniwnSyZfZ7v7nE");
-        put("Futbol", "KnvZfZ7vAde");
+        put("Basketbol", "KnvZfZ7vAde");
         put("Buz Hokeyi", "KnvZfZ7vAdI");
         put("Tenis", "KnvZfZ7vAAv");
         put("Beyzbol", "KnvZfZ7vAdv");

@@ -126,7 +126,11 @@ public class ProfileFragment extends Fragment {
 
     private void uploadPp() {
         if (!UserManager.getInstance().ppUrl.isEmpty()) {
-            Picasso.get().load(UserManager.getInstance().ppUrl).into(binding.profileImage);
+            Picasso.get()
+                    .load(UserManager.getInstance().ppUrl)
+                    .placeholder(R.drawable.loading)
+                    .error(R.drawable.error)
+                    .into(binding.profileImage);
         }
     }
 
