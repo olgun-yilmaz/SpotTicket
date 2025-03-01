@@ -3,6 +3,7 @@ package com.olgunyilmaz.spotticket.view.activities;
 import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityOnBoardingBinding;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.service.UserFavoritesManager;
@@ -25,7 +27,6 @@ import com.olgunyilmaz.spotticket.service.UserManager;
 
 public class OnBoardingActivity extends AppCompatActivity {
     private ActivityOnBoardingBinding binding;
-    private FirebaseAuth auth;
     private FirebaseUser currentUser;
     private FirebaseFirestore db;
     private Runnable runnable;
@@ -39,24 +40,35 @@ public class OnBoardingActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        auth = FirebaseAuth.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.setLanguageCode("tr");
 
         db = FirebaseFirestore.getInstance();
 
-        currentUser = auth.getCurrentUser();
+        SharedPreferences sharedPreferences = this.getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);
+
+        boolean isFromLogin = getIntent().getBooleanExtra("fromLogin",false);
+
+        if(isFromLogin){
+            String email = getIntent().getStringExtra("userEmail");
+            //binding.imageView.setImageResource(R.drawable.loading); // will use a diff background
+            downloadData(email);
+        }
+
+        boolean isRemember = sharedPreferences.getBoolean("rememberMe",false);
+
+        if (isRemember){
+            currentUser = auth.getCurrentUser();
+        }
 
         if (currentUser != null) {
 
             if (currentUser.getEmail() != null) {
 
                 String email = currentUser.getEmail().toString();
-                binding.getStartText.setText(email);
 
                 if (!email.isEmpty()) {
-                    binding.nextButton.setEnabled(false);
-                    getFavoriteEvents(email);
-                    getPp(email);
+                    downloadData(email);
                 }
 
             }
@@ -68,11 +80,18 @@ public class OnBoardingActivity extends AppCompatActivity {
 
                 if (currentUser != null) {
                     goToActivity(MainActivity.class);
+                    finish(); // if user in app, won't back by intent
                 } else {
                     goToActivity(EmailPasswordActivity.class);
                 }
             }
         });
+    }
+
+    private void downloadData(String email){
+        binding.nextButton.setEnabled(false);
+        getPp(email);
+        getFavoriteEvents(email);
     }
 
     private void updateLoadingText() {
@@ -102,7 +121,6 @@ public class OnBoardingActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            binding.nextButton.setEnabled(true); // if pp downloaded u can go
                             QuerySnapshot result = task.getResult();
                             if (result != null && !result.isEmpty()) {
                                 QueryDocumentSnapshot document = (QueryDocumentSnapshot) result.getDocuments().get(0);
@@ -130,7 +148,9 @@ public class OnBoardingActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         String msg;
                         if (task.isSuccessful()) {
-                            UserFavoritesManager.getInstance().userFavorites.clear();
+                            if (UserFavoritesManager.getInstance().userFavorites != null){
+                                UserFavoritesManager.getInstance().userFavorites.clear();
+                            }
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
 
@@ -142,6 +162,7 @@ public class OnBoardingActivity extends AppCompatActivity {
                                 UserFavoritesManager.getInstance().addFavorite(myEventModel);
                             }
                             msg = "Haydi Başlayalım !";
+                            binding.nextButton.setEnabled(true); // if downloaded u can go
 
                         } else {
                             msg = "Bir Sorun Oluştu :/";

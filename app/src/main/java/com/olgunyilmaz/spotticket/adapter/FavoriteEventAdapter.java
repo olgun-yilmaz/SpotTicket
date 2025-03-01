@@ -68,6 +68,9 @@ public class FavoriteEventAdapter extends RecyclerView.Adapter<FavoriteEventAdap
 
     @Override
     public int getItemCount() {
+        if(favoriteEventList == null){
+            return 0;
+        }
         return favoriteEventList.size();
     }
 

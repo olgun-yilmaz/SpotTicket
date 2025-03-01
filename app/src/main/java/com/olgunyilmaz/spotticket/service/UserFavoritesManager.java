@@ -20,14 +20,16 @@ public class UserFavoritesManager {
     }
 
     public void addFavorite(FavoriteEventModel event) {
-        if (!userFavorites.contains(event)) {
-            userFavorites.add(event);
+        if (userFavorites != null) {
+            if (!userFavorites.contains(event)) {
+                userFavorites.add(event);
+            }
         }
     }
 
     public void removeFavorite(String eventID) {
-        for (FavoriteEventModel event : userFavorites){
-            if (eventID.equals(event.getEventId()) ){
+        for (FavoriteEventModel event : userFavorites) {
+            if (eventID.equals(event.getEventId())) {
                 userFavorites.remove(event);
                 break;
             }

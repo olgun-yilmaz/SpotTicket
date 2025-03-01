@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
         goToLoginActivity();
 
         UserManager.getInstance().ppUrl = ""; // clean for next user
-        UserFavoritesManager.getInstance().userFavorites = null;
     }
 
     private void goToLoginActivity() {
@@ -77,8 +76,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToProfileScreen(View view) {
-        ProfileFragment profileFragment = new ProfileFragment();
-        replaceFragment(profileFragment);
+        replaceFragment(new ProfileFragment());
     }
 
 }

@@ -63,17 +63,21 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
 
         fragmentManager = requireActivity().getSupportFragmentManager();
 
-        if (!UserFavoritesManager.getInstance().userFavorites.isEmpty()) {
-            FavoriteEventModel favoriteEvent = UserFavoritesManager.getInstance().userFavorites.get(0);
+        if (UserFavoritesManager.getInstance().userFavorites != null) {
+            if (!UserFavoritesManager.getInstance().userFavorites.isEmpty()) {
+                FavoriteEventModel favoriteEvent = UserFavoritesManager.getInstance().userFavorites.get(0);
 
-            binding.filterEventName.setText(favoriteEvent.getEventName());
+                binding.filterEventName.setText(favoriteEvent.getEventName());
 
-            Picasso.get()
-                    .load(favoriteEvent.getImageUrl())
-                    .placeholder(R.drawable.loading)
-                    .error(R.drawable.error)
-                    .into(binding.filterEventImage);
-            binding.filterEventImage.setOnClickListener(v -> seeEventDetails(favoriteEvent.getEventId(), favoriteEvent.getImageUrl()));
+                Picasso.get()
+                        .load(favoriteEvent.getImageUrl())
+                        .placeholder(R.drawable.loading)
+                        .error(R.drawable.error)
+                        .into(binding.filterEventImage);
+                binding.filterEventImage.setOnClickListener(v ->
+                        seeEventDetails(favoriteEvent.getEventId(), favoriteEvent.getImageUrl()));
+            }
+
         }
 
         sharedPreferences = requireActivity().getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);

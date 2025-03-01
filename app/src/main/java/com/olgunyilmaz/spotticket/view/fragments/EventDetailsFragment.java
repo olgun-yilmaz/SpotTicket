@@ -133,7 +133,6 @@ public class EventDetailsFragment extends Fragment {
                 return true;
             }
         }
-
         return false;
     }
 
