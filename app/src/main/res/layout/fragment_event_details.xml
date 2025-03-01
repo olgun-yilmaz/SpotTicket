@@ -11,14 +11,12 @@
         android:id="@+id/detailsImage"
 
         android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.88"
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.25"
 
         android:src="@drawable/loading"
 
-        app:layout_constraintVertical_bias="0.05"
-        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintVertical_bias="0.13"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,14 +26,18 @@
     <CheckBox
         android:id="@+id/favCheckBox"
 
+        app:layout_constraintHorizontal_bias="0.9"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
         android:button="@drawable/fav_empty_icon"
 
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/detailsImage"
-        app:layout_constraintTop_toTopOf="@+id/detailsImage">
+        app:layout_constraintEnd_toEndOf="@id/detailsImage"
+        app:layout_constraintStart_toStartOf="@+id/detailsImage"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/detailsImage">
 
     </CheckBox>
 
@@ -47,13 +49,13 @@
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.08"
 
-        app:layout_constraintVertical_bias="0.35"
+        app:layout_constraintVertical_bias="0.4"
 
         android:text="Yükleniyor . . ."
         android:textSize="24sp"
         android:gravity="center"
 
-        app:layout_constraintEnd_toEndOf="@+id/favCheckBox"
+        app:layout_constraintEnd_toEndOf="@+id/detailsImage"
         app:layout_constraintStart_toStartOf="@+id/detailsImage"
 
         app:layout_constraintTop_toTopOf="parent"
@@ -66,7 +68,7 @@
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.05"
 
-        app:layout_constraintVertical_bias="0.45"
+        app:layout_constraintVertical_bias="0.5"
 
         android:text="Yükleniyor . . ."
         android:textSize="24sp"
@@ -85,7 +87,7 @@
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.08"
 
-        app:layout_constraintVertical_bias="0.55"
+        app:layout_constraintVertical_bias="0.6"
 
         android:text="Yükleniyor . . ."
         android:textSize="24sp"
@@ -104,7 +106,7 @@
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.05"
 
-        app:layout_constraintVertical_bias="0.65"
+        app:layout_constraintVertical_bias="0.7"
 
         android:text="Yükleniyor . . ."
         android:textSize="24sp"
@@ -121,7 +123,7 @@
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintHeight_percent="0.12"
         app:layout_constraintWidth_percent="0.8"
 
         app:layout_constraintVertical_bias="0.85"

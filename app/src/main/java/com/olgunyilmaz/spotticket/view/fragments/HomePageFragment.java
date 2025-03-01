@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 
 public class HomePageFragment extends Fragment implements SelectCityFragment.CitySelectListener {
@@ -39,6 +41,8 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
     private CategoryAdapter categoryAdapter;
     private ArrayList<CategoryResponse> categories;
     private SharedPreferences sharedPreferences;
+    private Runnable runnable;
+    private Handler handler;
 
 
     @Override
@@ -65,17 +69,7 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
 
         if (UserFavoritesManager.getInstance().userFavorites != null) {
             if (!UserFavoritesManager.getInstance().userFavorites.isEmpty()) {
-                FavoriteEventModel favoriteEvent = UserFavoritesManager.getInstance().userFavorites.get(0);
-
-                binding.filterEventName.setText(favoriteEvent.getEventName());
-
-                Picasso.get()
-                        .load(favoriteEvent.getImageUrl())
-                        .placeholder(R.drawable.loading)
-                        .error(R.drawable.error)
-                        .into(binding.filterEventImage);
-                binding.filterEventImage.setOnClickListener(v ->
-                        seeEventDetails(favoriteEvent.getEventId(), favoriteEvent.getImageUrl()));
+                updateImage(10); // update per 10 seconds
             }
 
         }
@@ -104,6 +98,30 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
                 binding.categoryRecyclerView.setAdapter(categoryAdapter);
             }
         });
+    }
+
+    private void updateImage(int frequency){
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                Random random = new Random();
+                int randomID = random.nextInt(UserFavoritesManager.getInstance().userFavorites.size());
+                FavoriteEventModel favoriteEvent = UserFavoritesManager.getInstance().userFavorites.get(randomID);
+
+                binding.filterEventName.setText(favoriteEvent.getEventName());
+
+                Picasso.get()
+                        .load(favoriteEvent.getImageUrl())
+                        .placeholder(R.drawable.loading)
+                        .error(R.drawable.error)
+                        .into(binding.filterEventImage);
+                binding.filterEventImage.setOnClickListener(v ->
+                        seeEventDetails(favoriteEvent.getEventId(), favoriteEvent.getImageUrl()));
+                handler.postDelayed(runnable, 1000L * frequency);
+            }
+        };
+        handler.post(runnable);
     }
 
     private void seeEventDetails(String eventID, String imageUrl) {

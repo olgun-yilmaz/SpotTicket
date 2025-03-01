@@ -32,10 +32,7 @@ public class SignUpFragment extends Fragment {
     private FragmentSignUpBinding binding;
     FragmentManager fragmentManager;
     private FirebaseAuth auth;
-    private String email;
-    private String password;
     private String username;
-    private String validPassword;
 
 
     public SignUpFragment() {
@@ -64,27 +61,22 @@ public class SignUpFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         auth.setLanguageCode("tr");
 
-        binding.signUpButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signUp(view);
-            }
-        });
+        binding.signUpButton.setOnClickListener(v -> signUp());
 
     }
 
 
-    public void signUp(View view) {
+    public void signUp() {
 
-        email = binding.signUpEmailText.getText().toString();
-        password = binding.signUpPasswordText.getText().toString();
-        validPassword = binding.signUpPasswordValidText.getText().toString();
+        String email = binding.signUpEmailText.getText().toString();
+        String password = binding.signUpPasswordText.getText().toString();
+        String validPassword = binding.signUpPasswordValidText.getText().toString();
         username = binding.signUpUserNameText.getText().toString();
 
         if (!email.isEmpty() && !password.isEmpty()) {
             if (password.equals(validPassword)) {
                 auth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener((Activity) getContext(), new OnCompleteListener<AuthResult>() {
+                        .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
@@ -111,16 +103,15 @@ public class SignUpFragment extends Fragment {
                                                     String msg;
                                                     if (task1.isSuccessful()) {
                                                         msg = "Doğrulama e-postası gönderildi!";
+                                                        login();
 
                                                     } else {
                                                         msg = "Doğrulama e-postası gönderilemedi";
                                                     }
-                                                    Toast.makeText(getContext(),
+                                                    Toast.makeText(requireContext(),
                                                             msg,
                                                             Toast.LENGTH_LONG).show();
                                                 });
-
-                                        login(view);
                                     }
                                 } else {
                                     Log.w(TAG, "Kayıt olunamadı!", task.getException());
@@ -137,10 +128,10 @@ public class SignUpFragment extends Fragment {
     }
 
 
-    private void login(View view) {
+    private void login() {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        LoginFragment loginFragment = new LoginFragment();
-        fragmentTransaction.replace(R.id.loginFragmentContainer, loginFragment).commit();
+        LoginFragment fragment = new LoginFragment();
+        fragmentTransaction.replace(R.id.loginFragmentContainer, fragment).commit();
     }
 
 }

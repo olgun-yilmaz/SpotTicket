@@ -139,7 +139,6 @@ public class LoginFragment extends Fragment {
                                     String msg;
 
                                     if(currentUser.isEmailVerified()){
-
                                         sharedPreferences.edit().putString("userEmail",email).apply();
 
                                         Intent intent = new Intent(getContext(), OnBoardingActivity.class); // for download the user data

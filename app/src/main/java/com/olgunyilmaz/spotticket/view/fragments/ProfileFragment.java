@@ -5,6 +5,8 @@ import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -104,13 +106,23 @@ public class ProfileFragment extends Fragment {
         binding.usernameText.setText(user.getEmail());
         binding.creationDateText.setText(getCreationDate());
 
-        binding.editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                editMode();
-            }
-        });
+        binding.deleteMyAccountButton.setOnClickListener(v -> showDeleteAccountDialog());
 
+        binding.editButton.setOnClickListener(v -> editMode());
+
+    }
+
+    private void showDeleteAccountDialog() {
+        if (isAdded() && getActivity() != null) {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("Hesap Silme")
+                    .setMessage("Hesabınızı silmek istediğinizden emin misiniz?")
+                    .setNegativeButton("Hayır", null)
+                    .setPositiveButton("Evet", (dialogInterface, i) -> {
+                        ReAuthenticateDialogFragment dialog = new ReAuthenticateDialogFragment();
+                        dialog.show(getParentFragmentManager(), "ReauthenticateDialog");
+                    }).show();
+        }
     }
 
     private String getCreationDate(){
@@ -136,6 +148,7 @@ public class ProfileFragment extends Fragment {
 
     private void editMode(){
         binding.editButton.setVisibility(View.GONE);
+        binding.deleteMyAccountButton.setVisibility(View.GONE);
         binding.saveButton.setVisibility(View.VISIBLE);
         binding.profileImage.setEnabled(true);
 
@@ -153,6 +166,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void displayMode(){
+        binding.deleteMyAccountButton.setVisibility(View.VISIBLE);
         binding.editButton.setVisibility(View.VISIBLE);
         binding.saveButton.setVisibility(View.GONE);
         binding.profileImage.setEnabled(false);

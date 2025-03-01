@@ -86,7 +86,7 @@
         app:layout_constraintStart_toStartOf="@id/signUpPasswordText"/>
 
     <Button
-        android:id="@+id/signUpButton2"
+        android:id="@+id/signUpButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
 

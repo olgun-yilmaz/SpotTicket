@@ -16,7 +16,7 @@
 
         app:layout_constraintWidth_percent="0.8"
 
-        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintVertical_bias="0.05"
 
         android:src="@drawable/sample_profile_image"
 
@@ -33,9 +33,9 @@
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintHeight_percent="0.05"
 
-        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintVertical_bias="0.45"
 
         android:text="Kullanıcı Adı : "
         android:textSize="24sp"
@@ -54,9 +54,9 @@
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintHeight_percent="0.05"
 
-        app:layout_constraintVertical_bias="0.65"
+        app:layout_constraintVertical_bias="0.55"
 
         android:text="E-Mail : "
         android:textSize="24sp"
@@ -74,9 +74,9 @@
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintHeight_percent="0.05"
 
-        app:layout_constraintVertical_bias="0.80"
+        app:layout_constraintVertical_bias="0.65"
 
         android:text="Kayıt Tarihi : "
         android:textSize="24sp"
@@ -93,6 +93,26 @@
 
     </TextView>
 
+    <Button
+        android:id="@+id/saveButton"
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.1"
+
+        app:layout_constraintVertical_bias="0.8"
+
+        android:visibility="invisible"
+
+        android:text="Kaydet"
+
+        app:layout_constraintEnd_toEndOf="@id/creationDateText"
+        app:layout_constraintStart_toStartOf="@id/creationDateText"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
     <ImageView
         android:id="@+id/editButton"
 
@@ -100,7 +120,7 @@
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.1"
 
-        app:layout_constraintVertical_bias="0.95"
+        app:layout_constraintVertical_bias="0.8"
 
         android:src="@drawable/edit_icon"
 
@@ -115,22 +135,26 @@
     </ImageView>
 
     <Button
-        android:id="@+id/saveButton"
+        android:id="@+id/deleteMyAccountButton"
 
         android:layout_width="0dp"
         android:layout_height="0dp"
+
         app:layout_constraintHeight_percent="0.1"
 
         app:layout_constraintVertical_bias="0.95"
 
-        android:text="Kaydet"
-
         app:layout_constraintEnd_toEndOf="@id/creationDateText"
         app:layout_constraintStart_toStartOf="@id/creationDateText"
 
+        android:text="HESABIMI SİL"
+
+        android:backgroundTint="#F2BA0707"
+
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-         />
+        app:layout_constraintTop_toTopOf="parent">
+
+    </Button>
 
 
 
