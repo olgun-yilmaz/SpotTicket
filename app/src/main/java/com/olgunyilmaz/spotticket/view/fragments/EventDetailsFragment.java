@@ -58,7 +58,6 @@ public class EventDetailsFragment extends Fragment {
 
     private FragmentEventDetailsBinding binding;
     private FirebaseFirestore db;
-    private FirebaseAuth auth;
 
     private String collectionPath;
     private String eventId;
@@ -92,7 +91,7 @@ public class EventDetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         db = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.setLanguageCode("tr");
 
         String userEmail = auth.getCurrentUser().getEmail().toString();
