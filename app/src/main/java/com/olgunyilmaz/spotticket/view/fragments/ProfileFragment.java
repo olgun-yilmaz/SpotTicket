@@ -2,13 +2,10 @@ package com.olgunyilmaz.spotticket.view.fragments;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
-import static android.content.Context.MODE_PRIVATE;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -55,14 +52,13 @@ import java.util.Map;
 
 public class ProfileFragment extends Fragment {
 
-    FragmentProfileBinding binding;
-    SharedPreferences sharedPreferences;
+    private FragmentProfileBinding binding;
     private Uri imgUri;
     private FirebaseFirestore db;
     private FirebaseAuth auth;
 
-    ActivityResultLauncher<Intent> activityResultLauncher;
-    ActivityResultLauncher<String> permissionLauncher;
+    private ActivityResultLauncher<Intent> activityResultLauncher;
+    private ActivityResultLauncher<String> permissionLauncher;
     private FirebaseStorage storage;
     private FirebaseUser user;
 
@@ -92,8 +88,6 @@ public class ProfileFragment extends Fragment {
         uploadPp();
 
         displayMode();
-
-        sharedPreferences = getActivity().getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);
 
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();

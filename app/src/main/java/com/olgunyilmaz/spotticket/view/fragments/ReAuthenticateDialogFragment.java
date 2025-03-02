@@ -1,10 +1,7 @@
 package com.olgunyilmaz.spotticket.view.fragments;
 
-import static android.content.ContentValues.TAG;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,7 +9,6 @@ import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -20,7 +16,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -32,9 +27,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.R;
-import com.olgunyilmaz.spotticket.databinding.FragmentReauthenticateDialogBinding;
-import com.olgunyilmaz.spotticket.view.activities.EmailPasswordActivity;
 import com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity;
 
 public class ReAuthenticateDialogFragment extends DialogFragment {
@@ -166,6 +160,10 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
     private void deleteAccount(AlertDialog dialog){
         user.delete()
                 .addOnSuccessListener(aVoid -> {
+
+                    LocalDataManager localDataManager = new LocalDataManager(requireActivity());
+                    localDataManager.deleteAllData();
+
                     dialog.dismiss();
                     goBackToOnBoarding();
                 })

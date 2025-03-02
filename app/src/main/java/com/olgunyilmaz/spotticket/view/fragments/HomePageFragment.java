@@ -1,8 +1,5 @@
 package com.olgunyilmaz.spotticket.view.fragments;
 
-import static android.content.Context.MODE_PRIVATE;
-
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,6 +23,7 @@ import com.olgunyilmaz.spotticket.model.CategoryResponse;
 import com.olgunyilmaz.spotticket.model.CitiesResponse;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.service.UserFavoritesManager;
+import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.squareup.picasso.Picasso;
 
 import java.io.InputStreamReader;
@@ -40,9 +38,9 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
     FragmentManager fragmentManager;
     private CategoryAdapter categoryAdapter;
     private ArrayList<CategoryResponse> categories;
-    private SharedPreferences sharedPreferences;
     private Runnable runnable;
     private Handler handler;
+    private LocalDataManager localDataManager;
 
 
     @Override
@@ -62,6 +60,8 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        localDataManager = new LocalDataManager(requireActivity());
+
         categories = new ArrayList<>();
         getCategories();
 
@@ -74,9 +74,7 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
 
         }
 
-        sharedPreferences = requireActivity().getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);
-
-        String city = sharedPreferences.getString("city", "Ankara");
+        String city = localDataManager.getStringData("city","Ankara");
         binding.selectCityText.setText(city);
 
         ArrayList<String> cities = getCities();
@@ -170,7 +168,7 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
     @Override
     public void onCitySelected(String city) {
         binding.selectCityText.setText(city);
-        sharedPreferences.edit().putString("city", city).apply();
+        localDataManager.updateStringData("city",city);
     }
 
     private void getCategories() {

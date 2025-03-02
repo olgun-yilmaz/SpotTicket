@@ -1,10 +1,7 @@
 package com.olgunyilmaz.spotticket.view.fragments;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import static com.olgunyilmaz.spotticket.view.activities.MainActivity.TICKETMASTER_API_KEY;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -25,6 +22,7 @@ import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.service.RetrofitClient;
 import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
 import com.olgunyilmaz.spotticket.util.Categories;
+import com.olgunyilmaz.spotticket.util.LocalDataManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,8 +36,6 @@ import retrofit2.Response;
 public class DisplayFragment extends Fragment {
     private FragmentDisplayBinding binding;
     private EventAdapter eventAdapter;
-
-    SharedPreferences sharedPreferences;
     TicketmasterApiService apiService;
     private Runnable runnable;
     private Handler handler;
@@ -65,12 +61,12 @@ public class DisplayFragment extends Fragment {
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        sharedPreferences = getActivity().getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);
+        LocalDataManager localDataManager = new LocalDataManager(requireActivity());
 
-        String city = sharedPreferences.getString("city", "Ankara");
+        String city = localDataManager.getStringData("city","Ankara");
         binding.fragmentCityText.setText(city);
 
-        String category = sharedPreferences.getString("category","Pop");
+        String category = localDataManager.getStringData("category","Pop");
         binding.fragmentCategoryText.setText(category);
 
         apiService = RetrofitClient.getApiService();

@@ -1,11 +1,8 @@
 package com.olgunyilmaz.spotticket.view.fragments;
 
 import static android.content.ContentValues.TAG;
-import static android.content.Context.MODE_PRIVATE;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,6 +33,7 @@ import com.olgunyilmaz.spotticket.databinding.FragmentLoginBinding;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.service.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.service.UserManager;
+import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity;
 
@@ -44,7 +43,7 @@ public class LoginFragment extends Fragment {
     private FirebaseAuth auth;
     private Runnable runnable;
     private Handler handler;
-    private SharedPreferences sharedPreferences;
+    private LocalDataManager localDataManager;
     int counter = 0;
 
     public LoginFragment() {}
@@ -71,8 +70,8 @@ public class LoginFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         auth.setLanguageCode("tr");
 
-        sharedPreferences = requireActivity().getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);
-        String lastUserEmail = sharedPreferences.getString("userEmail","");
+        localDataManager = new LocalDataManager(requireActivity());
+        String lastUserEmail = localDataManager.getStringData("userEmail","");
 
         binding.loginUsernameText.setText(lastUserEmail);
 
@@ -81,15 +80,13 @@ public class LoginFragment extends Fragment {
         binding.loginSignUpButton.setOnClickListener(v -> signUp());
 
         binding.resetPasswordText.setOnClickListener(v -> resetPassword());
-
-        binding.rememberMeButton.setOnClickListener(v -> rememberMe());
     }
 
-    private void rememberMe(){
+    private void updateRememberMe(){
         if (binding.rememberMeButton.isChecked()){
-            sharedPreferences.edit().putBoolean("rememberMe",true).apply();
+            localDataManager.updateBooleanData("rememberMe",true);
         }else{
-            sharedPreferences.edit().putBoolean("rememberMe",false).apply();
+            localDataManager.updateBooleanData("rememberMe",false);
         }
 
     }
@@ -139,7 +136,8 @@ public class LoginFragment extends Fragment {
                                     String msg;
 
                                     if(currentUser.isEmailVerified()){
-                                        sharedPreferences.edit().putString("userEmail",email).apply();
+                                        localDataManager.updateStringData("userEmail",email);
+                                        updateRememberMe();
 
                                         Intent intent = new Intent(getContext(), OnBoardingActivity.class); // for download the user data
                                         intent.putExtra("fromLogin",true);

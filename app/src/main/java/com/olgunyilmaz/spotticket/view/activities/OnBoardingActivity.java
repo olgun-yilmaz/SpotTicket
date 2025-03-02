@@ -3,7 +3,6 @@ package com.olgunyilmaz.spotticket.view.activities;
 import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -19,11 +18,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityOnBoardingBinding;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.service.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.service.UserManager;
+import com.olgunyilmaz.spotticket.util.LocalDataManager;
 
 public class OnBoardingActivity extends AppCompatActivity {
     private ActivityOnBoardingBinding binding;
@@ -45,17 +44,21 @@ public class OnBoardingActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-        SharedPreferences sharedPreferences = this.getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);
+        LocalDataManager localDataManager = new LocalDataManager(OnBoardingActivity.this);
 
         boolean isFromLogin = getIntent().getBooleanExtra("fromLogin",false);
 
+        boolean isRemember = localDataManager.getBooleanData("rememberMe");
+
         if(isFromLogin){
             String email = getIntent().getStringExtra("userEmail");
+            isRemember = true; // dont update data just give permission for login
+
             //binding.imageView.setImageResource(R.drawable.loading); // will use a diff background
             downloadData(email);
         }
 
-        boolean isRemember = sharedPreferences.getBoolean("rememberMe",false);
+
 
         if (isRemember){
             currentUser = auth.getCurrentUser();
