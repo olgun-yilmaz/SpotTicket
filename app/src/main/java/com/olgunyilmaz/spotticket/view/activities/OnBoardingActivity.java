@@ -113,7 +113,7 @@ public class OnBoardingActivity extends AppCompatActivity {
 
 
     private void getRecommendedEvents() { // download 3
-        String city = localDataManager.getStringData("city", "Ankara");
+        String city = localDataManager.getStringData("city", "Amsterdam");
 
         TicketmasterApiService apiService = RetrofitClient.getApiService();
         apiService.getEvents(TICKETMASTER_API_KEY, city, "")
@@ -207,6 +207,10 @@ public class OnBoardingActivity extends AppCompatActivity {
                                 String eventID = (String) document.get("eventID");
                                 String imageUrl = (String) document.get("imageUrl");
                                 String eventName = (String) document.get("eventName");
+
+                                System.out.println(eventID);
+                                System.out.println(eventName);
+                                System.out.println(imageUrl);
 
                                 FavoriteEventModel myEventModel = new FavoriteEventModel(eventID, eventName, imageUrl);
                                 UserFavoritesManager.getInstance().addFavorite(myEventModel);

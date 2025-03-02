@@ -67,7 +67,7 @@ public class DisplayFragment extends Fragment {
 
         LocalDataManager localDataManager = new LocalDataManager(requireActivity());
 
-        String city = localDataManager.getStringData("city", "Ankara");
+        String city = localDataManager.getStringData("city", "Amsterdam");
         binding.fragmentCityText.setText(city);
 
         String category = localDataManager.getStringData("category", "Pop");

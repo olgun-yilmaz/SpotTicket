@@ -15,8 +15,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.firebase.auth.FirebaseAuth;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityMainBinding;
-import com.olgunyilmaz.spotticket.service.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.service.UserManager;
+import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.view.fragments.DisplayFragment;
 import com.olgunyilmaz.spotticket.view.fragments.FavoritesFragment;
 import com.olgunyilmaz.spotticket.view.fragments.ProfileFragment;
@@ -75,6 +75,10 @@ public class MainActivity extends AppCompatActivity {
     public void signOut(View view) {
         auth.signOut();
         goToLoginActivity();
+
+        LocalDataManager localDataManager = new LocalDataManager(MainActivity.this);
+        localDataManager.deleteData("city");
+        localDataManager.deleteData("category");
 
         UserManager.getInstance().ppUrl = ""; // clean for next user
     }

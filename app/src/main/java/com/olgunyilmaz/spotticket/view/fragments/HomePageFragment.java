@@ -72,7 +72,7 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
 
         }
 
-        String city = localDataManager.getStringData("city", "Ankara");
+        String city = localDataManager.getStringData("city", "Amsterdam");
         binding.selectCityText.setText(city);
 
         ArrayList<String> cities = getCities();

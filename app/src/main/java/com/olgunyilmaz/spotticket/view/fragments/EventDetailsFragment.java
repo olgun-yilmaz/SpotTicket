@@ -87,6 +87,7 @@ public class EventDetailsFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             eventId = args.getString("eventID");
+            System.out.println(eventId);
             String imageUrl = args.getString("imageUrl");
             eventName = args.getString("eventName");
 
@@ -125,7 +126,7 @@ public class EventDetailsFragment extends Fragment {
 
     private void addFavorite(String eventId, String eventName, String imageUrl) {
         Map<String, Object> favorite = new HashMap<>();
-        favorite.put("eventId", eventId);
+        favorite.put("eventID", eventId);
         favorite.put("eventName", eventName);
         favorite.put("imageUrl", imageUrl);
 

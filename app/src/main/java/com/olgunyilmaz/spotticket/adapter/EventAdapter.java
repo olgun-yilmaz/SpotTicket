@@ -55,7 +55,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 Bundle args = new Bundle();
                 args.putString("eventID", event.getId());
                 args.putString("imageUrl", event.getHighQualityImage());
-                args.putString("eventDate", formattedDate);
                 args.putString("eventName", event.getName());
                 fragment.setArguments(args);
 
