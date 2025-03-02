@@ -1,0 +1,91 @@
+package com.olgunyilmaz.spotticket.util;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
+import android.provider.MediaStore;
+
+import androidx.annotation.NonNull;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class ImageLoader {
+    private final int maxSize;
+    private final Uri imageUri;
+    @NonNull
+    private final Context context;
+
+    public ImageLoader(@NonNull Context context, Uri imageUri, int maxSize) {
+        this.imageUri = imageUri;
+        this.context = context;
+        this.maxSize = maxSize;
+    }
+
+    private Bitmap makeImgSmall(int maxSize) {
+        try {
+            Bitmap img = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
+
+            Bitmap rotatedBitmap = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(),
+                    getImageMatrix(imageUri), true);
+
+            int width = rotatedBitmap.getWidth();
+            int height = rotatedBitmap.getHeight();
+            double bitmapRatio = (double) width / (double) height;
+
+            if (bitmapRatio >= 1) { // Landscape
+                width = maxSize;
+                height = (int) (width / bitmapRatio);
+            } else { // Portrait
+                height = maxSize;
+                width = (int) (height * bitmapRatio);
+            }
+
+            return Bitmap.createScaledBitmap(rotatedBitmap, width, height, true);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private Matrix getImageMatrix(Uri imageUri) throws IOException {
+        ExifInterface exif = new ExifInterface(context.getContentResolver().openInputStream(imageUri));
+        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+
+        Matrix matrix = new Matrix();
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.postRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.postRotate(180);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                matrix.postRotate(270);
+                break;
+            case ExifInterface.ORIENTATION_NORMAL:
+            case ExifInterface.ORIENTATION_UNDEFINED:
+                break;
+        }
+        return matrix;
+
+    }
+
+    public Uri getResizedImageUri() {
+        Bitmap bitmap = makeImgSmall(maxSize);
+        File file = new File(context.getCacheDir(), "small_image.jpg");
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Uri.fromFile(file);
+    }
+}

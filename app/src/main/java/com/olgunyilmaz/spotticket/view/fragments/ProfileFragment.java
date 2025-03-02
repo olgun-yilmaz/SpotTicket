@@ -42,6 +42,7 @@ import com.google.firebase.storage.UploadTask;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentProfileBinding;
 import com.olgunyilmaz.spotticket.service.UserManager;
+import com.olgunyilmaz.spotticket.util.ImageLoader;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -95,7 +96,6 @@ public class ProfileFragment extends Fragment {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-
         binding.emailText.setText(user.getDisplayName());
         binding.usernameText.setText(user.getEmail());
         binding.creationDateText.setText(getCreationDate());
@@ -119,8 +119,8 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    private String getCreationDate(){
-        if (user.getMetadata() != null){
+    private String getCreationDate() {
+        if (user.getMetadata() != null) {
             long creationTime = user.getMetadata().getCreationTimestamp();
             Date creationDate = new Date(creationTime);
             SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", new Locale("tr", "TR"));
@@ -140,7 +140,7 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    private void editMode(){
+    private void editMode() {
         binding.editButton.setVisibility(View.GONE);
         binding.deleteMyAccountButton.setVisibility(View.GONE);
         binding.saveButton.setVisibility(View.VISIBLE);
@@ -159,7 +159,7 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    private void displayMode(){
+    private void displayMode() {
         binding.deleteMyAccountButton.setVisibility(View.VISIBLE);
         binding.editButton.setVisibility(View.VISIBLE);
         binding.saveButton.setVisibility(View.GONE);
@@ -201,6 +201,9 @@ public class ProfileFragment extends Fragment {
             String dir_name = "pp";
             StorageReference storageRef = storage.getReference();
             StorageReference imageRef = storageRef.child("images").child(dir_name).child(user.getEmail() + ".jpg");
+
+            ImageLoader imageLoader = new ImageLoader(requireActivity(), imgUri, 500);
+            imgUri = imageLoader.getResizedImageUri();
 
             imageRef.putFile(imgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override

@@ -112,7 +112,7 @@ public class OnBoardingActivity extends AppCompatActivity {
     }
 
 
-    private void getRecommendedEvents() {
+    private void getRecommendedEvents() { // download 3
         String city = localDataManager.getStringData("city", "Ankara");
 
         TicketmasterApiService apiService = RetrofitClient.getApiService();
@@ -127,16 +127,21 @@ public class OnBoardingActivity extends AppCompatActivity {
                                 }
                             }
                         }
-                        binding.nextButton.setEnabled(true); // if downloaded u can go
-                        binding.getStartText.setText("Haydi Başlayalım !");
-                        handler.removeCallbacks(runnable);
+                        letsGo();
                     }
 
                     @Override
                     public void onFailure(Call<EventResponse> call, Throwable t) {
-                        Log.d(TAG, "onFailure: "+t.getLocalizedMessage());
+                        letsGo();
+                        Log.d(TAG, "onFailure: " + t.getLocalizedMessage());
                     }
                 });
+    }
+
+    private void letsGo() { // end process
+        binding.nextButton.setEnabled(true); // u can go
+        binding.getStartText.setText("Haydi Başlayalım !");
+        handler.removeCallbacks(runnable);
     }
 
     private void downloadData(String email) {
@@ -165,7 +170,8 @@ public class OnBoardingActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void getPp(String email) {
+    private void getPp(String email) { // download 1
+        updateLoadingText(); // start process
         db.collection("Users").whereEqualTo("email", email).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -179,19 +185,13 @@ public class OnBoardingActivity extends AppCompatActivity {
                                 if (ppUrl != null) {
                                     UserManager.getInstance().ppUrl = ppUrl;
                                 }
-                            } else {
-                                Log.w(TAG, "No documents found.");
                             }
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
                         }
-
                     }
                 });
     }
 
-    private void getFavoriteEvents(String userEmail) {
-        updateLoadingText();
+    private void getFavoriteEvents(String userEmail) { // download 2
         String path = userEmail + "_Events";
         db.collection(path).orderBy("eventName").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -212,8 +212,8 @@ public class OnBoardingActivity extends AppCompatActivity {
                                 UserFavoritesManager.getInstance().addFavorite(myEventModel);
                             }
                             getRecommendedEvents();
-                        }else{
-                            Toast.makeText(OnBoardingActivity.this,"Hata!",Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(OnBoardingActivity.this, "Hata!", Toast.LENGTH_LONG).show();
                         }
                     }
                 });

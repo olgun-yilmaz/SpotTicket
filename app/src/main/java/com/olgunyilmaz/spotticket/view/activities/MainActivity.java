@@ -27,7 +27,7 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
-    private ActivityMainBinding binding;
+    public ActivityMainBinding binding;
     private FragmentManager fragmentManager;
     private FirebaseAuth auth;
     private List<ImageView> menuButtons;
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());;
+        setContentView(binding.getRoot());
 
         getMenuButtons();
 
