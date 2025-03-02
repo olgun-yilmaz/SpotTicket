@@ -52,8 +52,7 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomePageBinding.inflate(getLayoutInflater(), container, false);
-        View view = binding.getRoot();
-        return view;
+        return binding.getRoot();
     }
 
     @Override
@@ -62,7 +61,6 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
 
         localDataManager = new LocalDataManager(requireActivity());
 
-        categories = new ArrayList<>();
         getCategories();
 
         fragmentManager = requireActivity().getSupportFragmentManager();
@@ -78,7 +76,7 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
         binding.selectCityText.setText(city);
 
         ArrayList<String> cities = getCities();
-        binding.selectCityButton.setOnClickListener(v -> showCityPicker(cities));
+        binding.cityLayout.setOnClickListener(v -> showCityPicker(cities));
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager
                 (requireContext(), 3, GridLayoutManager.HORIZONTAL, false);
@@ -177,6 +175,8 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
     }
 
     private void getCategories() {
+        categories = new ArrayList<>();
+
         categories.add(new CategoryResponse(R.drawable.family, "Aile"));
         categories.add(new CategoryResponse(R.drawable.basketball, "Basketbol"));
         categories.add(new CategoryResponse(R.drawable.baseball, "Beyzbol"));

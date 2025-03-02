@@ -12,7 +12,9 @@
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.25"
+        app:layout_constraintHeight_percent="0.4"
+
+        android:scaleType="centerCrop"
 
         android:src="@drawable/loading"
 
@@ -47,12 +49,12 @@
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintHeight_percent="0.04"
 
-        app:layout_constraintVertical_bias="0.4"
+        app:layout_constraintVertical_bias="0.55"
 
         android:text="Yükleniyor . . ."
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:gravity="center"
 
         app:layout_constraintEnd_toEndOf="@+id/detailsImage"
@@ -66,12 +68,12 @@
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintHeight_percent="0.03"
 
-        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintVertical_bias="0.62"
 
         android:text="Yükleniyor . . ."
-        android:textSize="24sp"
+        android:textSize="17sp"
         android:gravity="center"
 
         app:layout_constraintEnd_toEndOf="@+id/detailsDateText"
@@ -85,12 +87,12 @@
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintHeight_percent="0.03"
 
-        app:layout_constraintVertical_bias="0.6"
+        app:layout_constraintVertical_bias="0.69"
 
         android:text="Yükleniyor . . ."
-        android:textSize="24sp"
+        android:textSize="17sp"
         android:gravity="center"
 
         app:layout_constraintEnd_toEndOf="@+id/detailsDateText"
@@ -104,12 +106,12 @@
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintHeight_percent="0.03"
 
-        app:layout_constraintVertical_bias="0.7"
+        app:layout_constraintVertical_bias="0.76"
 
         android:text="Yükleniyor . . ."
-        android:textSize="24sp"
+        android:textSize="17sp"
         android:gravity="center"
 
         app:layout_constraintEnd_toEndOf="@+id/detailsNameText"
@@ -123,10 +125,10 @@
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.12"
+        app:layout_constraintHeight_percent="0.1"
         app:layout_constraintWidth_percent="0.8"
 
-        app:layout_constraintVertical_bias="0.85"
+        app:layout_constraintVertical_bias="0.87"
 
         app:srcCompat="@drawable/map_button_icon"
 

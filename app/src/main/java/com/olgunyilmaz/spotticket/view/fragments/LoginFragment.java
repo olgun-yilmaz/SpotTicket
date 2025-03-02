@@ -65,7 +65,7 @@ public class LoginFragment extends Fragment {
         localDataManager = new LocalDataManager(requireActivity());
         String lastUserEmail = localDataManager.getStringData("userEmail","");
 
-        binding.loginUsernameText.setText(lastUserEmail);
+        binding.loginEmailText.setText(lastUserEmail);
 
         binding.loginButton.setOnClickListener(v -> login());
 
@@ -87,7 +87,7 @@ public class LoginFragment extends Fragment {
         binding.resetPasswordText.setText("- - - Şifreni mi unuttun? - - -");
         binding.resetPasswordText.setEnabled(true);
 
-        binding.loginUsernameText.setVisibility(View.VISIBLE);
+        binding.loginEmailText.setVisibility(View.VISIBLE);
         binding.loginSignUpButton.setVisibility(View.VISIBLE);
         binding.loginButton.setVisibility(View.VISIBLE);
         binding.loginPasswordText.setVisibility(View.VISIBLE);
@@ -101,7 +101,7 @@ public class LoginFragment extends Fragment {
         updateLoadingText();
         binding.resetPasswordText.setEnabled(false);
 
-        binding.loginUsernameText.setVisibility(View.INVISIBLE);
+        binding.loginEmailText.setVisibility(View.INVISIBLE);
         binding.loginSignUpButton.setVisibility(View.INVISIBLE);
         binding.loginButton.setVisibility(View.INVISIBLE);
         binding.loginPasswordText.setVisibility(View.INVISIBLE);
@@ -109,7 +109,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void login(){
-        String email = binding.loginUsernameText.getText().toString();
+        String email = binding.loginEmailText.getText().toString();
         String password = binding.loginPasswordText.getText().toString();
 
         if (!email.isEmpty() && !password.isEmpty()){

@@ -3,7 +3,6 @@ package com.olgunyilmaz.spotticket.view.fragments;
 
 import static android.content.ContentValues.TAG;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;

@@ -1,20 +1,16 @@
 package com.olgunyilmaz.spotticket.adapter;
 
-import static android.content.Context.MODE_PRIVATE;
-
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.CategoryRowBinding;
 import com.olgunyilmaz.spotticket.model.CategoryResponse;
+import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.olgunyilmaz.spotticket.view.fragments.DisplayFragment;
 
@@ -54,13 +50,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             public void onClick(View view) {
                 DisplayFragment displayFragment = new DisplayFragment();
 
-                SharedPreferences sharedPreferences = ((MainActivity) holder.itemView.getContext())
-                        .getSharedPreferences("com.olgunyilmaz.spotticket", MODE_PRIVATE);
+                MainActivity activity = (MainActivity) holder.itemView.getContext();
+                activity.binding.homeButton.setEnabled(true); // for back to home page
+                activity.binding.displayButton.setEnabled(false); // we're here
 
-                sharedPreferences.edit().putString("category",category.getCategoryName()).apply();
+                LocalDataManager localDataManager = new LocalDataManager(activity);
+                localDataManager.updateStringData("category",category.getCategoryName());
 
-                ((MainActivity) holder.itemView.getContext())
-                        .getSupportFragmentManager()
+                activity.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragmentContainerView, displayFragment)
                         .addToBackStack(null)

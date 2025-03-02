@@ -7,6 +7,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Handler;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.adapter.EventAdapter;
 import com.olgunyilmaz.spotticket.databinding.FragmentDisplayBinding;
 import com.olgunyilmaz.spotticket.model.EventResponse;
@@ -23,6 +26,7 @@ import com.olgunyilmaz.spotticket.service.RetrofitClient;
 import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
 import com.olgunyilmaz.spotticket.util.Categories;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
+import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -69,6 +73,8 @@ public class DisplayFragment extends Fragment {
         String category = localDataManager.getStringData("category","Pop");
         binding.fragmentCategoryText.setText(category);
 
+        binding.selectLayout.setOnClickListener(v -> goToHomePage());
+
         apiService = RetrofitClient.getApiService();
         findEvent(apiService, city, category);
     }
@@ -86,6 +92,17 @@ public class DisplayFragment extends Fragment {
             }
         };
         handler.post(runnable);
+    }
+
+    private void goToHomePage(){
+        MainActivity activity = (MainActivity) requireActivity();
+        activity.binding.displayButton.setEnabled(true);
+        activity.binding.homeButton.setEnabled(false);
+
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        HomePageFragment fragment = new HomePageFragment();
+        fragmentTransaction.replace(R.id.fragmentContainerView,fragment).commit();
     }
 
     private void findEvent(TicketmasterApiService apiService, String city, String category) {

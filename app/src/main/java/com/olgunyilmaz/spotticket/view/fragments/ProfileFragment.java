@@ -151,7 +151,6 @@ public class ProfileFragment extends Fragment {
         binding.saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                binding.profileImage.setImageResource(R.drawable.loading);
                 displayMode();
                 uploadImage2db();
             }
@@ -198,6 +197,7 @@ public class ProfileFragment extends Fragment {
 
     private void uploadImage2db() {
         if (imgUri != null) {
+            binding.profileImage.setImageResource(R.drawable.loading);
             String dir_name = "pp";
             StorageReference storageRef = storage.getReference();
             StorageReference imageRef = storageRef.child("images").child(dir_name).child(user.getEmail() + ".jpg");
@@ -215,6 +215,7 @@ public class ProfileFragment extends Fragment {
                             updateProfileImage(auth.getCurrentUser().getEmail().toString(), uri.toString());
                             UserManager.getInstance().ppUrl = imgUri.toString();
                             binding.profileImage.setImageURI(imgUri);
+                            imgUri = null; // reset uri for next
                         }
                     });
 

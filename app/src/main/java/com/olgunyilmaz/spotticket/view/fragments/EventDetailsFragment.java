@@ -77,6 +77,7 @@ public class EventDetailsFragment extends Fragment {
 
         MainActivity activity = (MainActivity) requireActivity();
         activity.binding.homeButton.setEnabled(true); // for back to home page
+        activity.binding.myEventsButton.setEnabled(true); // for back to fav page
 
         String userEmail = auth.getCurrentUser().getEmail().toString();
         collectionPath = userEmail + "_Events";
