@@ -1,6 +1,5 @@
 package com.olgunyilmaz.spotticket.adapter;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,27 +35,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         EventResponse.Event event = eventList.get(position);
         holder.binding.eventName.setText(event.getName());
 
-        if (event.getImages() != null && !event.getImages().isEmpty()) {
-            EventResponse.Image selectedImage = null;
-
-            for (EventResponse.Image image : event.getImages()) {
-                if (image.getWidth() > 255 && image.getHeight() > 255) { // high quality image
-                    selectedImage = image;
-                }
-            }
-
-            if (selectedImage == null) {
-                selectedImage = event.getImages().get(0);
-            }
-
-            event.getImages().get(0).setUrl(selectedImage.getUrl()); // make first image selected image
-
+        if(event.getHighQualityImage() != null){
             Picasso.get()
-                    .load(selectedImage.getUrl())
+                    .load(event.getHighQualityImage())
                     .placeholder(R.drawable.loading)
                     .error(R.drawable.error)
                     .into(holder.binding.eventImage);
         }
+
+
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -24,6 +24,24 @@ public class EventResponse {
 
     public class Event {
 
+        public String getHighQualityImage(){
+            if (getImages() != null && !getImages().isEmpty()) {
+                Image selectedImage = null;
+                for(Image image : getImages()){
+                    if(image.width > 255 && image.height > 255){
+                        selectedImage = image;
+                        break;
+                    }
+                }
+                if (selectedImage == null){
+                    selectedImage = getImages().get(0);
+                }
+
+                return selectedImage.url;
+            }
+            return null;
+        }
+
         @SerializedName("id")
         private String id;
 

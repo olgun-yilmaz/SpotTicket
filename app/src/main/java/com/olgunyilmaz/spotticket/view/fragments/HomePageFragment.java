@@ -21,8 +21,8 @@ import com.olgunyilmaz.spotticket.adapter.CategoryAdapter;
 import com.olgunyilmaz.spotticket.databinding.FragmentHomePageBinding;
 import com.olgunyilmaz.spotticket.model.CategoryResponse;
 import com.olgunyilmaz.spotticket.model.CitiesResponse;
-import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
-import com.olgunyilmaz.spotticket.service.UserFavoritesManager;
+import com.olgunyilmaz.spotticket.model.EventResponse;
+import com.olgunyilmaz.spotticket.service.RecommendedEventManager;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.squareup.picasso.Picasso;
 
@@ -35,7 +35,7 @@ import java.util.Random;
 
 public class HomePageFragment extends Fragment implements SelectCityFragment.CitySelectListener {
     private FragmentHomePageBinding binding;
-    FragmentManager fragmentManager;
+    private FragmentManager fragmentManager;
     private CategoryAdapter categoryAdapter;
     private ArrayList<CategoryResponse> categories;
     private Runnable runnable;
@@ -67,14 +67,14 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
 
         fragmentManager = requireActivity().getSupportFragmentManager();
 
-        if (UserFavoritesManager.getInstance().userFavorites != null) {
-            if (!UserFavoritesManager.getInstance().userFavorites.isEmpty()) {
+        if (RecommendedEventManager.getInstance().recommendedEvents != null) {
+            if (!RecommendedEventManager.getInstance().recommendedEvents.isEmpty()) {
                 updateImage(10); // update per 10 seconds
             }
 
         }
 
-        String city = localDataManager.getStringData("city","Ankara");
+        String city = localDataManager.getStringData("city", "Ankara");
         binding.selectCityText.setText(city);
 
         ArrayList<String> cities = getCities();
@@ -98,24 +98,29 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
         });
     }
 
-    private void updateImage(int frequency){
+    private void updateImage(int frequency) {
         handler = new Handler();
         runnable = new Runnable() {
             @Override
             public void run() {
-                Random random = new Random();
-                int randomID = random.nextInt(UserFavoritesManager.getInstance().userFavorites.size());
-                FavoriteEventModel favoriteEvent = UserFavoritesManager.getInstance().userFavorites.get(randomID);
 
-                binding.filterEventName.setText(favoriteEvent.getEventName());
+                Random random = new Random();
+                int randomID = random.nextInt(RecommendedEventManager.getInstance().recommendedEvents.size());
+                EventResponse.Event event = RecommendedEventManager.getInstance().recommendedEvents.get(randomID);
+
+                binding.recommendedEventName.setText(event.getName());
 
                 Picasso.get()
-                        .load(favoriteEvent.getImageUrl())
+                        .load(event.getHighQualityImage())
                         .placeholder(R.drawable.loading)
                         .error(R.drawable.error)
-                        .into(binding.filterEventImage);
-                binding.filterEventImage.setOnClickListener(v ->
-                        seeEventDetails(favoriteEvent.getEventId(), favoriteEvent.getImageUrl()));
+                        .into(binding.recommendedEventImage);
+
+
+                binding.recommendedEventLayout.setOnClickListener(v ->
+                        seeEventDetails(event.getId(), event.getHighQualityImage()));
+
+
                 handler.postDelayed(runnable, 1000L * frequency);
             }
         };
@@ -168,7 +173,7 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
     @Override
     public void onCitySelected(String city) {
         binding.selectCityText.setText(city);
-        localDataManager.updateStringData("city",city);
+        localDataManager.updateStringData("city", city);
     }
 
     private void getCategories() {

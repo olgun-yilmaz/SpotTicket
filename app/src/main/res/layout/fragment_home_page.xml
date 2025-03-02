@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:id="@+id/filterEventLayout"
+        android:id="@+id/recommendedEventLayout"
 
         app:layout_constraintHeight_percent="0.45"
 
@@ -24,13 +24,14 @@
 
 
         <ImageView
-            android:id="@+id/filterEventImage"
+            android:id="@+id/recommendedEventImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
 
+            android:src="@drawable/loading"
+
             android:scaleType="centerCrop"
 
-            android:src="@drawable/sample_event"
             app:layout_constraintBottom_toBottomOf="parent"
 
             app:layout_constraintEnd_toEndOf="parent"
@@ -44,7 +45,7 @@
         </ImageView>
 
         <TextView
-            android:id="@+id/filterEventName"
+            android:id="@+id/recommendedEventName"
             android:layout_width="0dp"
             android:layout_height="0dp"
 
@@ -54,7 +55,7 @@
             app:layout_constraintHeight_percent="0.15"
 
             android:gravity="center"
-            android:text="Event Name"
+            android:text="Yüklenior . . ."
             android:textSize="17sp"
 
             app:layout_constraintBottom_toBottomOf="parent"

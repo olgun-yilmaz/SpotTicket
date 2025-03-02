@@ -3,6 +3,8 @@ package com.olgunyilmaz.spotticket.view.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,15 +22,15 @@ import com.olgunyilmaz.spotticket.view.fragments.FavoritesFragment;
 import com.olgunyilmaz.spotticket.view.fragments.ProfileFragment;
 import com.olgunyilmaz.spotticket.view.fragments.HomePageFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private FragmentManager fragmentManager;
-    public static String TICKETMASTER_BASE_URL;
-    public static String TICKETMASTER_API_KEY;
-    public static String MAPS_BASE_URL;
-    public static String MAPS_API_KEY;
     private FirebaseAuth auth;
+    private List<ImageView> menuButtons;
 
 
     @Override
@@ -36,28 +38,36 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(binding.getRoot());;
 
-        TICKETMASTER_BASE_URL = getString(R.string.ticketmaster_base_url);
-        TICKETMASTER_API_KEY = getString(R.string.ticketmaster_api_key);
-
-        MAPS_BASE_URL = getString(R.string.maps_base_url);
-        MAPS_API_KEY = getString(R.string.maps_api_key);
+        getMenuButtons();
 
         auth = FirebaseAuth.getInstance();
         auth.setLanguageCode("tr");
 
         fragmentManager = getSupportFragmentManager();
 
-        binding.displayButton.setOnClickListener(v -> replaceFragment(new DisplayFragment()));
+        binding.homeButton.setEnabled(false); // first page button disabled
 
-        binding.homeButton.setOnClickListener(v-> replaceFragment(new HomePageFragment()));
+        binding.displayButton.setOnClickListener(v -> replaceFragment(new DisplayFragment(), v));
 
-        binding.myEventsButton.setOnClickListener(v -> replaceFragment(new FavoritesFragment()));
+        binding.homeButton.setOnClickListener(v-> replaceFragment(new HomePageFragment(), v));
+
+        binding.myEventsButton.setOnClickListener(v -> replaceFragment(new FavoritesFragment(), v));
 
     }
 
-    private void replaceFragment(Fragment fragment) {
+    private void getMenuButtons(){
+        menuButtons = new ArrayList<>();
+        menuButtons.add(binding.profileButton);
+        menuButtons.add(binding.myEventsButton);
+        menuButtons.add(binding.homeButton);
+        menuButtons.add(binding.displayButton);
+        menuButtons.add(binding.signOutButton);
+    }
+
+    private void replaceFragment(Fragment fragment, View sender) {
+        disableButton(sender);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
     }
@@ -76,8 +86,19 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+    private void disableButton(View selectedButton){ // disable chosen button
+        for(ImageView button : menuButtons){
+            if (button == selectedButton){
+                button.setEnabled(false);
+            }else{
+                button.setEnabled(true);
+            }
+
+        }
+    }
+
     public void goToProfileScreen(View view) {
-        replaceFragment(new ProfileFragment());
+        replaceFragment(new ProfileFragment(), view);
     }
 
 }

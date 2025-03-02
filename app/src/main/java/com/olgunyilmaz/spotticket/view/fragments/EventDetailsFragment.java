@@ -1,9 +1,9 @@
 package com.olgunyilmaz.spotticket.view.fragments;
 
 import static android.content.ContentValues.TAG;
-import static com.olgunyilmaz.spotticket.view.activities.MainActivity.MAPS_API_KEY;
-import static com.olgunyilmaz.spotticket.view.activities.MainActivity.MAPS_BASE_URL;
-import static com.olgunyilmaz.spotticket.view.activities.MainActivity.TICKETMASTER_API_KEY;
+import static com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity.MAPS_API_KEY;
+import static com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity.MAPS_BASE_URL;
+import static com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity.TICKETMASTER_API_KEY;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,19 +19,33 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityOnBoardingBinding;
+import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
+import com.olgunyilmaz.spotticket.service.RecommendedEventManager;
+import com.olgunyilmaz.spotticket.service.RetrofitClient;
+import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
 import com.olgunyilmaz.spotticket.service.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.service.UserManager;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class OnBoardingActivity extends AppCompatActivity {
     private ActivityOnBoardingBinding binding;
+    public static String TICKETMASTER_BASE_URL;
+    public static String TICKETMASTER_API_KEY;
+    public static String MAPS_BASE_URL;
+    public static String MAPS_API_KEY;
     private FirebaseUser currentUser;
     private FirebaseFirestore db;
     private Runnable runnable;
     private Handler handler;
     int counter = 0;
+    private LocalDataManager localDataManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +54,24 @@ public class OnBoardingActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        TICKETMASTER_BASE_URL = getString(R.string.ticketmaster_base_url);
+        TICKETMASTER_API_KEY = getString(R.string.ticketmaster_api_key);
+
+        MAPS_BASE_URL = getString(R.string.maps_base_url);
+        MAPS_API_KEY = getString(R.string.maps_api_key);
+
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.setLanguageCode("tr");
 
         db = FirebaseFirestore.getInstance();
 
-        LocalDataManager localDataManager = new LocalDataManager(OnBoardingActivity.this);
+        localDataManager = new LocalDataManager(OnBoardingActivity.this);
 
-        boolean isFromLogin = getIntent().getBooleanExtra("fromLogin",false);
+        boolean isFromLogin = getIntent().getBooleanExtra("fromLogin", false);
 
         boolean isRemember = localDataManager.getBooleanData("rememberMe");
 
-        if(isFromLogin){
+        if (isFromLogin) {
             String email = getIntent().getStringExtra("userEmail");
             isRemember = true; // dont update data just give permission for login
 
@@ -59,8 +80,7 @@ public class OnBoardingActivity extends AppCompatActivity {
         }
 
 
-
-        if (isRemember){
+        if (isRemember) {
             currentUser = auth.getCurrentUser();
         }
 
@@ -91,10 +111,37 @@ public class OnBoardingActivity extends AppCompatActivity {
         });
     }
 
-    private void downloadData(String email){
+
+    private void getRecommendedEvents() {
+        String city = localDataManager.getStringData("city", "Ankara");
+
+        TicketmasterApiService apiService = RetrofitClient.getApiService();
+        apiService.getEvents(TICKETMASTER_API_KEY, city, "")
+                .enqueue(new Callback<EventResponse>() {
+                    @Override
+                    public void onResponse(Call<EventResponse> call, Response<EventResponse> response) {
+                        if (response.isSuccessful()) {
+                            if (response.body() != null) {
+                                if (response.body().getEmbedded() != null) {
+                                    RecommendedEventManager.getInstance().recommendedEvents = response.body().getEmbedded().getEvents();
+                                }
+                            }
+                        }
+                        binding.nextButton.setEnabled(true); // if downloaded u can go
+                        binding.getStartText.setText("Haydi Başlayalım !");
+                        handler.removeCallbacks(runnable);
+                    }
+
+                    @Override
+                    public void onFailure(Call<EventResponse> call, Throwable t) {
+                        Log.d(TAG, "onFailure: "+t.getLocalizedMessage());
+                    }
+                });
+    }
+
+    private void downloadData(String email) {
         binding.nextButton.setEnabled(false);
         getPp(email);
-        getFavoriteEvents(email);
     }
 
     private void updateLoadingText() {
@@ -124,6 +171,7 @@ public class OnBoardingActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            getFavoriteEvents(email);
                             QuerySnapshot result = task.getResult();
                             if (result != null && !result.isEmpty()) {
                                 QueryDocumentSnapshot document = (QueryDocumentSnapshot) result.getDocuments().get(0);
@@ -149,9 +197,8 @@ public class OnBoardingActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        String msg;
                         if (task.isSuccessful()) {
-                            if (UserFavoritesManager.getInstance().userFavorites != null){
+                            if (UserFavoritesManager.getInstance().userFavorites != null) {
                                 UserFavoritesManager.getInstance().userFavorites.clear();
                             }
                             for (QueryDocumentSnapshot document : task.getResult()) {
@@ -164,15 +211,10 @@ public class OnBoardingActivity extends AppCompatActivity {
                                 FavoriteEventModel myEventModel = new FavoriteEventModel(eventID, imageUrl, eventName);
                                 UserFavoritesManager.getInstance().addFavorite(myEventModel);
                             }
-                            msg = "Haydi Başlayalım !";
-                            binding.nextButton.setEnabled(true); // if downloaded u can go
-
-                        } else {
-                            msg = "Bir Sorun Oluştu :/";
-                            Log.w(TAG, "Error getting documents.", task.getException());
+                            getRecommendedEvents();
+                        }else{
+                            Toast.makeText(OnBoardingActivity.this,"Hata!",Toast.LENGTH_LONG).show();
                         }
-                        binding.getStartText.setText(msg);
-                        handler.removeCallbacks(runnable);
                     }
                 });
     }
