@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.olgunyilmaz.spotticket.R;
 
-import com.olgunyilmaz.spotticket.databinding.EventRowBinding;
+import com.olgunyilmaz.spotticket.databinding.FavoriteRowBinding;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.olgunyilmaz.spotticket.view.fragments.EventDetailsFragment;
@@ -29,21 +29,21 @@ public class FavoriteEventAdapter extends RecyclerView.Adapter<FavoriteEventAdap
     @NonNull
     @Override
     public FavoriteEventHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        EventRowBinding binding = EventRowBinding.inflate(LayoutInflater.from(parent.getContext()));
+        FavoriteRowBinding binding =FavoriteRowBinding.inflate(LayoutInflater.from(parent.getContext()));
         return new FavoriteEventHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(FavoriteEventHolder holder, int position) {
         FavoriteEventModel favoriteEvent = favoriteEventList.get(position);
-        holder.binding.eventName.setText(favoriteEvent.getEventName());
+        holder.binding.favoriteEventName.setText(favoriteEvent.getEventName());
 
         if (!favoriteEvent.getImageUrl().isEmpty()) {
             Picasso.get()
                     .load(favoriteEvent.getImageUrl())
                     .placeholder(R.drawable.loading)
                     .error(R.drawable.error)
-                    .into(holder.binding.eventImage);
+                    .into(holder.binding.favoriteEventImage);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -75,9 +75,9 @@ public class FavoriteEventAdapter extends RecyclerView.Adapter<FavoriteEventAdap
     }
 
     public class FavoriteEventHolder extends RecyclerView.ViewHolder {
-        private EventRowBinding binding;
+        private FavoriteRowBinding binding;
 
-        public FavoriteEventHolder(EventRowBinding binding) {
+        public FavoriteEventHolder(FavoriteRowBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

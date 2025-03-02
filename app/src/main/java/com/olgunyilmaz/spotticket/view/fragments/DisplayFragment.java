@@ -67,10 +67,10 @@ public class DisplayFragment extends Fragment {
 
         LocalDataManager localDataManager = new LocalDataManager(requireActivity());
 
-        String city = localDataManager.getStringData("city","Ankara");
+        String city = localDataManager.getStringData("city", "Ankara");
         binding.fragmentCityText.setText(city);
 
-        String category = localDataManager.getStringData("category","Pop");
+        String category = localDataManager.getStringData("category", "Pop");
         binding.fragmentCategoryText.setText(category);
 
         binding.selectLayout.setOnClickListener(v -> goToHomePage());
@@ -94,7 +94,7 @@ public class DisplayFragment extends Fragment {
         handler.post(runnable);
     }
 
-    private void goToHomePage(){
+    private void goToHomePage() {
         MainActivity activity = (MainActivity) requireActivity();
         activity.binding.displayButton.setEnabled(true);
         activity.binding.homeButton.setEnabled(false);
@@ -102,7 +102,7 @@ public class DisplayFragment extends Fragment {
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         HomePageFragment fragment = new HomePageFragment();
-        fragmentTransaction.replace(R.id.fragmentContainerView,fragment).commit();
+        fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
     }
 
     private void findEvent(TicketmasterApiService apiService, String city, String category) {
@@ -143,7 +143,6 @@ public class DisplayFragment extends Fragment {
                         Toast.makeText(getContext(), "Hata: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-
     }
 
 }

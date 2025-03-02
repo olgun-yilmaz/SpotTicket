@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.olgunyilmaz.spotticket.databinding.EventRowBinding;
+import com.olgunyilmaz.spotticket.util.EventDetailsHelper;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.olgunyilmaz.spotticket.view.fragments.EventDetailsFragment;
 import com.olgunyilmaz.spotticket.R;
@@ -35,6 +36,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         EventResponse.Event event = eventList.get(position);
         holder.binding.eventName.setText(event.getName());
 
+        EventDetailsHelper helper = new EventDetailsHelper();
+        String formattedDate = helper.getFormattedDate(event.getDates().getStart().getDateTime());
+        holder.binding.eventDate.setText(formattedDate);
+
         if(event.getHighQualityImage() != null){
             Picasso.get()
                     .load(event.getHighQualityImage())
@@ -43,17 +48,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                     .into(holder.binding.eventImage);
         }
 
-
-
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.binding.bookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EventDetailsFragment fragment = new EventDetailsFragment();
                 Bundle args = new Bundle();
                 args.putString("eventID", event.getId());
-                args.putString("imageUrl", event.getImages().get(0).getUrl()); // get first(selected) image
-                args.putString("imageUrl", event.getImages().get(0).getUrl()); // get first(selected) image
+                args.putString("imageUrl", event.getHighQualityImage());
+                args.putString("eventDate", formattedDate);
+                args.putString("eventName", event.getName());
                 fragment.setArguments(args);
 
                 ((MainActivity) holder.itemView.getContext())

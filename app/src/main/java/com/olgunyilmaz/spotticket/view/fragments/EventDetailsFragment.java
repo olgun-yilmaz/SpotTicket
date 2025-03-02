@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,9 +26,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.olgunyilmaz.spotticket.R;
+import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.service.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.databinding.FragmentEventDetailsBinding;
-import com.olgunyilmaz.spotticket.model.EventDetailsResponse;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.service.RetrofitClient;
 import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
@@ -78,6 +79,7 @@ public class EventDetailsFragment extends Fragment {
         MainActivity activity = (MainActivity) requireActivity();
         activity.binding.homeButton.setEnabled(true); // for back to home page
         activity.binding.myEventsButton.setEnabled(true); // for back to fav page
+        activity.binding.displayButton.setEnabled(true); // for back to display page
 
         String userEmail = auth.getCurrentUser().getEmail().toString();
         collectionPath = userEmail + "_Events";
@@ -86,6 +88,7 @@ public class EventDetailsFragment extends Fragment {
         if (args != null) {
             eventId = args.getString("eventID");
             String imageUrl = args.getString("imageUrl");
+            eventName = args.getString("eventName");
 
             if (isLiked()) {
                 binding.favCheckBox.setChecked(true);
@@ -96,7 +99,7 @@ public class EventDetailsFragment extends Fragment {
                 int imgId;
                 if (isChecked) {
                     imgId = R.drawable.fav_filled_icon;
-                    addFavorite(eventId, imageUrl, eventName);
+                    addFavorite(eventId, eventName, imageUrl);
                 } else {
                     imgId = R.drawable.fav_empty_icon;
                     removeFavorite(eventId);
@@ -120,26 +123,21 @@ public class EventDetailsFragment extends Fragment {
         return false;
     }
 
-    private void addFavorite(String eventId, String imgUrl, String eventName) {
-        Map<String, Object> userEvent = new HashMap<>();
-        userEvent.put("eventID", eventId);
-        userEvent.put("imageUrl", imgUrl);
-        userEvent.put("eventName", eventName);
+    private void addFavorite(String eventId, String eventName, String imageUrl) {
+        Map<String, Object> favorite = new HashMap<>();
+        favorite.put("eventId", eventId);
+        favorite.put("eventName", eventName);
+        favorite.put("imageUrl", imageUrl);
 
-        db.collection(collectionPath).add(userEvent).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                        UserFavoritesManager.getInstance().addFavorite(new FavoriteEventModel(eventId, imgUrl, eventName));
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
-
+        db.collection(collectionPath)
+            .add(favorite)
+            .addOnSuccessListener(documentReference -> {
+                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                UserFavoritesManager.getInstance().addFavorite(
+                    new FavoriteEventModel(eventId, eventName, imageUrl)
+                );
+            })
+            .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }
 
     private void removeFavorite(String eventId) {
@@ -167,18 +165,18 @@ public class EventDetailsFragment extends Fragment {
 
     private void findEventDetails(TicketmasterApiService apiService, String eventId, String imageUrl) {
         apiService.getEventDetails(eventId, TICKETMASTER_API_KEY)
-                .enqueue(new Callback<EventDetailsResponse>() {
+                .enqueue(new Callback<EventResponse.Event>() {
                     @SuppressLint("SetTextI18n")
                     @Override
-                    public void onResponse(Call<EventDetailsResponse> call, Response<EventDetailsResponse> response) {
+                    public void onResponse(Call<EventResponse.Event> call, Response<EventResponse.Event> response) {
                         if (response.isSuccessful()) {
-                            EventDetailsResponse eventDetails = response.body();
+                            EventResponse.Event event = response.body();
 
-                            eventName = eventDetails.getName();
+                            eventName = event.getName();
 
                             binding.detailsNameText.setText(eventName);
 
-                            String eventDate = eventDetails.getDates().getStart().getDateTime();
+                            String eventDate = event.getDates().getStart().getDateTime();
 
                             binding.detailsDateText.setText("Tarih : " + detailsHelper.getFormattedDate(eventDate));
 
@@ -189,18 +187,20 @@ public class EventDetailsFragment extends Fragment {
                                     .into(binding.detailsImage);
 
                             binding.detailsTypeText.setText("Etkinlik türü : " +
-                                    detailsHelper.getEventSegmentInfo(eventDetails, eventDetails.getClassifications()));
+                                    detailsHelper.getEventSegmentInfo(event, event.getClassifications()));
 
                             binding.detailsVenueText.setText
-                                    (detailsHelper.getVenueInfo(eventDetails, eventDetails.getEmbedded().getVenues()));
+                                    (detailsHelper.getVenueInfo(event, event.getEmbedded().getVenues()));
 
-                            binding.buyTicketButton.setOnClickListener(v -> buyTicket(eventDetails.getUrl()));
+                            binding.buyTicketButton.setOnClickListener(v -> buyTicket(event.getUrl()));
                         }
+
                     }
 
                     @Override
-                    public void onFailure(Call<EventDetailsResponse> call, Throwable t) {
-                        t.printStackTrace();
+                    public void onFailure(Call<EventResponse.Event> call, Throwable t) {
+                        Toast.makeText(requireContext(),t.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+
                     }
                 });
     }

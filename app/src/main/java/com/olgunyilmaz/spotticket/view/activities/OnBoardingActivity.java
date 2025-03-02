@@ -208,7 +208,7 @@ public class OnBoardingActivity extends AppCompatActivity {
                                 String imageUrl = (String) document.get("imageUrl");
                                 String eventName = (String) document.get("eventName");
 
-                                FavoriteEventModel myEventModel = new FavoriteEventModel(eventID, imageUrl, eventName);
+                                FavoriteEventModel myEventModel = new FavoriteEventModel(eventID, eventName, imageUrl);
                                 UserFavoritesManager.getInstance().addFavorite(myEventModel);
                             }
                             getRecommendedEvents();

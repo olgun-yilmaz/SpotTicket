@@ -1,6 +1,5 @@
 package com.olgunyilmaz.spotticket.service;
 
-import com.olgunyilmaz.spotticket.model.EventDetailsResponse;
 import com.olgunyilmaz.spotticket.model.EventResponse;
 
 import retrofit2.Call;
@@ -16,7 +15,7 @@ public interface TicketmasterApiService {
             @Query("classificationId") String categoryId
     );
     @GET("events/{eventId}.json")
-    Call<EventDetailsResponse> getEventDetails(
+    Call<EventResponse.Event> getEventDetails(
             @Path("eventId") String eventId,
             @Query("apikey") String apiKey
     );

@@ -21,13 +21,6 @@ import java.util.ArrayList;
 
 public class FavoritesFragment extends Fragment {
     FragmentFavoritesBinding binding;
-    private FavoriteEventAdapter favoriteEventAdapter;
-
-
-    public FavoritesFragment() {
-        // Required empty public constructor
-    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,8 +31,7 @@ public class FavoritesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentFavoritesBinding.inflate(getLayoutInflater(), container, false);
-        View view = binding.getRoot();
-        return view;
+        return binding.getRoot();
     }
 
     @Override
@@ -51,8 +43,8 @@ public class FavoritesFragment extends Fragment {
 
     private void displayEvents() {
         ArrayList<FavoriteEventModel> favorites = UserFavoritesManager.getInstance().userFavorites;
-        
-        favoriteEventAdapter = new FavoriteEventAdapter(favorites);
+
+        FavoriteEventAdapter favoriteEventAdapter = new FavoriteEventAdapter(favorites);
         binding.myEventsRecyclerView.setAdapter(favoriteEventAdapter);
         favoriteEventAdapter.notifyDataSetChanged();
     }

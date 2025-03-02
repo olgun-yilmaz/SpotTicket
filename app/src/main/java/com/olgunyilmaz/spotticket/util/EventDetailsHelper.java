@@ -7,7 +7,7 @@ import static com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity.MAPS
 import android.os.Build;
 import android.util.Log;
 
-import com.olgunyilmaz.spotticket.model.EventDetailsResponse;
+import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.model.GeocodingResponse;
 import com.olgunyilmaz.spotticket.service.GeocodingService;
 
@@ -52,9 +52,9 @@ public class EventDetailsHelper {
         }
         return eventDate;
     }
-    public String getVenueInfo(EventDetailsResponse eventDetails, List venues) {
+    public String getVenueInfo(EventResponse.Event eventDetails, List venues) {
         if (venues != null) {
-            EventDetailsResponse.Venue venue = eventDetails.getEmbedded().getVenues().get(0);
+            EventResponse.Venue venue = eventDetails.getEmbedded().getVenues().get(0);
 
             venueName = venue.getName() + " " + venue.getCity().getName();
 
@@ -75,9 +75,9 @@ public class EventDetailsHelper {
             return address;
         }
     }
-    public String getEventSegmentInfo(EventDetailsResponse eventDetails, List classifications) {
+    public String getEventSegmentInfo(EventResponse.Event eventDetails, List classifications) {
         if (classifications != null) {
-            EventDetailsResponse.Classification classification = eventDetails.getClassifications().get(0);
+            EventResponse.Classification classification = eventDetails.getClassifications().get(0);
             return classification.getSegment().getName();
         }
         return "";
