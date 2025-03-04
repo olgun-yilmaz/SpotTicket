@@ -92,8 +92,19 @@ public class DisplayFragment extends Fragment {
 
         binding.selectLayout.setOnClickListener(v -> goToHomePage());
 
+        String keyword = "";
+        boolean searchByKeyword = false;
+
+        Bundle args = getArguments();
+        if (args != null) {
+            searchByKeyword = args.getBoolean("searchByKeyword", false);
+            if (searchByKeyword){
+                keyword = args.getString("keyword","");
+            }
+        }
+
         apiService = RetrofitClient.getApiService();
-        findEvent(apiService, city, category);
+        findEvent(apiService, city, category, keyword,searchByKeyword);
     }
 
     private void updateLoadingText() {
@@ -122,9 +133,19 @@ public class DisplayFragment extends Fragment {
         fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
     }
 
-    private void findEvent(TicketmasterApiService apiService, String city, String category) {
+    private void findEvent(TicketmasterApiService service, String city, String category,
+                           String keyword, boolean searchByKeyword) {
         updateLoadingText();
-        apiService.getEvents(TICKETMASTER_API_KEY, city, Categories.CATEGORIES.get(category))
+
+        if(searchByKeyword){
+            keywordMode(keyword);
+            city = ""; // don't save, just for this request
+            category = "";
+        }else{
+            selectMode("","");
+        }
+
+        service.getEvents(TICKETMASTER_API_KEY, city, Categories.CATEGORIES.get(category), keyword)
                 .enqueue(new Callback<EventResponse>() {
                     @Override
                     public void onResponse(Call<EventResponse> call, Response<EventResponse> response) {
@@ -160,6 +181,20 @@ public class DisplayFragment extends Fragment {
                         Toast.makeText(getContext(), "Hata: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void selectMode(String city, String category){
+        binding.displayKeywordText.setVisibility(View.GONE);
+        binding.fragmentCategoryText.setVisibility(View.VISIBLE);
+        binding.fragmentCityText.setVisibility(View.VISIBLE);
+    }
+
+    private void keywordMode(String keyword){
+        binding.displayKeywordText.setText(keyword);
+        binding.displayKeywordText.setVisibility(View.VISIBLE);
+        binding.fragmentCategoryText.setVisibility(View.GONE);
+        binding.fragmentCityText.setVisibility(View.GONE);
+
     }
 
 }

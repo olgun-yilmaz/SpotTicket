@@ -133,7 +133,7 @@ public class OnBoardingActivity extends AppCompatActivity {
         String city = localDataManager.getStringData("city", "Amsterdam");
 
         TicketmasterApiService apiService = RetrofitClient.getApiService();
-        apiService.getEvents(TICKETMASTER_API_KEY, city, "")
+        apiService.getEvents(TICKETMASTER_API_KEY, city,"","")
                 .enqueue(new Callback<EventResponse>() {
                     @Override
                     public void onResponse(Call<EventResponse> call, Response<EventResponse> response) {

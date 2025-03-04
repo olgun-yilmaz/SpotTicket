@@ -31,6 +31,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.olgunyilmaz.spotticket.R;
@@ -41,6 +42,7 @@ import com.olgunyilmaz.spotticket.model.CitiesResponse;
 import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.service.RecommendedEventManager;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
+import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.squareup.picasso.Picasso;
 
 import java.io.InputStreamReader;
@@ -95,6 +97,19 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
         ArrayList<String> cities = getCities();
         binding.cityLayout.setOnClickListener(v -> showCityPicker(cities));
 
+        binding.homeSearchIcon.setOnClickListener(v -> searchEventByKeyword());
+        binding.homeSearchEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean onWriting) {
+                if(onWriting){
+                    writingMode();
+                }else{
+                    normalMode();
+                }
+            }
+        });
+
+
         GridLayoutManager gridLayoutManager = new GridLayoutManager
                 (requireContext(), 3, GridLayoutManager.HORIZONTAL, false);
 
@@ -111,6 +126,34 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
                 binding.categoryRecyclerView.setAdapter(categoryAdapter);
             }
         });
+    }
+
+    private void searchEventByKeyword(){
+        String keyword = binding.homeSearchEditText.getText().toString();
+
+        if (keyword.length() >= 3){
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            DisplayFragment fragment = new DisplayFragment();
+
+            setEnableHomeButton();
+
+            Bundle args = new Bundle();
+            args.putBoolean("searchByKeyword", true);
+            args.putString("keyword", keyword);
+            fragment.setArguments(args);
+
+            fragmentTransaction.replace(R.id.fragmentContainerView,fragment).commit();
+        }else{
+            Toast.makeText(requireActivity(),"En az 3 harf girmelisiniz!",Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    private void setEnableHomeButton(){
+        MainActivity activity = (MainActivity) requireActivity();
+        activity.binding.displayButton.setEnabled(false);
+        activity.binding.homeButton.setEnabled(true);
     }
 
     private void updateImage(int frequency) {
@@ -223,6 +266,20 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
         categories.add(new CategoryResponse(R.drawable.tennis, "Tenis"));
         categories.add(new CategoryResponse(R.drawable.theater, "Tiyatro"));
         categories.add(new CategoryResponse(R.drawable.food, "Yemek Festivali"));
+
+    }
+
+    private void writingMode(){
+        setEnableHomeButton();
+        binding.recommendedEventLayout.setVisibility(View.INVISIBLE);
+        binding.cityLayout.setVisibility(View.INVISIBLE);
+        binding.categoryRecyclerView.setVisibility(View.INVISIBLE);
+    }
+
+    private void normalMode(){
+        binding.recommendedEventLayout.setVisibility(View.VISIBLE);
+        binding.cityLayout.setVisibility(View.VISIBLE);
+        binding.categoryRecyclerView.setVisibility(View.VISIBLE);
 
     }
 }

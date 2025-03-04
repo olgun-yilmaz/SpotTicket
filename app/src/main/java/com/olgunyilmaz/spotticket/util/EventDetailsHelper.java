@@ -59,7 +59,7 @@ public class EventDetailsHelper {
     }
 
     public String getFormattedDate(String eventDate) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && eventDate != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
             ZonedDateTime dateTime = ZonedDateTime.parse(eventDate, formatter);
             ZonedDateTime localDateTime = dateTime.withZoneSameInstant(ZoneId.systemDefault());
@@ -67,7 +67,7 @@ public class EventDetailsHelper {
             String formattedDate = localDateTime.format(outputFormatter);
             return formattedDate;
         }
-        return eventDate;
+        return "Tarih bulunamadı";
     }
     public String getVenueInfo(EventResponse.Event eventDetails, List venues) {
         if (venues != null) {

@@ -38,6 +38,25 @@
         >
 
         <TextView
+            android:id="@+id/displayKeywordText"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:visibility="invisible"
+
+            android:gravity="center"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:text="KEYWORD"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        </TextView>
+
+        <TextView
             android:id="@+id/fragmentCityText"
 
             android:layout_width="0dp"
