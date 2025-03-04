@@ -30,7 +30,7 @@
         android:layout_margin="8dp"
         android:background="@android:drawable/editbox_background"
         app:iconifiedByDefault="false"
-        app:queryHint="Şehir ara..."
+        app:queryHint="@string/search_city_text"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

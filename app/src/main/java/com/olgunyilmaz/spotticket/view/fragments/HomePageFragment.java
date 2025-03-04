@@ -91,7 +91,7 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
 
         }
 
-        String city = localDataManager.getStringData("city", "Amsterdam");
+        String city = localDataManager.getStringData(getString(R.string.city_key), getString(R.string.default_city_name));
         binding.selectCityText.setText(city);
 
         ArrayList<String> cities = getCities();
@@ -138,13 +138,13 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
             setEnableHomeButton();
 
             Bundle args = new Bundle();
-            args.putBoolean("searchByKeyword", true);
-            args.putString("keyword", keyword);
+            args.putBoolean(getString(R.string.search_by_keyword_key), true);
+            args.putString(getString(R.string.keyword_key), keyword);
             fragment.setArguments(args);
 
             fragmentTransaction.replace(R.id.fragmentContainerView,fragment).commit();
         }else{
-            Toast.makeText(requireActivity(),"En az 3 harf girmelisiniz!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireActivity(),getString(R.string.weak_search_error),Toast.LENGTH_SHORT).show();
         }
 
 
@@ -191,8 +191,8 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
         EventDetailsFragment fragment = new EventDetailsFragment();
 
         Bundle args = new Bundle();
-        args.putString("eventID", eventID);
-        args.putString("imageUrl", imageUrl);
+        args.putString(getString(R.string.event_id_key), eventID);
+        args.putString(getString(R.string.image_url_key), imageUrl);
         fragment.setArguments(args);
 
         fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
@@ -200,7 +200,7 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
 
     private ArrayList<String> getCities() {
         try {
-            Reader reader = new InputStreamReader(getActivity().getAssets().open("cities.json"));
+            Reader reader = new InputStreamReader(getActivity().getAssets().open(getString(R.string.cities_json_file)));
             Gson gson = new Gson();
             CitiesResponse response = gson.fromJson(reader, CitiesResponse.class);
 
@@ -220,18 +220,18 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
         SelectCityFragment fragment = new SelectCityFragment();
 
         Bundle args = new Bundle();
-        args.putStringArrayList("cities", cities);
+        args.putStringArrayList(getString(R.string.cities_key), cities);
 
         fragment.setArguments(args);
         fragment.setListener(this);
 
-        fragment.show(getActivity().getSupportFragmentManager(), "cityPicker");
+        fragment.show(getActivity().getSupportFragmentManager(), getString(R.string.city_picker_tag));
     }
 
     @Override
     public void onCitySelected(String city) {
         binding.selectCityText.setText(city);
-        localDataManager.updateStringData("city", city);
+        localDataManager.updateStringData(getString(R.string.city_key), city);
     }
 
     private void getCategories() {

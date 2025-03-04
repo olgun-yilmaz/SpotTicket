@@ -70,7 +70,7 @@
 
         app:layout_constraintVertical_bias="0.55"
 
-        android:text="Yükleniyor . . ."
+        android:text="@string/loading_text"
         android:textSize="20sp"
         android:gravity="center"
 
@@ -89,7 +89,7 @@
 
         app:layout_constraintVertical_bias="0.62"
 
-        android:text="Yükleniyor . . ."
+        android:text="@string/loading_text"
         android:textSize="17sp"
         android:gravity="center"
 
@@ -108,7 +108,7 @@
 
         app:layout_constraintVertical_bias="0.69"
 
-        android:text="Yükleniyor . . ."
+        android:text="@string/loading_text"
         android:textSize="17sp"
         android:gravity="center"
 
@@ -127,7 +127,7 @@
 
         app:layout_constraintVertical_bias="0.76"
 
-        android:text="Yükleniyor . . ."
+        android:text="@string/loading_text"
         android:textSize="17sp"
         android:gravity="center"
 
@@ -171,7 +171,7 @@
         android:shadowColor="#835656"
         app:strokeColor="#BFA2A2"
 
-        android:text="Satın Al"
+        android:text="@string/buy_text"
         android:textColor="#BD1515"
         android:textColorHighlight="#BD8F8F"
         android:textColorHint="#DEB3B3"

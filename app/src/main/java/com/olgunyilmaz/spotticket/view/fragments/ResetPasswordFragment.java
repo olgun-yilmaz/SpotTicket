@@ -84,10 +84,10 @@ public class ResetPasswordFragment extends Fragment {
                     public void onComplete(@NonNull Task<Void> task) {
                         String msg;
                         if (task.isSuccessful()) {
-                             msg = "Şifrenizi gönderilen linkten sıfırlayabilirsiniz.";
+                             msg = getString(R.string.send_password_reset_link);
                             login(view);
                         }else{
-                            msg = "Bir hata oluştu.";
+                            msg = getString(R.string.error_text);
                         }
                         Toast.makeText(getContext(),msg,Toast.LENGTH_LONG).show();
                     }

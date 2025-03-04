@@ -92,8 +92,8 @@ public class MainActivity extends AppCompatActivity {
         goToLoginActivity();
 
         LocalDataManager localDataManager = new LocalDataManager(MainActivity.this);
-        localDataManager.deleteData("city");
-        localDataManager.deleteData("category");
+        localDataManager.deleteData(getString(R.string.city_key));
+        localDataManager.deleteData(getString(R.string.category_key));
 
         UserManager.getInstance().ppUrl = ""; // clean for next user
     }

@@ -72,8 +72,7 @@ public class DisplayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentDisplayBinding.inflate(getLayoutInflater(), container, false);
-        View view = binding.getRoot();
-        return view;
+        return binding.getRoot();
     }
 
     @Override
@@ -84,10 +83,14 @@ public class DisplayFragment extends Fragment {
 
         LocalDataManager localDataManager = new LocalDataManager(requireActivity());
 
-        String city = localDataManager.getStringData("city", "Amsterdam");
+        String city = localDataManager.getStringData
+                (getString(R.string.city_key), getString(R.string.default_city_name));
+
         binding.fragmentCityText.setText(city);
 
-        String category = localDataManager.getStringData("category", "Pop");
+        String category = localDataManager.getStringData
+                (getString(R.string.category_key), getString(R.string.default_category_name));
+
         binding.fragmentCategoryText.setText(category);
 
         binding.selectLayout.setOnClickListener(v -> goToHomePage());
@@ -97,9 +100,9 @@ public class DisplayFragment extends Fragment {
 
         Bundle args = getArguments();
         if (args != null) {
-            searchByKeyword = args.getBoolean("searchByKeyword", false);
+            searchByKeyword = args.getBoolean(getString(R.string.search_by_keyword_key), false);
             if (searchByKeyword){
-                keyword = args.getString("keyword","");
+                keyword = args.getString(getString(R.string.keyword_key),"");
             }
         }
 
@@ -114,8 +117,8 @@ public class DisplayFragment extends Fragment {
             public void run() {
                 counter++;
                 int numPoint = counter % 4;
-                String numPointText = ". ".repeat(numPoint) + "  ".repeat(4 - numPoint);
-                binding.fragmentResultText.setText("Aranıyor " + numPointText);
+                String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
+                binding.fragmentResultText.setText(getString(R.string.plain_loading_text) + numPointText);
                 handler.postDelayed(runnable, 1000);
             }
         };
@@ -142,7 +145,7 @@ public class DisplayFragment extends Fragment {
             city = ""; // don't save, just for this request
             category = "";
         }else{
-            selectMode("","");
+            selectMode();
         }
 
         service.getEvents(TICKETMASTER_API_KEY, city, Categories.CATEGORIES.get(category), keyword)
@@ -156,14 +159,14 @@ public class DisplayFragment extends Fragment {
                                     events = response.body().getEmbedded().getEvents();
                                 }
                                 handler.removeCallbacks(runnable);
-                                binding.fragmentResultText.setText(events.size() + " SONUÇ BULUNDU");
+                                binding.fragmentResultText.setText(events.size() + " " + getString(R.string.result_founded_text));
                                 eventAdapter = new EventAdapter(events);
                                 binding.recyclerView.setAdapter(eventAdapter);
                             }
 
                         } else {
                             try {
-                                String errorMessage = "Hata: " + response.code() + " - " + response.message();
+                                String errorMessage = getString(R.string.error_text) + response.code() + " - " + response.message();
                                 if (response.errorBody() != null) {
                                     errorMessage += "\n" + response.errorBody().string();
                                 }
@@ -178,12 +181,12 @@ public class DisplayFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<EventResponse> call, Throwable t) {
-                        Toast.makeText(getContext(), "Hata: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getString(R.string.error_text) + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    private void selectMode(String city, String category){
+    private void selectMode(){
         binding.displayKeywordText.setVisibility(View.GONE);
         binding.fragmentCategoryText.setVisibility(View.VISIBLE);
         binding.fragmentCityText.setVisibility(View.VISIBLE);

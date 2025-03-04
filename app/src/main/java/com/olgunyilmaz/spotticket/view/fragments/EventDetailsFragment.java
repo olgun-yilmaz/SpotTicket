@@ -99,7 +99,7 @@ public class EventDetailsFragment extends Fragment {
         activity.binding.displayButton.setEnabled(true); // for back to display page
 
         String userEmail = auth.getCurrentUser().getEmail().toString();
-        collectionPath = userEmail + "_Events";
+        collectionPath = userEmail + R.string.my_events_key;
 
         Bundle args = getArguments();
         if (args != null) {

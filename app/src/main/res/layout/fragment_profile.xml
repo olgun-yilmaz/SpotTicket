@@ -54,7 +54,7 @@
 
         app:layout_constraintVertical_bias="0.45"
 
-        android:text="Kullanıcı Adı : "
+        android:text="@string/username_text"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textAlignment="center"
@@ -75,7 +75,7 @@
 
         app:layout_constraintVertical_bias="0.55"
 
-        android:text="E-Mail : "
+        android:text="@string/email_text"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textAlignment="center"
@@ -95,7 +95,7 @@
 
         app:layout_constraintVertical_bias="0.65"
 
-        android:text="Kayıt Tarihi : "
+        android:text="@string/creation_date_text"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textAlignment="center"
@@ -164,7 +164,7 @@
         app:layout_constraintEnd_toEndOf="@id/creationDateText"
         app:layout_constraintStart_toStartOf="@id/creationDateText"
 
-        android:text="HESABIMI SİL"
+        android:text="@string/delete_my_account"
 
         android:backgroundTint="#F2BA0707"
 

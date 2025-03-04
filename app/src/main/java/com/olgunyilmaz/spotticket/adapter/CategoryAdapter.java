@@ -73,7 +73,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                 activity.binding.displayButton.setEnabled(false); // we're here
 
                 LocalDataManager localDataManager = new LocalDataManager(activity);
-                localDataManager.updateStringData("category",category.getCategoryName());
+
+                String categoryKey = holder.itemView.getContext().getString(R.string.category_key);
+                localDataManager.updateStringData(categoryKey,category.getCategoryName());
 
                 activity.getSupportFragmentManager()
                         .beginTransaction()

@@ -126,12 +126,12 @@ public class ProfileFragment extends Fragment {
     private void showDeleteAccountDialog() {
         if (isAdded() && getActivity() != null) {
             new AlertDialog.Builder(getActivity())
-                    .setTitle("Hesap Silme")
-                    .setMessage("Hesabınızı silmek istediğinizden emin misiniz?")
-                    .setNegativeButton("Hayır", null)
-                    .setPositiveButton("Evet", (dialogInterface, i) -> {
+                    .setTitle(getString(R.string.delete_account_text))
+                    .setMessage(getString(R.string.delete_account_question))
+                    .setNegativeButton(getString(R.string.answer_no), null)
+                    .setPositiveButton(getString(R.string.answer_yes), (dialogInterface, i) -> {
                         ReAuthenticateDialogFragment dialog = new ReAuthenticateDialogFragment();
-                        dialog.show(getParentFragmentManager(), "ReauthenticateDialog");
+                        dialog.show(getParentFragmentManager(), getString(R.string.re_authenticate_tag));
                     }).show();
         }
     }
@@ -143,7 +143,7 @@ public class ProfileFragment extends Fragment {
             SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", new Locale("tr", "TR"));
             return sdf.format(creationDate);
         }
-        return "Tarih bulunamadı!";
+        return getString(R.string.date_not_founded_text);
 
     }
 
@@ -183,25 +183,26 @@ public class ProfileFragment extends Fragment {
     }
 
     private void updateProfileImage(String email, String ppUrl) {
-        db.collection("Users")
-                .whereEqualTo("email", email)
+        db.collection(getString(R.string.users_collection_key))
+                .whereEqualTo(getString(R.string.email_key), email)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) { // update
                         DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
                         String documentId = documentSnapshot.getId();
 
-                        db.collection("Users").document(documentId)
-                                .update("profileImageUrl", ppUrl)
+                        db.collection(getString(R.string.users_collection_key)).document(documentId)
+                                .update(getString(R.string.profile_image_url_key), ppUrl)
                                 .addOnSuccessListener(aVoid -> {
                                     Log.d(TAG, "Profile image updated successfully.");
                                 });
                     } else { // add new
                         Map<String, Object> user = new HashMap<>();
-                        user.put("email", email);
-                        user.put("profileImageUrl", ppUrl);
+                        user.put(getString(R.string.email_key), email);
+                        user.put(getString(R.string.profile_image_url_key), ppUrl);
 
-                        db.collection("Users").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        db.collection(getString(R.string.users_collection_key)).add(user)
+                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
@@ -217,7 +218,8 @@ public class ProfileFragment extends Fragment {
             binding.profileImage.setImageResource(R.drawable.loading);
             String dir_name = "pp";
             StorageReference storageRef = storage.getReference();
-            StorageReference imageRef = storageRef.child("images").child(dir_name).child(user.getEmail() + ".jpg");
+            StorageReference imageRef = storageRef.child("images").child(dir_name)
+                    .child(user.getEmail() + ".jpg");
 
             ImageLoader imageLoader = new ImageLoader(requireActivity(), imgUri, 500);
             imgUri = imageLoader.getResizedImageUri();
@@ -225,7 +227,9 @@ public class ProfileFragment extends Fragment {
             imageRef.putFile(imgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(getContext(), "Fotoğraf başarıyla değiştirildi!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getString(R.string.successfully_image_change_text),
+                            Toast.LENGTH_LONG).show();
+
                     imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
@@ -257,7 +261,8 @@ public class ProfileFragment extends Fragment {
     private void askPermission(View view, String permission) {
         if (ContextCompat.checkSelfPermission(requireContext(), permission) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), permission)) {
-                Snackbar.make(view, "Permission needed for gallery", Snackbar.LENGTH_INDEFINITE).setAction("Give Permission", new View.OnClickListener() {
+                Snackbar.make(view, getString(R.string.gallery_permission_text),
+                        Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.give_permission_text), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         permissionLauncher.launch(permission);
@@ -299,7 +304,7 @@ public class ProfileFragment extends Fragment {
                     activityResultLauncher.launch(intentToGallery);
                 } else {
                     //permission denied
-                    Toast.makeText(getActivity(), "Permission needed!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getString(R.string.gallery_permission_text), Toast.LENGTH_LONG).show();
                 }
             }
         });

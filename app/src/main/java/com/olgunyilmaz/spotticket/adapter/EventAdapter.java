@@ -50,6 +50,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
     @Override
     public void onBindViewHolder(EventViewHolder holder, int position) {
+        MainActivity activity = (MainActivity) holder.itemView.getContext();
+
         EventResponse.Event event = eventList.get(position);
         holder.binding.eventName.setText(event.getName());
 
@@ -70,13 +72,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             public void onClick(View view) {
                 EventDetailsFragment fragment = new EventDetailsFragment();
                 Bundle args = new Bundle();
-                args.putString("eventID", event.getId());
-                args.putString("imageUrl", event.getHighQualityImage());
-                args.putString("eventName", event.getName());
+                args.putString(activity.getString(R.string.event_id_key), event.getId());
+                args.putString(activity.getString(R.string.image_url_key), event.getHighQualityImage());
+                args.putString(activity.getString(R.string.event_name_key), event.getName());
                 fragment.setArguments(args);
 
-                ((MainActivity) holder.itemView.getContext())
-                        .getSupportFragmentManager()
+                activity.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragmentContainerView, fragment)
                         .addToBackStack(null)

@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:hint="Şifre :"
+        android:hint="@string/password_text"
         android:inputType="textPassword"
         android:textSize="34sp"
 

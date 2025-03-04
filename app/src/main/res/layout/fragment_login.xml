@@ -34,7 +34,7 @@
 
         app:layout_constraintVertical_bias="0.15"
 
-        android:hint="E-Mail :"
+        android:hint="@string/email_text"
         android:inputType="textEmailAddress"
 
         app:layout_constraintBottom_toBottomOf="parent"
@@ -52,7 +52,7 @@
 
         app:layout_constraintVertical_bias="0.35"
 
-        android:hint="Şifre :"
+        android:hint="@string/password_text"
         android:inputType="textPassword"
 
         app:layout_constraintBottom_toBottomOf="parent"
@@ -72,7 +72,7 @@
         app:layout_constraintVertical_bias="0.5"
         app:layout_constraintHorizontal_bias="0.9"
 
-        android:text="Beni Hatırla"
+        android:text="@string/remember_me_text"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -91,7 +91,7 @@
 
         app:layout_constraintVertical_bias="0.65"
 
-        android:text="- - - Şifreni mi unuttun? - - -"
+        android:text="@string/forgot_password_text"
         android:textAlignment="center"
         android:textColor="#03A9F4"
         android:textSize="24sp"
@@ -112,7 +112,7 @@
 
         app:layout_constraintVertical_bias="0.8"
 
-        android:text="GİRİŞ YAP"
+        android:text="@string/login_text"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -129,7 +129,7 @@
 
         app:layout_constraintVertical_bias="0.95"
 
-        android:text="KAYIT OL"
+        android:text="@string/sign_up_text"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"

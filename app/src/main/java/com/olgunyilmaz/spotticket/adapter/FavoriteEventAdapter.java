@@ -52,6 +52,8 @@ public class FavoriteEventAdapter extends RecyclerView.Adapter<FavoriteEventAdap
 
     @Override
     public void onBindViewHolder(FavoriteEventHolder holder, int position) {
+        MainActivity activity = (MainActivity) holder.itemView.getContext();
+
         FavoriteEventModel favoriteEvent = favoriteEventList.get(position);
         holder.binding.favoriteEventName.setText(favoriteEvent.getEventName());
 
@@ -67,11 +69,13 @@ public class FavoriteEventAdapter extends RecyclerView.Adapter<FavoriteEventAdap
             @Override
             public void onClick(View view) {
                 EventDetailsFragment fragment = new EventDetailsFragment();
+
                 Bundle args = new Bundle();
-                System.out.println(favoriteEvent.getEventId());
-                args.putString("eventID", favoriteEvent.getEventId());
-                args.putString("imageUrl", favoriteEvent.getImageUrl());
-                args.putString("eventName", favoriteEvent.getEventName());
+
+                args.putString(activity.getString(R.string.event_id_key), favoriteEvent.getEventId());
+                args.putString(activity.getString(R.string.image_url_key), favoriteEvent.getImageUrl());
+                args.putString(activity.getString(R.string.event_name_key), favoriteEvent.getEventName());
+
                 fragment.setArguments(args);
 
                 ((MainActivity) holder.itemView.getContext())

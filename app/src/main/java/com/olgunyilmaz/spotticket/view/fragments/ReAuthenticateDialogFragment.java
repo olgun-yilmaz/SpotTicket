@@ -59,9 +59,6 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        if (getActivity() == null) {
-            throw new IllegalStateException("Activity cannot be null");
-        }
         db = FirebaseFirestore.getInstance();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -72,10 +69,10 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         AlertDialog dialog = builder.setView(view)
-                .setTitle("Hesap Silme")
-                .setMessage("Hesabınızı silmek için şifrenizi girin")
-                .setPositiveButton("Onayla", null)
-                .setNegativeButton("İptal", null)
+                .setTitle(getString(R.string.delete_account_text))
+                .setMessage(getString(R.string.enter_password_for_delete_account))
+                .setPositiveButton(getString(R.string.answer_confirm), null)
+                .setNegativeButton(getString(R.string.answer_cancel), null)
                 .create();
 
         dialog.setOnShowListener(dialogInterface -> {
@@ -84,7 +81,8 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
                 if (!password.isEmpty()) {
                     reauthenticateAndDelete(password, dialog);
                 } else {
-                    Toast.makeText(getContext(), "Şifre boş olamaz", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),
+                            getString(R.string.enter_password_for_delete_account), Toast.LENGTH_SHORT).show();
                 }
             });
         });
@@ -107,7 +105,7 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
     }
 
     private void deleteFavoriteEvents(String email, AlertDialog dialog) {
-        String collection = email + "_Events";
+        String collection = email + getString(R.string.my_events_key);
         db.collection(collection).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -125,16 +123,15 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
     }
 
     private void deleteUserData(String email, AlertDialog dialog) {
-        String collection = "Users";
-        db.collection(collection)
-                .whereEqualTo("email", email)
+        db.collection(getString(R.string.users_collection_key))
+                .whereEqualTo(getString(R.string.email_key), email)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) { // update
                         DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
                         String documentId = documentSnapshot.getId();
 
-                        db.collection("Users").document(documentId)
+                        db.collection(getString(R.string.users_collection_key)).document(documentId)
                                 .delete()
                                 .addOnSuccessListener(aVoid -> {
                                     deleteProfileImage(email, dialog);
@@ -150,7 +147,7 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
 
     private void goBackToOnBoarding() {
         handler.removeCallbacks(runnable);
-        Toast.makeText(requireActivity(),"Hesabınız başarıyla silindi!",Toast.LENGTH_LONG).show();
+        Toast.makeText(requireActivity(),getString(R.string.successfully_delete_account_text),Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getActivity(), OnBoardingActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
@@ -162,13 +159,13 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
             AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), password);
             user.reauthenticate(credential)
                     .addOnSuccessListener(unused -> {
-                        dialog.setTitle("Veriler Siliniyor");
+                        dialog.setTitle(getString(R.string.deleting_data_text));
                         updateLoadingText(dialog);
                         deleteFavoriteEvents(user.getEmail(), dialog);
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(getActivity(),
-                                "Kimlik doğrulama başarısız: " + e.getMessage(),
+                                getString(R.string.validation_error_text),
                                 Toast.LENGTH_LONG).show();
                     });
         }
@@ -186,7 +183,7 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(getActivity(),
-                            "Hesap silme başarısız: " + e.getMessage(),
+                            getString(R.string.delete_account_error_text),
                             Toast.LENGTH_LONG).show();
                 });
     }
@@ -199,7 +196,7 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
                 counter++;
                 int numPoint = counter % 4;
                 String numPointText = ". ".repeat(numPoint) + "  ".repeat(4 - numPoint);
-                dialog.setMessage("Siliniyor " + numPointText);
+                dialog.setMessage(getString(R.string.deleting_text) + numPointText);
                 handler.postDelayed(runnable, 1000);
             }
         };

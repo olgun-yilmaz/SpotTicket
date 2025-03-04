@@ -29,6 +29,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.adapter.CityAdapter;
 import com.olgunyilmaz.spotticket.databinding.FragmentSelectCityBinding;
 
@@ -63,7 +64,7 @@ public class SelectCityFragment extends DialogFragment {
 
         Bundle args = getArguments();
         if (args != null) {
-            ArrayList<String> cities = args.getStringArrayList("cities");
+            ArrayList<String> cities = args.getStringArrayList(getString(R.string.cities_key));
             adapter = new CityAdapter(cities, new CityAdapter.OnCityClickListener() {
                 @Override
                 public void onCityClick(String city) {

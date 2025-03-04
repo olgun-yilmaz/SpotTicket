@@ -52,9 +52,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        double venueLatitude = getIntent().getDoubleExtra("venueLatitude",40.98780984859083);
-        double venueLongitude = getIntent().getDoubleExtra("venueLongitude",29.03689029646077);
-        String venueName = getIntent().getStringExtra("venueName");
+        double venueLatitude = getIntent().getDoubleExtra
+                (getString(R.string.venue_latitude_key),40.98780984859083);
+
+        double venueLongitude = getIntent().getDoubleExtra
+                (getString(R.string.venue_longitude_key),29.03689029646077);
+
+        String venueName = getIntent().getStringExtra(getString(R.string.venue_name_key));
 
         goToLocation(venueLatitude,venueLongitude,venueName,15);
 

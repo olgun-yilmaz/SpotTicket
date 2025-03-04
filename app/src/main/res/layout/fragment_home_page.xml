@@ -47,7 +47,7 @@
 
             app:layout_constraintWidth_percent="0.8"
 
-            android:hint="Etkinlik Ara . . ."
+            android:hint="@string/search_events_text"
             android:textSize="15sp"
             android:textAlignment="center"
 
@@ -130,7 +130,7 @@
             app:layout_constraintHeight_percent="0.15"
 
             android:gravity="center"
-            android:text="Yüklenior . . ."
+            android:text="@string/loading_text"
             android:textSize="17sp"
 
             app:layout_constraintBottom_toBottomOf="parent"
@@ -208,7 +208,6 @@
             app:layout_constraintHorizontal_bias="1"
 
             android:gravity="center"
-            android:text="City"
             android:textSize="24sp"
 
 

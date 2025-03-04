@@ -84,12 +84,12 @@ public class OnBoardingActivity extends AppCompatActivity {
 
         localDataManager = new LocalDataManager(OnBoardingActivity.this);
 
-        boolean isFromLogin = getIntent().getBooleanExtra("fromLogin", false);
+        boolean isFromLogin = getIntent().getBooleanExtra(getString(R.string.from_login_key), false);
 
-        boolean isRemember = localDataManager.getBooleanData("rememberMe");
+        boolean isRemember = localDataManager.getBooleanData(getString(R.string.remember_me_key));
 
         if (isFromLogin) {
-            String email = getIntent().getStringExtra("userEmail");
+            String email = getIntent().getStringExtra(getString(R.string.user_email_key));
             isRemember = true; // dont update data just give permission for login
 
             //binding.imageView.setImageResource(R.drawable.loading); // will use a diff background
@@ -130,7 +130,8 @@ public class OnBoardingActivity extends AppCompatActivity {
 
 
     private void getRecommendedEvents() { // download 3
-        String city = localDataManager.getStringData("city", "Amsterdam");
+        String city = localDataManager.getStringData
+                (getString(R.string.city_key), getString(R.string.default_city_name));
 
         TicketmasterApiService apiService = RetrofitClient.getApiService();
         apiService.getEvents(TICKETMASTER_API_KEY, city,"","")
@@ -157,7 +158,7 @@ public class OnBoardingActivity extends AppCompatActivity {
 
     private void letsGo() { // end process
         binding.nextButton.setEnabled(true); // u can go
-        binding.getStartText.setText("Haydi Başlayalım !");
+        binding.getStartText.setText(getString(R.string.lets_go_text));
         handler.removeCallbacks(runnable);
     }
 
@@ -173,8 +174,8 @@ public class OnBoardingActivity extends AppCompatActivity {
             public void run() {
                 counter++;
                 int numPoint = counter % 4;
-                String numPointText = ". ".repeat(numPoint) + "  ".repeat(4 - numPoint);
-                binding.getStartText.setText("Yükleniyor " + numPointText);
+                String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
+                binding.getStartText.setText(getString(R.string.plain_loading_text) + numPointText);
                 handler.postDelayed(runnable, 1000);
             }
         };
@@ -189,7 +190,8 @@ public class OnBoardingActivity extends AppCompatActivity {
 
     private void getPp(String email) { // download 1
         updateLoadingText(); // start process
-        db.collection("Users").whereEqualTo("email", email).get()
+        db.collection(getString(R.string.users_collection_key))
+                .whereEqualTo(getString(R.string.email_key), email).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -198,7 +200,7 @@ public class OnBoardingActivity extends AppCompatActivity {
                             QuerySnapshot result = task.getResult();
                             if (result != null && !result.isEmpty()) {
                                 QueryDocumentSnapshot document = (QueryDocumentSnapshot) result.getDocuments().get(0);
-                                String ppUrl = document.getString("profileImageUrl");
+                                String ppUrl = document.getString(getString(R.string.profile_image_url_key));
                                 if (ppUrl != null) {
                                     UserManager.getInstance().ppUrl = ppUrl;
                                 }
@@ -209,8 +211,8 @@ public class OnBoardingActivity extends AppCompatActivity {
     }
 
     private void getFavoriteEvents(String userEmail) { // download 2
-        String path = userEmail + "_Events";
-        db.collection(path).orderBy("eventName").get()
+        String path = userEmail +  getString(R.string.my_events_key);
+        db.collection(path).orderBy(getString(R.string.event_name_key)).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -221,9 +223,9 @@ public class OnBoardingActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
 
-                                String eventID = (String) document.get("eventID");
-                                String imageUrl = (String) document.get("imageUrl");
-                                String eventName = (String) document.get("eventName");
+                                String eventID = (String) document.get(getString(R.string.event_id_key));
+                                String imageUrl = (String) document.get(getString(R.string.image_url_key));
+                                String eventName = (String) document.get(getString(R.string.event_name_key));
 
                                 System.out.println(eventID);
                                 System.out.println(eventName);
@@ -234,7 +236,7 @@ public class OnBoardingActivity extends AppCompatActivity {
                             }
                             getRecommendedEvents();
                         } else {
-                            Toast.makeText(OnBoardingActivity.this, "Hata!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(OnBoardingActivity.this, getString(R.string.error_text), Toast.LENGTH_LONG).show();
                         }
                     }
                 });

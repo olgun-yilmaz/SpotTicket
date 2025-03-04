@@ -47,7 +47,6 @@
             android:gravity="center"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:text="KEYWORD"
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,7 +64,6 @@
             app:layout_constraintWidth_percent="0.5"
             app:layout_constraintHorizontal_bias="0"
 
-            android:text="Şehir :"
             android:gravity="center"
             android:textSize="25sp"
             android:textStyle="bold"
@@ -87,7 +85,6 @@
 
             app:layout_constraintHorizontal_bias="1"
 
-            android:text="Kategori :"
             android:gravity="center"
             android:textSize="25sp"
             android:textStyle="bold"
@@ -126,7 +123,7 @@
 
         app:layout_constraintVertical_bias="1"
 
-        android:text="Aranıyor ..."
+        android:text="@string/searching_text"
         android:textAlignment="textEnd"
         android:textSize="15sp"
         android:textStyle="bold"

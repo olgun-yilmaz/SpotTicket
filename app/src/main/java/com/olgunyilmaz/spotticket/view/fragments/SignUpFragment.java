@@ -51,11 +51,6 @@ public class SignUpFragment extends Fragment {
     private String username;
 
 
-    public SignUpFragment() {
-        // Required empty public constructor
-    }
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,8 +60,7 @@ public class SignUpFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentSignUpBinding.inflate(getLayoutInflater(), container, false);
-        View view = binding.getRoot();
-        return view;
+        return binding.getRoot();
     }
 
     @Override
@@ -96,7 +90,7 @@ public class SignUpFragment extends Fragment {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    Log.d(TAG, "Başarıyla kayıt oldunuz");
+                                    Log.d(TAG, getString(R.string.successfully_sign_up_text));
                                     FirebaseUser user = auth.getCurrentUser();
                                     if (user != null) {
                                         // update username
@@ -118,11 +112,11 @@ public class SignUpFragment extends Fragment {
                                                 .addOnCompleteListener(task1 -> {
                                                     String msg;
                                                     if (task1.isSuccessful()) {
-                                                        msg = "Doğrulama e-postası gönderildi!";
+                                                        msg = getString(R.string.validation_email_send_text);
                                                         login();
 
                                                     } else {
-                                                        msg = "Doğrulama e-postası gönderilemedi";
+                                                        msg = getString(R.string.error_validation_email_send_text);
                                                     }
                                                     Toast.makeText(requireContext(),
                                                             msg,
@@ -130,16 +124,19 @@ public class SignUpFragment extends Fragment {
                                                 });
                                     }
                                 } else {
-                                    Log.w(TAG, "Kayıt olunamadı!", task.getException());
-                                    Toast.makeText(getContext(), "Kayıt olunamadı!",
+                                    Log.w(TAG, getString(R.string.error_text), task.getException());
+                                    Toast.makeText(getContext(), getString(R.string.error_sign_up_text),
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
             } else {
-                Toast.makeText(getContext(), "Lütfen girdiğiniz bilgileri kontrol edin!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getString(R.string.pleae_check_your_info_text), Toast.LENGTH_LONG).show();
             }
 
+        }else{
+            Toast.makeText(requireActivity(),
+                    requireActivity().getString(R.string.pleae_check_your_info_text),Toast.LENGTH_SHORT).show();
         }
     }
 

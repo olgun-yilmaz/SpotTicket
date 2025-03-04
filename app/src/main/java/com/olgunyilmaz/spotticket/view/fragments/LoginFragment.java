@@ -80,7 +80,7 @@ public class LoginFragment extends Fragment {
         auth.setLanguageCode("tr");
 
         localDataManager = new LocalDataManager(requireActivity());
-        String lastUserEmail = localDataManager.getStringData("userEmail","");
+        String lastUserEmail = localDataManager.getStringData(getString(R.string.user_email_key),"");
 
         binding.loginEmailText.setText(lastUserEmail);
 
@@ -93,15 +93,15 @@ public class LoginFragment extends Fragment {
 
     private void updateRememberMe(){
         if (binding.rememberMeButton.isChecked()){
-            localDataManager.updateBooleanData("rememberMe",true);
+            localDataManager.updateBooleanData(getString(R.string.remember_me_key),true);
         }else{
-            localDataManager.updateBooleanData("rememberMe",false);
+            localDataManager.updateBooleanData(getString(R.string.remember_me_key),false);
         }
 
     }
 
     private void normalMode(){
-        binding.resetPasswordText.setText("- - - Şifreni mi unuttun? - - -");
+        binding.resetPasswordText.setText(getText(R.string.forgot_password_text));
         binding.resetPasswordText.setEnabled(true);
 
         binding.loginEmailText.setVisibility(View.VISIBLE);
@@ -188,7 +188,7 @@ public class LoginFragment extends Fragment {
                 counter++;
                 int numPoint = counter % 4;
                 String numPointText = ". ".repeat(numPoint) + "  ".repeat(4 - numPoint);
-                binding.resetPasswordText.setText(String.format("Lütfen Bekleyiniz %s", numPointText));
+                binding.resetPasswordText.setText(getString(R.string.please_wait_text)+ numPointText);
                 handler.postDelayed(runnable, 1000);
             }
         };
