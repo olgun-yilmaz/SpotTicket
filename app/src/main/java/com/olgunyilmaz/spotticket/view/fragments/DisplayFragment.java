@@ -57,7 +57,7 @@ import retrofit2.Response;
 public class DisplayFragment extends Fragment {
     private FragmentDisplayBinding binding;
     private EventAdapter eventAdapter;
-    TicketmasterApiService apiService;
+    private TicketmasterApiService apiService;
     private Runnable runnable;
     private Handler handler;
     int counter = 0;
@@ -148,7 +148,10 @@ public class DisplayFragment extends Fragment {
             selectMode();
         }
 
-        service.getEvents(TICKETMASTER_API_KEY, city, Categories.CATEGORIES.get(category), keyword)
+        Categories categories = new Categories(requireContext());
+        categories.loadCategories();
+
+        service.getEvents(TICKETMASTER_API_KEY, city, categories.CATEGORIES.get(category), keyword)
                 .enqueue(new Callback<EventResponse>() {
                     @Override
                     public void onResponse(Call<EventResponse> call, Response<EventResponse> response) {
@@ -193,11 +196,29 @@ public class DisplayFragment extends Fragment {
     }
 
     private void keywordMode(String keyword){
-        binding.displayKeywordText.setText(keyword);
+        binding.displayKeywordText.setText(capitalizeWords(keyword));
         binding.displayKeywordText.setVisibility(View.VISIBLE);
         binding.fragmentCategoryText.setVisibility(View.GONE);
         binding.fragmentCityText.setVisibility(View.GONE);
 
+    }
+
+    private String capitalizeWords(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+
+        String[] words = str.split(" ");
+        StringBuilder result = new StringBuilder();
+
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                result.append(word.substring(0, 1).toUpperCase())
+                        .append(word.substring(1)).append(" ");
+            }
+        }
+
+        return result.toString().trim();
     }
 
 }

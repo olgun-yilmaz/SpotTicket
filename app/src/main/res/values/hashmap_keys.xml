@@ -32,6 +32,7 @@
 
     <string name="image_url_key">imageUrl</string>
 
+    <string name="pref_name">com.olgunyilmaz.spotticket</string>
     <string name="my_events_key">_Events</string>
 
     <string name="profile_image_url_key">profileImageUrl</string>
@@ -40,7 +41,6 @@
     <string name="remember_me_key">rememberMe</string>
 
     <string name="search_by_keyword_key">searchByKeyword</string>
-    <string name="send_password_reset_link">Şifrenizi gönderilen linkten sıfırlayabilirsiniz.</string>
 
     <string name="user_email_key">userEmail</string>
     <string name="users_collection_key">Users</string>

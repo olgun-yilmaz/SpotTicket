@@ -195,7 +195,7 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
             public void run() {
                 counter++;
                 int numPoint = counter % 4;
-                String numPointText = ". ".repeat(numPoint) + "  ".repeat(4 - numPoint);
+                String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
                 dialog.setMessage(getString(R.string.deleting_text) + numPointText);
                 handler.postDelayed(runnable, 1000);
             }

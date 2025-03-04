@@ -21,9 +21,11 @@ import static android.content.ContentValues.TAG;
 import static com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity.MAPS_API_KEY;
 import static com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity.MAPS_BASE_URL;
 
+import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
+import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.model.GeocodingResponse;
 import com.olgunyilmaz.spotticket.service.GeocodingService;
@@ -42,9 +44,21 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class EventDetailsHelper {
-    private double venueLatitude = 40.98780984859083;
-    private double venueLongitude = 29.03689029646077;
-    private String venueName = "Ülker Stadyumu";
+    private double venueLatitude;
+    private double venueLongitude;
+    private String venueName;
+    private final Context context;
+
+    public Context getContext() {
+        return context;
+    }
+
+    public EventDetailsHelper(Context context) {
+        this.context = context;
+        venueName = context.getString(R.string.default_venue_name);
+        venueLatitude = Double.parseDouble(context.getString(R.string.default_venue_latitude));
+        venueLongitude = Double.parseDouble(context.getString(R.string.default_venue_longitude));
+    }
 
     public String getVenueName() {
         return venueName;
@@ -67,13 +81,15 @@ public class EventDetailsHelper {
             String formattedDate = localDateTime.format(outputFormatter);
             return formattedDate;
         }
-        return "Tarih bulunamadı";
+        return context.getString(R.string.date_not_founded_text);
     }
     public String getVenueInfo(EventResponse.Event eventDetails, List venues) {
         if (venues != null) {
             EventResponse.Venue venue = eventDetails.getEmbedded().getVenues().get(0);
 
             venueName = venue.getName() + " " + venue.getCity().getName();
+
+            venueName = removeDuplicateWords(venueName);
 
             findVenueLocation(getSearchAddress(venueName));
 
@@ -127,5 +143,20 @@ public class EventDetailsHelper {
                 Log.e(TAG, "Failed to get LatLng: " + t.getMessage());
             }
         });
+    }
+
+    private String removeDuplicateWords(String str) {
+        String[] words = str.split(" ");
+        StringBuilder result = new StringBuilder();
+        String previousWord = "";
+
+        for (String word : words) {
+            if (!word.equals(previousWord)) {
+                result.append(word).append(" ");
+                previousWord = word;
+            }
+        }
+
+        return result.toString().trim();
     }
 }

@@ -18,7 +18,7 @@
 package com.olgunyilmaz.spotticket.model;
 
 public class CategoryResponse {
-    private int imageID;
+    private final int imageID;
 
     public CategoryResponse(int imageID, String categoryName) {
         this.imageID = imageID;
@@ -29,17 +29,10 @@ public class CategoryResponse {
         return categoryName;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
 
     public int getImageID() {
         return imageID;
     }
 
-    public void setImageID(int imageID) {
-        this.imageID = imageID;
-    }
-
-    private String categoryName;
+    private final String categoryName;
 }

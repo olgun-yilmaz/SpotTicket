@@ -49,6 +49,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Random;
 
 
@@ -237,40 +238,45 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
     private void getCategories() {
         categories = new ArrayList<>();
 
-        categories.add(new CategoryResponse(R.drawable.family, "Aile"));
-        categories.add(new CategoryResponse(R.drawable.basketball, "Basketbol"));
-        categories.add(new CategoryResponse(R.drawable.baseball, "Beyzbol"));
-        categories.add(new CategoryResponse(R.drawable.blues, "Blues"));
-        categories.add(new CategoryResponse(R.drawable.ice_hockey, "Buz Hokeyi"));
-        categories.add(new CategoryResponse(R.drawable.dancing, "Dans"));
-        categories.add(new CategoryResponse(R.drawable.disney, "Disney"));
-        categories.add(new CategoryResponse(R.drawable.movie, "Film"));
+        categories.add(new CategoryResponse(R.drawable.all_categories,getString(R.string.all_categories)));
+        categories.add(new CategoryResponse(R.drawable.family, getString(R.string.family)));
+        categories.add(new CategoryResponse(R.drawable.basketball, getString(R.string.basketball)));
+        categories.add(new CategoryResponse(R.drawable.baseball, getString(R.string.baseball)));
+        categories.add(new CategoryResponse(R.drawable.blues, getString(R.string.blues)));
+        categories.add(new CategoryResponse(R.drawable.ice_hockey, getString(R.string.ice_hockey)));
+        categories.add(new CategoryResponse(R.drawable.dancing, getString(R.string.dancing)));
+        categories.add(new CategoryResponse(R.drawable.disney, getString(R.string.disney)));
+        categories.add(new CategoryResponse(R.drawable.movie, getString(R.string.movie)));
+        categories.add(new CategoryResponse(R.drawable.folk, getString(R.string.folk)));
 
-        categories.add(new CategoryResponse(R.drawable.folk, "Folk"));
-        categories.add(new CategoryResponse(R.drawable.electro, "Elektronik Müzik"));
-        categories.add(new CategoryResponse(R.drawable.hip_hop, "Hip-Hop/Rap"));
-        categories.add(new CategoryResponse(R.drawable.jazz, "Jazz"));
-        categories.add(new CategoryResponse(R.drawable.classical_music, "Klasik Müzik"));
-        categories.add(new CategoryResponse(R.drawable.conference, "Konferans"));
-        categories.add(new CategoryResponse(R.drawable.cultural, "Kültür Festivali"));
-        categories.add(new CategoryResponse(R.drawable.mma, "MMA/Dövüş Sporları"));
-        categories.add(new CategoryResponse(R.drawable.music, "Müzik"));
-        categories.add(new CategoryResponse(R.drawable.musical, "Müzikal"));
+        categories.add(new CategoryResponse(R.drawable.electro, getString(R.string.electro)));
+        categories.add(new CategoryResponse(R.drawable.entertainment,getString(R.string.entertainment)));
+        categories.add(new CategoryResponse(R.drawable.hip_hop, getString(R.string.hip_hop)));
+        categories.add(new CategoryResponse(R.drawable.jazz, getString(R.string.jazz)));
+        categories.add(new CategoryResponse(R.drawable.classical_music, getString(R.string.classical_music)));
+        categories.add(new CategoryResponse(R.drawable.conference, getString(R.string.conference)));
+        categories.add(new CategoryResponse(R.drawable.cultural, getString(R.string.cultural)));
+        categories.add(new CategoryResponse(R.drawable.mma, getString(R.string.mma)));
+        categories.add(new CategoryResponse(R.drawable.music, getString(R.string.music)));
+        categories.add(new CategoryResponse(R.drawable.musical, getString(R.string.musical)));
 
-        categories.add(new CategoryResponse(R.drawable.opera, "Opera"));
-        categories.add(new CategoryResponse(R.drawable.rb, "R&B"));
-        categories.add(new CategoryResponse(R.drawable.rock, "Rock"));
-        categories.add(new CategoryResponse(R.drawable.pop_music, "Pop"));
-        categories.add(new CategoryResponse(R.drawable.theater_art, "Sanat & Tiyatro"));
-        categories.add(new CategoryResponse(R.drawable.sports, "Spor"));
-        categories.add(new CategoryResponse(R.drawable.tennis, "Tenis"));
-        categories.add(new CategoryResponse(R.drawable.theater, "Tiyatro"));
-        categories.add(new CategoryResponse(R.drawable.food, "Yemek Festivali"));
+        categories.add(new CategoryResponse(R.drawable.opera, getString(R.string.opera)));
+        categories.add(new CategoryResponse(R.drawable.rb, getString(R.string.rb)));
+        categories.add(new CategoryResponse(R.drawable.rock, getString(R.string.rock)));
+        categories.add(new CategoryResponse(R.drawable.pop_music, getString(R.string.pop_music)));
+        categories.add(new CategoryResponse(R.drawable.theater_art, getString(R.string.theater_art)));
+        categories.add(new CategoryResponse(R.drawable.exhibition,getString(R.string.exhibition)));
+        categories.add(new CategoryResponse(R.drawable.sports, getString(R.string.sports)));
+        categories.add(new CategoryResponse(R.drawable.tennis, getString(R.string.tennis)));
+        categories.add(new CategoryResponse(R.drawable.theater, getString(R.string.theater)));
+        categories.add(new CategoryResponse(R.drawable.food, getString(R.string.food)));
 
     }
 
     private void writingMode(){
         setEnableHomeButton();
+
+
         binding.recommendedEventLayout.setVisibility(View.INVISIBLE);
         binding.cityLayout.setVisibility(View.INVISIBLE);
         binding.categoryRecyclerView.setVisibility(View.INVISIBLE);

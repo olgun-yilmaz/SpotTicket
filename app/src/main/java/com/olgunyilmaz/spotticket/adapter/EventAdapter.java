@@ -55,7 +55,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         EventResponse.Event event = eventList.get(position);
         holder.binding.eventName.setText(event.getName());
 
-        EventDetailsHelper helper = new EventDetailsHelper();
+        EventDetailsHelper helper = new EventDetailsHelper(activity);
         String formattedDate = helper.getFormattedDate(event.getDates().getStart().getDateTime());
         holder.binding.eventDate.setText(formattedDate);
 

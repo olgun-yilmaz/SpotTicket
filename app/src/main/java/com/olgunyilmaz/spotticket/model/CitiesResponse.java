@@ -26,7 +26,4 @@ public class CitiesResponse {
         return cities;
     }
 
-    public void setCities(ArrayList<String> cities) {
-        this.cities = cities;
-    }
 }

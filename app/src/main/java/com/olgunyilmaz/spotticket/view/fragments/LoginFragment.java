@@ -17,7 +17,6 @@
 
 package com.olgunyilmaz.spotticket.view.fragments;
 
-import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,7 +28,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,47 +134,49 @@ public class LoginFragment extends Fragment {
                     .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                Log.d(TAG, "Kullanıcı girişi başarılı");
-                                FirebaseUser currentUser = auth.getCurrentUser();
+                            if (isAdded()) {
+                                if (task.isSuccessful()) {
+                                    FirebaseUser currentUser = auth.getCurrentUser();
 
-                                if (currentUser != null){
+                                    if (currentUser != null){
+                                        String msg;
 
-                                    String msg;
+                                        if(currentUser.isEmailVerified()){
+                                            localDataManager.updateStringData(getString(R.string.user_email_key),email);
+                                            updateRememberMe();
 
-                                    if(currentUser.isEmailVerified()){
-                                        localDataManager.updateStringData("userEmail",email);
-                                        updateRememberMe();
+                                            Intent intent = new Intent(requireActivity(), OnBoardingActivity.class); // for download the user data
+                                            intent.putExtra(getString(R.string.from_login_key),true);
+                                            intent.putExtra(getString(R.string.user_email_key),email);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            startActivity(intent);
+                                            requireActivity().finish();
+                                            msg = getString(R.string.welcome_message) + " "+currentUser.getDisplayName();
 
-                                        Intent intent = new Intent(getContext(), OnBoardingActivity.class); // for download the user data
-                                        intent.putExtra("fromLogin",true);
-                                        intent.putExtra("userEmail",email);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        startActivity(intent);
-                                        requireActivity().finish();
-                                        msg = "Hoşgeldin : ";
+                                        }else{
+                                            normalMode();
+                                            msg = getString(R.string.email_verification_message);
+                                        }
+                                        Toast.makeText(requireContext(),msg+currentUser.getDisplayName()
+                                                ,Toast.LENGTH_LONG).show();
 
-                                    }else{
-                                        normalMode();
-                                        msg = "Giriş yapabilmek için gönderilen linkten e-posta adresinizi doğrulamanız gerekmektedir.";
+
                                     }
-                                    Toast.makeText(getContext(),msg+currentUser.getDisplayName()
-                                            ,Toast.LENGTH_LONG).show();
-
-
                                 }
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            normalMode();
-                            Toast.makeText(getContext(),e.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+                            if (isAdded()) {
+                                normalMode();
+                                Toast.makeText(requireContext(),e.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+                            }
                         }
                     });
 
         }else{
-            Toast.makeText(getContext(),"Lütfen email ve parolanızı girin.",Toast.LENGTH_LONG).show();
+            Toast.makeText(requireContext(),getString(R.string.pleae_check_your_info_text),Toast.LENGTH_LONG).show();
         }
     }
 
@@ -185,16 +185,25 @@ public class LoginFragment extends Fragment {
         runnable = new Runnable() {
             @Override
             public void run() {
-                counter++;
-                int numPoint = counter % 4;
-                String numPointText = ". ".repeat(numPoint) + "  ".repeat(4 - numPoint);
-                binding.resetPasswordText.setText(getString(R.string.please_wait_text)+ numPointText);
-                handler.postDelayed(runnable, 1000);
+                if (isAdded()) {
+                    counter++;
+                    int numPoint = counter % 4;
+                    String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
+                    binding.resetPasswordText.setText(getString(R.string.please_wait_text)+ numPointText);
+                    handler.postDelayed(runnable, 1000);
+                }
             }
         };
         handler.post(runnable);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (handler != null) {
+            handler.removeCallbacks(runnable);
+        }
+    }
 
     private void signUp(){
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

@@ -20,25 +20,28 @@ package com.olgunyilmaz.spotticket.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.olgunyilmaz.spotticket.R;
+
 public class LocalDataManager {
     private SharedPreferences sharedPreferences;
-    private static final String PREF_NAME = "com.olgunyilmaz.spotticket";
+    private static String PREF_NAME;
     private Context context;
 
     public LocalDataManager(Context context) {
         this.context = context;
 
         if (context != null){
+            PREF_NAME = context.getString(R.string.pref_name);
             sharedPreferences = context.getSharedPreferences(PREF_NAME,Context.MODE_PRIVATE);
         }
 
     }
 
     public void deleteAllData(){ // clear phone memory
-        deleteData("userEmail");
-        deleteData("city");
-        deleteData("category");
-        deleteData("rememberMe");
+        deleteData(context.getString(R.string.user_email_key));
+        deleteData(context.getString(R.string.city_key));
+        deleteData(context.getString(R.string.category_key));
+        deleteData(context.getString(R.string.remember_me_key));
     }
 
     public void deleteData(String key){

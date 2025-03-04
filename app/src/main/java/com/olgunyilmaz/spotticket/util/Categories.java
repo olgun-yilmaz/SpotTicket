@@ -17,52 +17,70 @@
 
 package com.olgunyilmaz.spotticket.util;
 
+import android.content.Context;
+
+import com.olgunyilmaz.spotticket.R;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Categories {
-    public static final Map<String, String> CATEGORIES = new HashMap<String, String>() {{
-        put("Tüm Kategoriler", "");
+    private Context context;
 
-        // Müzik ve Alt Kategorileri
-        put("Müzik", "KZFzniwnSyZfZ7v7nJ");
-        put("Rock", "KnvZfZ7vAeA");
-        put("Pop", "KnvZfZ7vAev");
-        put("Hip-Hop/Rap", "KnvZfZ7vAv1");
-        put("Klasik Müzik", "KnvZfZ7vAeJ");
-        put("Jazz", "KnvZfZ7vAvE");
-        put("Blues", "KnvZfZ7vAvd");
-        put("Folk", "KnvZfZ7vAva");
-        put("R&B", "KnvZfZ7vAee");
-        put("Elektronik", "KnvZfZ7vAvF");
+    public Categories(Context context) {
+        this.context = context;
+    }
 
-        // Spor ve Alt Kategorileri
-        put("Spor", "KZFzniwnSyZfZ7v7nE");
-        put("Basketbol", "KnvZfZ7vAde");
-        put("Buz Hokeyi", "KnvZfZ7vAdI");
-        put("Tenis", "KnvZfZ7vAAv");
-        put("Beyzbol", "KnvZfZ7vAdv");
-        put("MMA/Dövüş Sporları", "KnvZfZ7vA7k");
+    public Map<String, String> CATEGORIES = new HashMap<>();
 
-        // Sanat & Tiyatro
-        put("Sanat & Tiyatro", "KZFzniwnSyZfZ7v7na");
-        put("Tiyatro", "KnvZfZ7v7na");
-        put("Opera", "KnvZfZ7v7n1");
-        put("Müzikal", "KnvZfZ7v7l1");
-        put("Dans", "KnvZfZ7v7nI");
+    public void loadCategories() {
 
-        // Aile Etkinlikleri
-        put("Aile", "KZFzniwnSyZfZ7v7n1");
-        put("Disney", "KnvZfZ7vA1n");
+        if (context != null) {
+            CATEGORIES.put(context.getString(R.string.all_categories), "");
 
-        // Film
-        put("Film", "KZFzniwnSyZfZ7v7nn");
+            // Music
+            CATEGORIES.put(context.getString(R.string.music), "KZFzniwnSyZfZ7v7nJ");
+            CATEGORIES.put(context.getString(R.string.rock), "KnvZfZ7vAeA");
+            CATEGORIES.put(context.getString(R.string.pop_music), "KnvZfZ7vAev");
+            CATEGORIES.put(context.getString(R.string.hip_hop), "KnvZfZ7vAv1");
+            CATEGORIES.put(context.getString(R.string.classical_music), "KnvZfZ7vAeJ");
+            CATEGORIES.put(context.getString(R.string.jazz), "KnvZfZ7vAvE");
+            CATEGORIES.put(context.getString(R.string.blues), "KnvZfZ7vAvd");
+            CATEGORIES.put(context.getString(R.string.folk), "KnvZfZ7vAva");
+            CATEGORIES.put(context.getString(R.string.rb), "KnvZfZ7vAee");
+            CATEGORIES.put(context.getString(R.string.electro), "KnvZfZ7vAvF");
 
-        // Festivaller
-        put("Yemek Festivali", "KnvZfZ7vAeF");
-        put("Kültür Festivali", "KnvZfZ7vAeE");
+            // Sports
+            CATEGORIES.put(context.getString(R.string.sports), "KZFzniwnSyZfZ7v7nE");
+            CATEGORIES.put(context.getString(R.string.basketball), "KnvZfZ7vAde");
+            CATEGORIES.put(context.getString(R.string.ice_hockey), "KnvZfZ7vAdI");
+            CATEGORIES.put(context.getString(R.string.tennis), "KnvZfZ7vAAv");
+            CATEGORIES.put(context.getString(R.string.baseball), "KnvZfZ7vAdv");
+            CATEGORIES.put(context.getString(R.string.mma), "KnvZfZ7vA7k");
 
-        // Diğer
-        put("Konferans", "KnvZfZ7vAe7");
-    }};
+            // Theater
+            CATEGORIES.put(context.getString(R.string.theater_art), "KZFzniwnSyZfZ7v7na");
+            CATEGORIES.put(context.getString(R.string.theater), "KnvZfZ7v7na");
+            CATEGORIES.put(context.getString(R.string.opera), "KnvZfZ7v7n1");
+            CATEGORIES.put(context.getString(R.string.musical), "KnvZfZ7v7l1");
+            CATEGORIES.put(context.getString(R.string.dancing), "KnvZfZ7v7nI");
+
+            // Family Events
+            CATEGORIES.put(context.getString(R.string.family), "KZFzniwnSyZfZ7v7n1");
+            CATEGORIES.put(context.getString(R.string.disney), "KnvZfZ7vA1n");
+
+            // Movie
+            CATEGORIES.put(context.getString(R.string.movie), "KZFzniwnSyZfZ7v7nn");
+
+            // Fest
+            CATEGORIES.put(context.getString(R.string.food), "KnvZfZ7vAeF");
+            CATEGORIES.put(context.getString(R.string.cultural), "KnvZfZ7vAeE");
+
+            // Other
+            CATEGORIES.put(context.getString(R.string.conference), "KnvZfZ7vAe7");
+            CATEGORIES.put(context.getString(R.string.entertainment), "KZFzniwnSyZfZ7v7nX");
+            CATEGORIES.put(context.getString(R.string.exhibition), "KZFzniwnSyZfZ7v7nY");
+
+        }
+    }
 } 

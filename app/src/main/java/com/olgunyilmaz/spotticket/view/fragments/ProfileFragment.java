@@ -128,8 +128,8 @@ public class ProfileFragment extends Fragment {
             new AlertDialog.Builder(getActivity())
                     .setTitle(getString(R.string.delete_account_text))
                     .setMessage(getString(R.string.delete_account_question))
-                    .setNegativeButton(getString(R.string.answer_no), null)
-                    .setPositiveButton(getString(R.string.answer_yes), (dialogInterface, i) -> {
+                    .setNegativeButton(R.string.answer_no, null)
+                    .setPositiveButton(R.string.answer_yes, (dialogInterface, i) -> {
                         ReAuthenticateDialogFragment dialog = new ReAuthenticateDialogFragment();
                         dialog.show(getParentFragmentManager(), getString(R.string.re_authenticate_tag));
                     }).show();
@@ -218,8 +218,7 @@ public class ProfileFragment extends Fragment {
             binding.profileImage.setImageResource(R.drawable.loading);
             String dir_name = "pp";
             StorageReference storageRef = storage.getReference();
-            StorageReference imageRef = storageRef.child("images").child(dir_name)
-                    .child(user.getEmail() + ".jpg");
+            StorageReference imageRef = storageRef.child("images").child(dir_name).child(user.getEmail() + ".jpg");
 
             ImageLoader imageLoader = new ImageLoader(requireActivity(), imgUri, 500);
             imgUri = imageLoader.getResizedImageUri();
@@ -262,7 +261,8 @@ public class ProfileFragment extends Fragment {
         if (ContextCompat.checkSelfPermission(requireContext(), permission) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), permission)) {
                 Snackbar.make(view, getString(R.string.gallery_permission_text),
-                        Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.give_permission_text), new View.OnClickListener() {
+                        Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.give_permission_text),
+                        new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         permissionLauncher.launch(permission);

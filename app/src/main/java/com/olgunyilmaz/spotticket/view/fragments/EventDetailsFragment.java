@@ -91,7 +91,7 @@ public class EventDetailsFragment extends Fragment {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.setLanguageCode("tr");
 
-        detailsHelper = new EventDetailsHelper();
+        detailsHelper = new EventDetailsHelper(requireContext());
 
         MainActivity activity = (MainActivity) requireActivity();
         activity.binding.homeButton.setEnabled(true); // for back to home page
@@ -103,10 +103,9 @@ public class EventDetailsFragment extends Fragment {
 
         Bundle args = getArguments();
         if (args != null) {
-            eventId = args.getString("eventID");
-            System.out.println(eventId);
-            String imageUrl = args.getString("imageUrl");
-            eventName = args.getString("eventName");
+            eventId = args.getString(getString(R.string.event_id_key));
+            String imageUrl = args.getString(getString(R.string.image_url_key));
+            eventName = args.getString(getString(R.string.event_name_key));
 
             if (isLiked()) {
                 binding.favCheckBox.setChecked(true);
@@ -143,9 +142,9 @@ public class EventDetailsFragment extends Fragment {
 
     private void addFavorite(String eventId, String eventName, String imageUrl) {
         Map<String, Object> favorite = new HashMap<>();
-        favorite.put("eventID", eventId);
-        favorite.put("eventName", eventName);
-        favorite.put("imageUrl", imageUrl);
+        favorite.put(getString(R.string.event_id_key), eventId);
+        favorite.put(getString(R.string.event_name_key), eventName);
+        favorite.put(getString(R.string.image_url_key), imageUrl);
 
         db.collection(collectionPath)
             .add(favorite)
@@ -160,7 +159,7 @@ public class EventDetailsFragment extends Fragment {
 
     private void removeFavorite(String eventId) {
         db.collection(collectionPath)
-                .whereEqualTo("eventID", eventId)
+                .whereEqualTo(getString(R.string.event_id_key), eventId)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -172,7 +171,6 @@ public class EventDetailsFragment extends Fragment {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 UserFavoritesManager.getInstance().removeFavorite(eventId);
-                                                Log.d(TAG, "Etkinlik başarıyla kaldırıldı");
                                             }
                                         });
                             }
@@ -196,7 +194,8 @@ public class EventDetailsFragment extends Fragment {
 
                             String eventDate = event.getDates().getStart().getDateTime();
 
-                            binding.detailsDateText.setText("Tarih : " + detailsHelper.getFormattedDate(eventDate));
+                            binding.detailsDateText.setText(getString(R.string.date_text) +
+                                    " " +detailsHelper.getFormattedDate(eventDate));
 
                             Picasso.get().
                                     load(imageUrl)
@@ -204,7 +203,7 @@ public class EventDetailsFragment extends Fragment {
                                     .error(R.drawable.error)
                                     .into(binding.detailsImage);
 
-                            binding.detailsTypeText.setText("Etkinlik türü : " +
+                            binding.detailsTypeText.setText(getString(R.string.event_type_text) + " "+
                                     detailsHelper.getEventSegmentInfo(event, event.getClassifications()));
 
                             binding.detailsVenueText.setText
@@ -226,9 +225,9 @@ public class EventDetailsFragment extends Fragment {
     public void goToEvent() {
         Intent intent = new Intent(getContext(), MapsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("venueLatitude", detailsHelper.getVenueLatitude());
-        intent.putExtra("venueLongitude", detailsHelper.getVenueLongitude());
-        intent.putExtra("venueName", detailsHelper.getVenueName());
+        intent.putExtra(getString(R.string.venue_latitude_key), detailsHelper.getVenueLatitude());
+        intent.putExtra(getString(R.string.venue_longitude_key), detailsHelper.getVenueLongitude());
+        intent.putExtra(getString(R.string.venue_name_key), detailsHelper.getVenueName());
         startActivity(intent);
     }
 

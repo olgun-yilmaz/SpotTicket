@@ -42,11 +42,6 @@ public class ResetPasswordFragment extends Fragment {
     private FirebaseAuth auth;
 
 
-    public ResetPasswordFragment() {
-        // Required empty public constructor
-    }
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +51,7 @@ public class ResetPasswordFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding =FragmentResetPasswordBinding.inflate(getLayoutInflater(),container,false);
-        View view = binding.getRoot();
-        return view;
+        return binding.getRoot();
     }
 
     @Override

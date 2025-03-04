@@ -23,14 +23,19 @@
     <string name="answer_no">Hayır</string>
     <string name="answer_yes">Evet</string>
 
-
     <string name="buy_text">Satın Al</string>
 
     <string name="creation_date_text">Kayıt Tarihi : </string>
 
+    <string name="date_text">Tarih :</string>
     <string name="date_not_founded_text">Tarih bulunamadı!</string>
+
     <string name="default_city_name">Amsterdam</string>
     <string name="default_category_name">Pop</string>
+    <string name="default_venue_name">Ülker Stadyumu</string>
+    <string name="default_venue_latitude">40.98780984859083</string>
+
+    <string name="default_venue_longitude">29.03689029646077</string>
     <string name="delete_account_text">HESAP SİLME</string>
     <string name="delete_account_error_text">Hesap silme başarısız</string>
     <string name="delete_account_question">Hesabınızı silmek istediğinizden emin misiniz?</string>
@@ -40,6 +45,8 @@
 
     <string name="email_text">E-Mail :</string>
     <string name="enter_password_for_delete_account">Hesabınızı silmek için şifrenizi girin</string>
+    <string name="email_verification_message">Giriş yapabilmek için gönderilen linkten e-posta adresinizi doğrulamanız gerekmektedir.</string>
+    <string name="event_type_text">Etkinlik türü : </string>
 
     <string name="error_sign_up_text">Kayıt olunamadı.</string>
     <string name="error_text">Hata!</string>
@@ -73,6 +80,7 @@
     <string name="search_city_text">Şehir ara . . .</string>
     <string name="search_events_text">Etkinlik Ara . . .</string>
     <string name="searching_text">Aranıyor . . .</string>
+    <string name="send_password_reset_link">Şifrenizi gönderilen linkten sıfırlayabilirsiniz.</string>
     <string name="sign_up_text">KAYIT OL</string>
 
     <string name="username_text">Kullanıcı Adı : </string>
@@ -84,4 +92,5 @@
     <string name="title_activity_maps">MapsActivity</string>
 
     <string name="weak_search_error">En az 3 harf girmelisiniz!</string>
+    <string name="welcome_message">Hoşgeldin:</string>
 </resources>
