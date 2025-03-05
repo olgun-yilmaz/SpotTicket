@@ -31,7 +31,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityOnBoardingBinding;
-import com.olgunyilmaz.spotticket.service.OnBoardingHelper;
+import com.olgunyilmaz.spotticket.util.OnBoardingHelper;
 import com.olgunyilmaz.spotticket.util.Language;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 
@@ -62,7 +62,8 @@ public class OnBoardingActivity extends AppCompatActivity {
 
         localDataManager = new LocalDataManager(OnBoardingActivity.this);
         getLanguageData();
-        
+        localDataManager.updateStringData(getString(R.string.language_code_key),selectedLanguage.getCode());
+
         binding = ActivityOnBoardingBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
@@ -159,7 +160,6 @@ public class OnBoardingActivity extends AppCompatActivity {
         }
 
         localDataManager.updateIntegerData(getString(R.string.language_counter_key),languageCounter);
-        localDataManager.updateStringData(getString(R.string.language_code_key),selectedLanguage.getCode());
 
         recreate();
 
@@ -167,8 +167,9 @@ public class OnBoardingActivity extends AppCompatActivity {
 
     private void getLanguageData(){
         languageList = new ArrayList<>();
-        languageList.add(new Language(R.drawable.tr_icon,"tr","Türkçe"));
-        languageList.add(new Language(R.drawable.en_icon,"en","English"));
+        languageList.add(new Language(R.drawable.icon_tr,"tr","Türkçe"));
+        languageList.add(new Language(R.drawable.icon_en,"en","English"));
+        languageList.add(new Language(R.drawable.icon_de,"de","Deutsch"));
 
         selectLanguage(); // after get data select language
     }

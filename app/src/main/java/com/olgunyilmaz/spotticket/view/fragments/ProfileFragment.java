@@ -58,7 +58,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentProfileBinding;
-import com.olgunyilmaz.spotticket.service.UserManager;
+import com.olgunyilmaz.spotticket.util.UserManager;
 import com.olgunyilmaz.spotticket.util.ImageLoader;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.squareup.picasso.Picasso;

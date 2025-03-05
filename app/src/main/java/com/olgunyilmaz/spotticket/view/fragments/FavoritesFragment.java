@@ -28,7 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.olgunyilmaz.spotticket.service.UserFavoritesManager;
+import com.olgunyilmaz.spotticket.util.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.adapter.FavoriteEventAdapter;
 import com.olgunyilmaz.spotticket.databinding.FragmentFavoritesBinding;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;

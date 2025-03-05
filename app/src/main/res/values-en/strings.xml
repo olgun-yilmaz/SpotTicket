@@ -18,10 +18,10 @@
 <resources>
     <string name="app_name">SpotTicket</string>
 
-    <string name="answer_cancel">Cancel</string>
-    <string name="answer_confirm">Confirm</string>
-    <string name="answer_no">No</string>
-    <string name="answer_yes">Yes</string>
+    <string name="answer_cancel">CANCEL</string>
+    <string name="answer_confirm">CONFIRM</string>
+    <string name="answer_no">NO</string>
+    <string name="answer_yes">YES</string>
 
     <string name="buy_text">Purchase</string>
 
@@ -44,8 +44,8 @@
     <string name="deleting_data_text">Data is being deleted</string>
 
     <string name="email_text">E-Mail :</string>
-    <string name="enter_password_for_delete_account">Hesabınızı silmek için şifrenizi girin</string>
-    <string name="email_verification_message">Enter your password to delete your account.</string>
+    <string name="enter_password_for_delete_account">Enter your password to delete your account.</string>
+    <string name="email_verification_message">In order to log in, you must verify your e-mail address from the link sent.</string>
     <string name="event_type_text">Event Type : </string>
 
     <string name="error_sign_up_text">Could not register.</string>

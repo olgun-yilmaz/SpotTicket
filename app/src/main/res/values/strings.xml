@@ -18,8 +18,8 @@
 <resources>
     <string name="app_name">SpotTicket</string>
 
-    <string name="answer_cancel">İptal</string>
-    <string name="answer_confirm">Onayla</string>
+    <string name="answer_cancel">İPTAL</string>
+    <string name="answer_confirm">ONAYLA</string>
     <string name="answer_no">Hayır</string>
     <string name="answer_yes">Evet</string>
 

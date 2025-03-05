@@ -35,16 +35,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.model.EventResponse;
-import com.olgunyilmaz.spotticket.service.UserFavoritesManager;
+import com.olgunyilmaz.spotticket.util.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.databinding.FragmentEventDetailsBinding;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.service.RetrofitClient;
@@ -104,7 +102,7 @@ public class EventDetailsFragment extends Fragment {
         activity.binding.displayButton.setEnabled(true); // for back to display page
 
         String userEmail = auth.getCurrentUser().getEmail().toString();
-        collectionPath = userEmail + R.string.my_events_key;
+        collectionPath = userEmail + getString(R.string.my_events_key);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -154,7 +152,6 @@ public class EventDetailsFragment extends Fragment {
         db.collection(collectionPath)
             .add(favorite)
             .addOnSuccessListener(documentReference -> {
-                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                 UserFavoritesManager.getInstance().addFavorite(
                     new FavoriteEventModel(eventId, eventName, imageUrl)
                 );

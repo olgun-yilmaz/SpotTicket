@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.olgunyilmaz.spotticket.service;
+package com.olgunyilmaz.spotticket.util;
 
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 

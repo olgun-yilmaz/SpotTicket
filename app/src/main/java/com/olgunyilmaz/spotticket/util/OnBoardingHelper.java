@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.olgunyilmaz.spotticket.service;
+package com.olgunyilmaz.spotticket.util;
 
 import static android.content.ContentValues.TAG;
 
@@ -36,7 +36,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
-import com.olgunyilmaz.spotticket.util.LocalDataManager;
+import com.olgunyilmaz.spotticket.service.RetrofitClient;
+import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
 
 import retrofit2.Call;
 import retrofit2.Callback;

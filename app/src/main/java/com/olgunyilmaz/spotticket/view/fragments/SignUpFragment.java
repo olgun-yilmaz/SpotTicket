@@ -42,6 +42,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentSignUpBinding;
+import com.olgunyilmaz.spotticket.util.LocalDataManager;
 
 
 public class SignUpFragment extends Fragment {
@@ -69,7 +70,9 @@ public class SignUpFragment extends Fragment {
 
         fragmentManager = getActivity().getSupportFragmentManager();
         auth = FirebaseAuth.getInstance();
-        auth.setLanguageCode("tr");
+        String countryCode = new LocalDataManager(requireActivity()).getStringData(getString(R.string.language_code_key),"tr");
+
+        auth.setLanguageCode(countryCode);
 
         binding.signUpButton.setOnClickListener(v -> signUp());
 

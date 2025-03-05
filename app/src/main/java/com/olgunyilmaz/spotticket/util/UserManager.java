@@ -15,25 +15,22 @@
  * limitations under the License.
  */
 
-package com.olgunyilmaz.spotticket.service;
+package com.olgunyilmaz.spotticket.util;
 
-import com.olgunyilmaz.spotticket.model.EventResponse;
 
-import java.util.ArrayList;
-import java.util.List;
+public class UserManager {
+    private static UserManager instance;
+    public String ppUrl;
 
-public class RecommendedEventManager {
-    private static RecommendedEventManager instance;
-    public List<EventResponse.Event> recommendedEvents;
-
-    private RecommendedEventManager() {
-        recommendedEvents = new ArrayList<>();
+    private UserManager(){
+        ppUrl = "";
     }
 
-    public static RecommendedEventManager getInstance() {
+    public static UserManager getInstance() {
         if (instance == null) {
-            instance = new RecommendedEventManager();
+            instance = new UserManager();
         }
         return instance;
     }
+
 }

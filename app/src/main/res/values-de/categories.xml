@@ -16,50 +16,49 @@
 -->
 
 <resources>
-    <string name="all_categories">All Categories</string>
+    <string name="all_categories">Alle Kategorien</string>
 
     <string name="basketball">Basketball</string>
     <string name="baseball">Baseball</string>
     <string name="blues">Blues</string>
 
-    <string name="classical_music">Classical Music</string>
-    <string name="conference">Conference</string>
+    <string name="classical_music">Klassische Musik</string>
+    <string name="conference">Konferenz</string>
 
-    <string name="dancing">Dancing</string>
+    <string name="dancing">Tanz</string>
     <string name="disney">Disney</string>
 
-    <string name="electro">Electro</string>
-    <string name="entertainment">Entertainment</string>
-    <string name="exhibition">Exhibition</string>
+    <string name="electro">Elektro</string>
+    <string name="entertainment">Unterhaltung</string>
+    <string name="exhibition">Ausstellung</string>
 
-    <string name="family">Family</string>
-    <string name="folk">Folk</string>
-    <string name="food">Food Fest</string>
+    <string name="family">Familie</string>
+    <string name="folk">Volksmusik</string>
+    <string name="food">Essen Fest</string>
 
     <string name="hip_hop">Hip-Hop/Rap</string>
 
     <string name="jazz">Jazz</string>
 
-    <string name="cultural">Cultural Fest</string>
+    <string name="cultural">Kulturelles Fest</string>
 
-    <string name="ice_hockey">Ice Hockey</string>
+    <string name="ice_hockey">Eishockey</string>
 
     <string name="mma">MMA</string>
-    <string name="movie">Movie</string>
-    <string name="music">Music</string>
+    <string name="movie">Film</string>
+    <string name="music">Musik</string>
     <string name="musical">Musical</string>
 
-    <string name="opera">Opera</string>
+    <string name="opera">Oper</string>
 
-    <string name="pop_music">Pop Music</string>
+    <string name="pop_music">Pop-Musik</string>
 
     <string name="rb">R&amp;B</string>
     <string name="rock">Rock</string>
 
     <string name="tennis">Tennis</string>
     <string name="theater">Theater</string>
-    <string name="theater_art">Theater &amp; Art</string>
+    <string name="theater_art">Theater &amp; Kunst</string>
 
-    <string name="sports">Sports</string>
-
+    <string name="sports">Sport</string>
 </resources>

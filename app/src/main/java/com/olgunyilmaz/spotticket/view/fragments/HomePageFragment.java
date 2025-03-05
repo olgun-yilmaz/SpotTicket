@@ -40,7 +40,7 @@ import com.olgunyilmaz.spotticket.databinding.FragmentHomePageBinding;
 import com.olgunyilmaz.spotticket.model.CategoryResponse;
 import com.olgunyilmaz.spotticket.model.CitiesResponse;
 import com.olgunyilmaz.spotticket.model.EventResponse;
-import com.olgunyilmaz.spotticket.service.RecommendedEventManager;
+import com.olgunyilmaz.spotticket.util.RecommendedEventManager;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.squareup.picasso.Picasso;
@@ -49,7 +49,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Locale;
 import java.util.Random;
 
 

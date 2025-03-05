@@ -66,8 +66,7 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentLoginBinding.inflate(getLayoutInflater(), container, false);
-        View view = binding.getRoot();
-        return view;
+        return binding.getRoot();
     }
 
     @Override
