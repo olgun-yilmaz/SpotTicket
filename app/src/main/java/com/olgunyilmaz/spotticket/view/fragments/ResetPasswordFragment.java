@@ -35,6 +35,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentResetPasswordBinding;
+import com.olgunyilmaz.spotticket.util.LocalDataManager;
 
 public class ResetPasswordFragment extends Fragment {
     private FragmentResetPasswordBinding binding;
@@ -59,7 +60,11 @@ public class ResetPasswordFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         fragmentManager = getActivity().getSupportFragmentManager();
         auth = FirebaseAuth.getInstance();
-        auth.setLanguageCode("tr");
+
+        String countryKey = getString(R.string.language_code_key);
+        String countryCode = new LocalDataManager(requireActivity()).getStringData(countryKey,"tr");
+
+        auth.setLanguageCode(countryCode);
 
         binding.resetPasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override

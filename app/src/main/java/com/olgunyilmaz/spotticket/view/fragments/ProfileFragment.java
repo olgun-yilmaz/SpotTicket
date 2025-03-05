@@ -60,6 +60,7 @@ import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentProfileBinding;
 import com.olgunyilmaz.spotticket.service.UserManager;
 import com.olgunyilmaz.spotticket.util.ImageLoader;
+import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -79,6 +80,7 @@ public class ProfileFragment extends Fragment {
     private ActivityResultLauncher<String> permissionLauncher;
     private FirebaseStorage storage;
     private FirebaseUser user;
+    private String countryCode;
 
 
     @Override
@@ -109,7 +111,10 @@ public class ProfileFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
-        auth.setLanguageCode("tr");
+        String countryKey = getString(R.string.language_code_key);
+        countryCode = new LocalDataManager(requireActivity()).getStringData(countryKey,"tr");
+
+        auth.setLanguageCode(countryCode);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -140,7 +145,10 @@ public class ProfileFragment extends Fragment {
         if (user.getMetadata() != null) {
             long creationTime = user.getMetadata().getCreationTimestamp();
             Date creationDate = new Date(creationTime);
-            SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", new Locale("tr", "TR"));
+
+            String country = countryCode.toUpperCase();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", new Locale(countryCode, country));
             return sdf.format(creationDate);
         }
         return getString(R.string.date_not_founded_text);

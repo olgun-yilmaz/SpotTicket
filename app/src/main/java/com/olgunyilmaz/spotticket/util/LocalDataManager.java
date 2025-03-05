@@ -76,4 +76,17 @@ public class LocalDataManager {
         }
     }
 
+    public int getIntegerData(String key){
+        if (key != null){
+            return sharedPreferences.getInt(key,0);
+        }
+        return 0;
+    }
+
+    public void updateIntegerData(String key, int value){
+        if (key != null){
+            sharedPreferences.edit().putInt(key,value).apply();
+        }
+    }
+
 }

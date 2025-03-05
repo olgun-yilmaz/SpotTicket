@@ -50,6 +50,7 @@ import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.service.RetrofitClient;
 import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
 import com.olgunyilmaz.spotticket.util.EventDetailsHelper;
+import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.olgunyilmaz.spotticket.view.activities.MapsActivity;
 import com.squareup.picasso.Picasso;
@@ -89,7 +90,11 @@ public class EventDetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         db = FirebaseFirestore.getInstance();
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.setLanguageCode("tr");
+
+        String countryKey = getString(R.string.language_code_key);
+        String countryCode = new LocalDataManager(requireActivity()).getStringData(countryKey,"tr");
+
+        auth.setLanguageCode(countryCode);
 
         detailsHelper = new EventDetailsHelper(requireContext());
 

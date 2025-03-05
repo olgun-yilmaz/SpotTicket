@@ -1,0 +1,96 @@
+<!--
+   Project: SpotTicket
+   Copyright 2025 Olgun Yılmaz
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<resources>
+    <string name="app_name">SpotTicket</string>
+
+    <string name="answer_cancel">Cancel</string>
+    <string name="answer_confirm">Confirm</string>
+    <string name="answer_no">No</string>
+    <string name="answer_yes">Yes</string>
+
+    <string name="buy_text">Purchase</string>
+
+    <string name="creation_date_text">Creation Date : </string>
+
+    <string name="date_text">Date :</string>
+    <string name="date_not_founded_text">Date Not Founded!</string>
+
+    <string name="default_city_name">Amsterdam</string>
+    <string name="default_category_name">Pop</string>
+    <string name="default_venue_name">Ulker Stadium</string>
+    <string name="default_venue_latitude">40.98780984859083</string>
+
+    <string name="default_venue_longitude">29.03689029646077</string>
+    <string name="delete_account_text">DELETE ACCOUNT</string>
+    <string name="delete_account_error_text">Account deletion failed</string>
+    <string name="delete_account_question">Are you sure you want to delete your account?</string>
+    <string name="delete_my_account">DELETE ACCOUNT</string>
+    <string name="deleting_text">Deleting</string>
+    <string name="deleting_data_text">Data is being deleted</string>
+
+    <string name="email_text">E-Mail :</string>
+    <string name="enter_password_for_delete_account">Hesabınızı silmek için şifrenizi girin</string>
+    <string name="email_verification_message">Enter your password to delete your account.</string>
+    <string name="event_type_text">Event Type : </string>
+
+    <string name="error_sign_up_text">Could not register.</string>
+    <string name="error_text">Error!</string>
+    <string name="error_validation_email_send_text">Verification email could not be sent.</string>
+
+    <string name="forgot_password_text">- - - Forgot Password? - - -</string>
+
+    <string name="gallery_permission_text">Permission needed for gallery!</string>
+    <string name="give_permission_text">Give permission</string>
+
+    <string name="successfully_delete_account_text">Your account has been deleted successfully!</string>
+    <string name="successfully_image_change_text">Profile photo has been changed successfully!</string>
+    <string name="successfully_sign_up_text">You have successfully registered!</string>
+
+    <string name="lets_go_text">Lets Go!</string>
+    <string name="loading_text">Loading . . .</string>
+    <string name="login_text">LOGIN</string>
+
+    <string name="my_events_text">My Events</string>
+
+    <string name="password_text">Password :</string>
+    <string name="plain_loading_text">Loading </string>
+    <string name="pleae_check_your_info_text">Please check the information you entered!</string>
+    <string name="please_wait_text">Please Wait </string>
+
+    <string name="remember_me_text">Remember Me</string>
+    <string name="reset_password_text">Reset Password</string>
+    <string name="result_founded_text">RESULTS FOUND</string>
+    <string name="review_text">REVIEW</string>
+
+    <string name="search_city_text">Search City . . .</string>
+    <string name="search_events_text">Search Event . . .</string>
+    <string name="searching_text">Searching . . .</string>
+    <string name="send_password_reset_link">You can reset your password from the link sent.</string>
+    <string name="sign_up_text">SIGN UP</string>
+
+    <string name="username_text">Username : </string>
+
+    <string name="valid_password_text">Password Again</string>
+    <string name="validation_email_send_text">Verification email sent!</string>
+    <string name="validation_error_text">Authentication failed!</string>
+
+    <string name="title_activity_maps">MapsActivity</string>
+
+    <string name="weak_search_error">You must enter at least 3 letters!</string>
+    <string name="welcome_message">Welcome :</string>
+</resources>

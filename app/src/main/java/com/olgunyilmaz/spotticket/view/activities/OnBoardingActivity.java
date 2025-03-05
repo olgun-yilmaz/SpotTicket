@@ -17,39 +17,27 @@
 
 package com.olgunyilmaz.spotticket.view.activities;
 
-import static android.content.ContentValues.TAG;
-
-import android.content.Intent;
+import android.content.Context;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityOnBoardingBinding;
-import com.olgunyilmaz.spotticket.model.EventResponse;
-import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
-import com.olgunyilmaz.spotticket.service.RecommendedEventManager;
-import com.olgunyilmaz.spotticket.service.RetrofitClient;
-import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
-import com.olgunyilmaz.spotticket.service.UserFavoritesManager;
-import com.olgunyilmaz.spotticket.service.UserManager;
+import com.olgunyilmaz.spotticket.service.OnBoardingHelper;
+import com.olgunyilmaz.spotticket.util.Language;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.ArrayList;
+import java.util.Locale;
+
 
 public class OnBoardingActivity extends AppCompatActivity {
     private ActivityOnBoardingBinding binding;
@@ -61,15 +49,26 @@ public class OnBoardingActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private Runnable runnable;
     private Handler handler;
-    int counter = 0;
+    private OnBoardingHelper helper;
     private LocalDataManager localDataManager;
+    private ArrayList<Language> languageList;
+    private Language selectedLanguage;
+    private int counter = 0;
+    private int languageCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        localDataManager = new LocalDataManager(OnBoardingActivity.this);
+        getLanguageData();
+        
         binding = ActivityOnBoardingBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        binding.languageButton.setImageResource(selectedLanguage.getImageID());
+        binding.languageText.setText(selectedLanguage.getLanguageText());
 
         TICKETMASTER_BASE_URL = getString(R.string.ticketmaster_base_url);
         TICKETMASTER_API_KEY = getString(R.string.ticketmaster_api_key);
@@ -78,11 +77,11 @@ public class OnBoardingActivity extends AppCompatActivity {
         MAPS_API_KEY = getString(R.string.maps_api_key);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.setLanguageCode("tr");
+        auth.setLanguageCode(selectedLanguage.getCode());
 
         db = FirebaseFirestore.getInstance();
 
-        localDataManager = new LocalDataManager(OnBoardingActivity.this);
+        helper = new OnBoardingHelper(OnBoardingActivity.this);
 
         boolean isFromLogin = getIntent().getBooleanExtra(getString(R.string.from_login_key), false);
 
@@ -114,46 +113,64 @@ public class OnBoardingActivity extends AppCompatActivity {
             }
         }
 
+        binding.languageButton.setOnClickListener(v -> changeLanguage());
+
         binding.nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if (currentUser != null) {
-                    goToActivity(MainActivity.class);
+                    helper.goToActivity(MainActivity.class);
                     finish(); // if user in app, won't back by intent
                 } else {
-                    goToActivity(EmailPasswordActivity.class);
+                    helper.goToActivity(EmailPasswordActivity.class);
                 }
             }
         });
     }
 
+    private void selectLanguage(){
+        languageCounter = localDataManager.getIntegerData(getString(R.string.language_counter_key));
 
-    private void getRecommendedEvents() { // download 3
-        String city = localDataManager.getStringData
-                (getString(R.string.city_key), getString(R.string.default_city_name));
+        int selectedId = languageCounter % languageList.size();
 
-        TicketmasterApiService apiService = RetrofitClient.getApiService();
-        apiService.getEvents(TICKETMASTER_API_KEY, city,"","")
-                .enqueue(new Callback<EventResponse>() {
-                    @Override
-                    public void onResponse(Call<EventResponse> call, Response<EventResponse> response) {
-                        if (response.isSuccessful()) {
-                            if (response.body() != null) {
-                                if (response.body().getEmbedded() != null) {
-                                    RecommendedEventManager.getInstance().recommendedEvents = response.body().getEmbedded().getEvents();
-                                }
-                            }
-                        }
-                        letsGo();
-                    }
+        selectedLanguage = languageList.get(selectedId);
 
-                    @Override
-                    public void onFailure(Call<EventResponse> call, Throwable t) {
-                        letsGo();
-                        Log.d(TAG, "onFailure: " + t.getLocalizedMessage());
-                    }
-                });
+        Locale locale = new Locale(selectedLanguage.getCode());
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Context context = createConfigurationContext(config);
+            getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+        } else {
+            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        }
+    }
+
+    private void changeLanguage(){
+        languageCounter = localDataManager.getIntegerData(getString(R.string.language_counter_key));
+
+        languageCounter += 1;
+
+        if(languageCounter == languageList.size() * 1000){ // reset if it's very big
+            languageCounter = languageList.size();
+        }
+
+        localDataManager.updateIntegerData(getString(R.string.language_counter_key),languageCounter);
+        localDataManager.updateStringData(getString(R.string.language_code_key),selectedLanguage.getCode());
+
+        recreate();
+
+    }
+
+    private void getLanguageData(){
+        languageList = new ArrayList<>();
+        languageList.add(new Language(R.drawable.tr_icon,"tr","Türkçe"));
+        languageList.add(new Language(R.drawable.en_icon,"en","English"));
+
+        selectLanguage(); // after get data select language
     }
 
     private void letsGo() { // end process
@@ -164,7 +181,7 @@ public class OnBoardingActivity extends AppCompatActivity {
 
     private void downloadData(String email) {
         binding.nextButton.setEnabled(false);
-        getPp(email);
+        helper.getPp(email,this::updateLoadingText,db,localDataManager,this::letsGo);
     }
 
     private void updateLoadingText() {
@@ -180,66 +197,6 @@ public class OnBoardingActivity extends AppCompatActivity {
             }
         };
         handler.post(runnable);
-    }
-
-    private void goToActivity(Class<?> activityClass) {
-        Intent intent = new Intent(OnBoardingActivity.this, activityClass);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
-
-    private void getPp(String email) { // download 1
-        updateLoadingText(); // start process
-        db.collection(getString(R.string.users_collection_key))
-                .whereEqualTo(getString(R.string.email_key), email).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            getFavoriteEvents(email);
-                            QuerySnapshot result = task.getResult();
-                            if (result != null && !result.isEmpty()) {
-                                QueryDocumentSnapshot document = (QueryDocumentSnapshot) result.getDocuments().get(0);
-                                String ppUrl = document.getString(getString(R.string.profile_image_url_key));
-                                if (ppUrl != null) {
-                                    UserManager.getInstance().ppUrl = ppUrl;
-                                }
-                            }
-                        }
-                    }
-                });
-    }
-
-    private void getFavoriteEvents(String userEmail) { // download 2
-        String path = userEmail +  getString(R.string.my_events_key);
-        db.collection(path).orderBy(getString(R.string.event_name_key)).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            if (UserFavoritesManager.getInstance().userFavorites != null) {
-                                UserFavoritesManager.getInstance().userFavorites.clear();
-                            }
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-
-                                String eventID = (String) document.get(getString(R.string.event_id_key));
-                                String imageUrl = (String) document.get(getString(R.string.image_url_key));
-                                String eventName = (String) document.get(getString(R.string.event_name_key));
-
-                                System.out.println(eventID);
-                                System.out.println(eventName);
-                                System.out.println(imageUrl);
-
-                                FavoriteEventModel myEventModel = new FavoriteEventModel(eventID, eventName, imageUrl);
-                                UserFavoritesManager.getInstance().addFavorite(myEventModel);
-                            }
-                            getRecommendedEvents();
-                        } else {
-                            Toast.makeText(OnBoardingActivity.this, getString(R.string.error_text), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
     }
 
 

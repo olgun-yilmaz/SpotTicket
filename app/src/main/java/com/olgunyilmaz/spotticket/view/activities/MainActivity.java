@@ -58,7 +58,11 @@ public class MainActivity extends AppCompatActivity {
         getMenuButtons();
 
         auth = FirebaseAuth.getInstance();
-        auth.setLanguageCode("tr");
+
+        String countryKey = getString(R.string.language_code_key);
+        String countryCode = new LocalDataManager(this).getStringData(countryKey,"tr");
+
+        auth.setLanguageCode(countryCode);
 
         fragmentManager = getSupportFragmentManager();
 
