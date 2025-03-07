@@ -18,20 +18,21 @@
 package com.olgunyilmaz.spotticket.model;
 
 public class FavoriteEventModel {
-    public FavoriteEventModel(String eventId, String eventName, String imageUrl) {
+    public FavoriteEventModel(String eventId, String eventName, String imageUrl, String date) {
         this.eventId = eventId;
         this.imageUrl = imageUrl;
         this.eventName = eventName;
+        this.date = date;
     }
 
     private final String eventId;
     private final String eventName;
+    private final String imageUrl;
+    private final String date;
 
     public String getEventName() {
         return eventName;
     }
-
-    private final String imageUrl;
 
     public String getEventId() {
         return eventId;
@@ -42,5 +43,7 @@ public class FavoriteEventModel {
         return imageUrl;
     }
 
-
+    public String getDate() {
+        return date;
+    }
 }

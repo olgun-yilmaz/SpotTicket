@@ -67,6 +67,9 @@
 
     <string name="my_events_text">Meine Veranstaltungen</string>
 
+    <string name="notification_context">Ihr Lieblingsevent steht vor der Tür. Wir wollten Sie daran erinnern :)</string>
+    <string name="notification_permission_text">Soll Spot Ticket Ihnen Benachrichtigungen senden?</string>
+
     <string name="password_text">Passwort :</string>
     <string name="plain_loading_text">Lädt </string>
     <string name="pleae_check_your_info_text">Bitte überprüfe die eingegebenen Informationen!</string>

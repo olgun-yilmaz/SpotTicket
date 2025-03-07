@@ -155,8 +155,8 @@ public class OnBoardingActivity extends AppCompatActivity {
 
         languageCounter += 1;
 
-        if(languageCounter == languageList.size() * 1000){ // reset if it's very big
-            languageCounter = languageList.size();
+        if(languageCounter == languageList.size() * 10000){ // reset if it's very big
+            languageCounter = 0;
         }
 
         localDataManager.updateIntegerData(getString(R.string.language_counter_key),languageCounter);

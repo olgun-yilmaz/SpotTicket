@@ -44,7 +44,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class OnBoardingHelper {
-    private Context context;
+    private final Context context;
 
     public OnBoardingHelper(Context context) {
         this.context = context;
@@ -98,8 +98,9 @@ public class OnBoardingHelper {
                                 String eventID = (String) document.get(context.getString(R.string.event_id_key));
                                 String imageUrl = (String) document.get(context.getString(R.string.image_url_key));
                                 String eventName = (String) document.get(context.getString(R.string.event_name_key));
+                                String eventDate = (String) document.get(context.getString(R.string.event_date_key));
 
-                                FavoriteEventModel myEventModel = new FavoriteEventModel(eventID, eventName, imageUrl);
+                                FavoriteEventModel myEventModel = new FavoriteEventModel(eventID, eventName, imageUrl,eventDate);
                                 UserFavoritesManager.getInstance().addFavorite(myEventModel);
                             }
                             getRecommendedEvents(ldm, letsGo);

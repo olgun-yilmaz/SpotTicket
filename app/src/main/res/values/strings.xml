@@ -67,6 +67,9 @@
 
     <string name="my_events_text">Etkinliklerim</string>
 
+    <string name="notification_context">Favori etkinliğin yaklaşıyor. Hatırlatmak istedik :)</string>
+    <string name="notification_permission_text">Spot Ticket size bildirim göndersin mi?</string>
+
     <string name="password_text">Şifre :</string>
     <string name="plain_loading_text">Yükleniyor </string>
     <string name="pleae_check_your_info_text">Lütfen girdiğiniz bilgileri kontrol edin!</string>

@@ -21,7 +21,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -73,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         binding.homeButton.setOnClickListener(v-> replaceFragment(new HomePageFragment(), v));
 
         binding.myEventsButton.setOnClickListener(v -> replaceFragment(new FavoritesFragment(), v));
-
     }
 
     private void getMenuButtons(){

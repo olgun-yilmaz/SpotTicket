@@ -90,7 +90,7 @@ public class EventDetailsFragment extends Fragment {
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
         String countryKey = getString(R.string.language_code_key);
-        String countryCode = new LocalDataManager(requireActivity()).getStringData(countryKey,"tr");
+        String countryCode = new LocalDataManager(requireActivity()).getStringData(countryKey, "tr");
 
         auth.setLanguageCode(countryCode);
 
@@ -109,6 +109,7 @@ public class EventDetailsFragment extends Fragment {
             eventId = args.getString(getString(R.string.event_id_key));
             String imageUrl = args.getString(getString(R.string.image_url_key));
             eventName = args.getString(getString(R.string.event_name_key));
+            String eventDate = args.getString(getString(R.string.event_date_key));
 
             if (isLiked()) {
                 binding.favCheckBox.setChecked(true);
@@ -119,7 +120,7 @@ public class EventDetailsFragment extends Fragment {
                 int imgId;
                 if (isChecked) {
                     imgId = R.drawable.fav_filled_icon;
-                    addFavorite(eventId, eventName, imageUrl);
+                    addFavorite(eventId, eventName, imageUrl, eventDate);
                 } else {
                     imgId = R.drawable.fav_empty_icon;
                     removeFavorite(eventId);
@@ -143,20 +144,23 @@ public class EventDetailsFragment extends Fragment {
         return false;
     }
 
-    private void addFavorite(String eventId, String eventName, String imageUrl) {
+    private void addFavorite(String eventId, String eventName, String imageUrl, String eventDate) {
         Map<String, Object> favorite = new HashMap<>();
         favorite.put(getString(R.string.event_id_key), eventId);
         favorite.put(getString(R.string.event_name_key), eventName);
         favorite.put(getString(R.string.image_url_key), imageUrl);
+        favorite.put(getString(R.string.event_date_key), eventDate);
+
+        System.out.println("ETKİNLİK TARİHİ : "+eventDate);
 
         db.collection(collectionPath)
-            .add(favorite)
-            .addOnSuccessListener(documentReference -> {
-                UserFavoritesManager.getInstance().addFavorite(
-                    new FavoriteEventModel(eventId, eventName, imageUrl)
-                );
-            })
-            .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+                .add(favorite)
+                .addOnSuccessListener(documentReference -> {
+                    UserFavoritesManager.getInstance().addFavorite(
+                            new FavoriteEventModel(eventId, eventName, imageUrl, eventDate)
+                    );
+                })
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }
 
     private void removeFavorite(String eventId) {
@@ -197,7 +201,7 @@ public class EventDetailsFragment extends Fragment {
                             String eventDate = event.getDates().getStart().getDateTime();
 
                             binding.detailsDateText.setText(getString(R.string.date_text) +
-                                    " " +detailsHelper.getFormattedDate(eventDate));
+                                    " " + detailsHelper.getFormattedDate(eventDate));
 
                             Picasso.get().
                                     load(imageUrl)
@@ -205,7 +209,7 @@ public class EventDetailsFragment extends Fragment {
                                     .error(R.drawable.error)
                                     .into(binding.detailsImage);
 
-                            binding.detailsTypeText.setText(getString(R.string.event_type_text) + " "+
+                            binding.detailsTypeText.setText(getString(R.string.event_type_text) + " " +
                                     detailsHelper.getEventSegmentInfo(event, event.getClassifications()));
 
                             binding.detailsVenueText.setText
@@ -218,7 +222,7 @@ public class EventDetailsFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<EventResponse.Event> call, Throwable t) {
-                        Toast.makeText(requireContext(),t.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(requireContext(), t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 
                     }
                 });

@@ -17,10 +17,17 @@
 
 package com.olgunyilmaz.spotticket.view.fragments;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -33,22 +40,19 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
+import com.google.android.material.snackbar.Snackbar;
+import com.olgunyilmaz.spotticket.util.NotificationHelper;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.adapter.CategoryAdapter;
 import com.olgunyilmaz.spotticket.databinding.FragmentHomePageBinding;
 import com.olgunyilmaz.spotticket.model.CategoryResponse;
-import com.olgunyilmaz.spotticket.model.CitiesResponse;
 import com.olgunyilmaz.spotticket.model.EventResponse;
+import com.olgunyilmaz.spotticket.util.HomePageHelper;
 import com.olgunyilmaz.spotticket.util.RecommendedEventManager;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
-import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.squareup.picasso.Picasso;
 
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
 
@@ -60,6 +64,9 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
     private Runnable runnable;
     private Handler handler;
     private LocalDataManager localDataManager;
+    private ActivityResultLauncher<String> permissionLauncher;
+    private NotificationHelper notificationHelper;
+    private HomePageHelper helper;
 
 
     @Override
@@ -79,8 +86,11 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
         super.onViewCreated(view, savedInstanceState);
 
         localDataManager = new LocalDataManager(requireActivity());
+        helper = new HomePageHelper(requireActivity());
 
-        getCategories();
+        registerLauncher();
+
+        categories = helper.getCategories();
 
         fragmentManager = requireActivity().getSupportFragmentManager();
 
@@ -94,16 +104,16 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
         String city = localDataManager.getStringData(getString(R.string.city_key), getString(R.string.default_city_name));
         binding.selectCityText.setText(city);
 
-        ArrayList<String> cities = getCities();
+        ArrayList<String> cities = helper.getCities();
         binding.cityLayout.setOnClickListener(v -> showCityPicker(cities));
 
         binding.homeSearchIcon.setOnClickListener(v -> searchEventByKeyword());
         binding.homeSearchEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean onWriting) {
-                if(onWriting){
+                if (onWriting) {
                     writingMode();
-                }else{
+                } else {
                     normalMode();
                 }
             }
@@ -128,32 +138,25 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
         });
     }
 
-    private void searchEventByKeyword(){
+    private void searchEventByKeyword() {
         String keyword = binding.homeSearchEditText.getText().toString();
 
-        if (keyword.length() >= 3){
+        if (keyword.length() >= 3) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             DisplayFragment fragment = new DisplayFragment();
 
-            setEnableHomeButton();
+            helper.setEnableHomeButton();
 
             Bundle args = new Bundle();
             args.putBoolean(getString(R.string.search_by_keyword_key), true);
             args.putString(getString(R.string.keyword_key), keyword);
             fragment.setArguments(args);
 
-            fragmentTransaction.replace(R.id.fragmentContainerView,fragment).commit();
-        }else{
-            Toast.makeText(requireActivity(),getString(R.string.weak_search_error),Toast.LENGTH_SHORT).show();
+            fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
+        } else {
+            Toast.makeText(requireActivity(), getString(R.string.weak_search_error), Toast.LENGTH_SHORT).show();
         }
 
-
-    }
-
-    private void setEnableHomeButton(){
-        MainActivity activity = (MainActivity) requireActivity();
-        activity.binding.displayButton.setEnabled(false);
-        activity.binding.homeButton.setEnabled(true);
     }
 
     private void updateImage(int frequency) {
@@ -168,6 +171,10 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
 
                 binding.recommendedEventName.setText(event.getName());
 
+                notificationHelper = new NotificationHelper(requireContext(), event.getName());
+
+                requestNotificationPermission(binding.recommendedEventImage);
+
                 Picasso.get()
                         .load(event.getHighQualityImage())
                         .placeholder(R.drawable.loading)
@@ -176,7 +183,7 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
 
 
                 binding.recommendedEventLayout.setOnClickListener(v ->
-                        seeEventDetails(event.getId(), event.getHighQualityImage()));
+                        seeEventDetails(event.getId(), event.getHighQualityImage(), event.getDates().getStart().getDateTime()));
 
 
                 handler.postDelayed(runnable, 1000L * frequency);
@@ -185,7 +192,7 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
         handler.post(runnable);
     }
 
-    private void seeEventDetails(String eventID, String imageUrl) {
+    private void seeEventDetails(String eventID, String imageUrl, String eventDate) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         EventDetailsFragment fragment = new EventDetailsFragment();
@@ -193,27 +200,10 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
         Bundle args = new Bundle();
         args.putString(getString(R.string.event_id_key), eventID);
         args.putString(getString(R.string.image_url_key), imageUrl);
+        args.putString(getString(R.string.event_date_key), eventDate);
         fragment.setArguments(args);
 
         fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
-    }
-
-    private ArrayList<String> getCities() {
-        try {
-            Reader reader = new InputStreamReader(getActivity().getAssets().open(getString(R.string.cities_json_file)));
-            Gson gson = new Gson();
-            CitiesResponse response = gson.fromJson(reader, CitiesResponse.class);
-
-            if (response != null && response.getCities() != null) {
-                ArrayList<String> cities = response.getCities();
-                Collections.sort(cities);
-                return cities;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     private void showCityPicker(ArrayList<String> cities) {
@@ -234,57 +224,54 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
         localDataManager.updateStringData(getString(R.string.city_key), city);
     }
 
-    private void getCategories() {
-        categories = new ArrayList<>();
-
-        categories.add(new CategoryResponse(R.drawable.all_categories,getString(R.string.all_categories)));
-        categories.add(new CategoryResponse(R.drawable.family, getString(R.string.family)));
-        categories.add(new CategoryResponse(R.drawable.basketball, getString(R.string.basketball)));
-        categories.add(new CategoryResponse(R.drawable.baseball, getString(R.string.baseball)));
-        categories.add(new CategoryResponse(R.drawable.blues, getString(R.string.blues)));
-        categories.add(new CategoryResponse(R.drawable.ice_hockey, getString(R.string.ice_hockey)));
-        categories.add(new CategoryResponse(R.drawable.dancing, getString(R.string.dancing)));
-        categories.add(new CategoryResponse(R.drawable.disney, getString(R.string.disney)));
-        categories.add(new CategoryResponse(R.drawable.movie, getString(R.string.movie)));
-        categories.add(new CategoryResponse(R.drawable.folk, getString(R.string.folk)));
-
-        categories.add(new CategoryResponse(R.drawable.electro, getString(R.string.electro)));
-        categories.add(new CategoryResponse(R.drawable.entertainment,getString(R.string.entertainment)));
-        categories.add(new CategoryResponse(R.drawable.hip_hop, getString(R.string.hip_hop)));
-        categories.add(new CategoryResponse(R.drawable.jazz, getString(R.string.jazz)));
-        categories.add(new CategoryResponse(R.drawable.classical_music, getString(R.string.classical_music)));
-        categories.add(new CategoryResponse(R.drawable.conference, getString(R.string.conference)));
-        categories.add(new CategoryResponse(R.drawable.cultural, getString(R.string.cultural)));
-        categories.add(new CategoryResponse(R.drawable.mma, getString(R.string.mma)));
-        categories.add(new CategoryResponse(R.drawable.music, getString(R.string.music)));
-        categories.add(new CategoryResponse(R.drawable.musical, getString(R.string.musical)));
-
-        categories.add(new CategoryResponse(R.drawable.opera, getString(R.string.opera)));
-        categories.add(new CategoryResponse(R.drawable.rb, getString(R.string.rb)));
-        categories.add(new CategoryResponse(R.drawable.rock, getString(R.string.rock)));
-        categories.add(new CategoryResponse(R.drawable.pop_music, getString(R.string.pop_music)));
-        categories.add(new CategoryResponse(R.drawable.theater_art, getString(R.string.theater_art)));
-        categories.add(new CategoryResponse(R.drawable.exhibition,getString(R.string.exhibition)));
-        categories.add(new CategoryResponse(R.drawable.sports, getString(R.string.sports)));
-        categories.add(new CategoryResponse(R.drawable.tennis, getString(R.string.tennis)));
-        categories.add(new CategoryResponse(R.drawable.theater, getString(R.string.theater)));
-        categories.add(new CategoryResponse(R.drawable.food, getString(R.string.food)));
-
-    }
-
-    private void writingMode(){
-        setEnableHomeButton();
-
+    private void writingMode() {
+        helper.setEnableHomeButton();
 
         binding.recommendedEventLayout.setVisibility(View.INVISIBLE);
         binding.cityLayout.setVisibility(View.INVISIBLE);
         binding.categoryRecyclerView.setVisibility(View.INVISIBLE);
     }
 
-    private void normalMode(){
+    private void normalMode() {
         binding.recommendedEventLayout.setVisibility(View.VISIBLE);
         binding.cityLayout.setVisibility(View.VISIBLE);
         binding.categoryRecyclerView.setVisibility(View.VISIBLE);
 
+    }
+
+    private void requestNotificationPermission(View view) {
+        String permission = Manifest.permission.POST_NOTIFICATIONS;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(requireActivity(), permission) != PackageManager.PERMISSION_GRANTED) {
+                Snackbar.make(view, getString(R.string.notification_permission_text), // needed
+                        Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.give_permission_text),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                permissionLauncher.launch(permission);
+                            }
+                        }).show();
+            } else {
+                permissionLauncher.launch(permission); // granted
+            }
+        } else { // dont need permission
+            notificationHelper.sendNotification();
+        }
+    }
+
+    private void registerLauncher() {
+
+        permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
+            @Override
+            public void onActivityResult(Boolean result) {
+                if (result) {
+                    //permission granted
+                    notificationHelper.sendNotification();
+                } else {
+                    //permission denied
+                    Toast.makeText(requireActivity(), getString(R.string.notification_permission_text), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 }
