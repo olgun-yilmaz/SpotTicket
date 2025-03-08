@@ -22,6 +22,8 @@
     <string name="cities_json_file">cities.json</string>
     <string name="city_picker_tag">cityPicker</string>
 
+    <string name="days_left_key">daysLeft</string>
+
     <string name="email_key">email</string>
     <string name="event_date_key">eventDate</string>
     <string name="event_id_key">eventID</string>

@@ -38,6 +38,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.olgunyilmaz.spotticket.NotificationScheduler;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityMainBinding;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
@@ -192,9 +193,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void sendAllNotifications() {
+    private void sendAllNotifications() { // main activity
         for (Pair<Long, String> notification : pendingNotifications) {
-            notificationHelper.sendNotification(notification.first, notification.second);
+            NotificationScheduler scheduler = new NotificationScheduler(notification.second,notification.first);
+            scheduler.scheduleNotification(this,30);
+            //notificationHelper.sendNotification(notification.first, notification.second);
         }
     }
 }
