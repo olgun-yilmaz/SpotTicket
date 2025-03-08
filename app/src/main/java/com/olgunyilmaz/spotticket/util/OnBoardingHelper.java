@@ -84,7 +84,7 @@ public class OnBoardingHelper {
                                    LocalDataManager ldm, Runnable letsGo) { // download 2
 
         String path = userEmail + context.getString(R.string.my_events_key);
-        db.collection(path).orderBy(context.getString(R.string.event_name_key)).get()
+        db.collection(path).orderBy(context.getString(R.string.event_date_key)).get() // order by date
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

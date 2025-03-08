@@ -31,15 +31,16 @@
 
     <string name="keyword_key">keyword</string>
 
+    <string name="image_url_key">imageUrl</string>
+
     <string name="language_code_key">languageCode</string>
     <string name="language_counter_key">languageCounter</string>
 
-
-    <string name="image_url_key">imageUrl</string>
-
-    <string name="pref_name">com.olgunyilmaz.spotticket</string>
     <string name="my_events_key">_Events</string>
 
+    <string name="notification_id_key">notificationID</string>
+
+    <string name="pref_name">com.olgunyilmaz.spotticket</string>
     <string name="profile_image_url_key">profileImageUrl</string>
 
     <string name="re_authenticate_tag">ReauthenticateDialog</string>

@@ -64,8 +64,6 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
     private Runnable runnable;
     private Handler handler;
     private LocalDataManager localDataManager;
-    private ActivityResultLauncher<String> permissionLauncher;
-    private NotificationHelper notificationHelper;
     private HomePageHelper helper;
 
 
@@ -87,8 +85,6 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
 
         localDataManager = new LocalDataManager(requireActivity());
         helper = new HomePageHelper(requireActivity());
-
-        registerLauncher();
 
         categories = helper.getCategories();
 
@@ -164,29 +160,27 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
         runnable = new Runnable() {
             @Override
             public void run() {
+                if(isAdded()){
+                    Random random = new Random();
+                    int randomID = random.nextInt(RecommendedEventManager.getInstance().recommendedEvents.size());
+                    EventResponse.Event event = RecommendedEventManager.getInstance().recommendedEvents.get(randomID);
 
-                Random random = new Random();
-                int randomID = random.nextInt(RecommendedEventManager.getInstance().recommendedEvents.size());
-                EventResponse.Event event = RecommendedEventManager.getInstance().recommendedEvents.get(randomID);
+                    binding.recommendedEventName.setText(event.getName());
 
-                binding.recommendedEventName.setText(event.getName());
-
-                notificationHelper = new NotificationHelper(requireContext(), event.getName());
-
-                requestNotificationPermission(binding.recommendedEventImage);
-
-                Picasso.get()
-                        .load(event.getHighQualityImage())
-                        .placeholder(R.drawable.loading)
-                        .error(R.drawable.error)
-                        .into(binding.recommendedEventImage);
+                    Picasso.get()
+                            .load(event.getHighQualityImage())
+                            .placeholder(R.drawable.loading)
+                            .error(R.drawable.error)
+                            .into(binding.recommendedEventImage);
 
 
-                binding.recommendedEventLayout.setOnClickListener(v ->
-                        seeEventDetails(event.getId(), event.getHighQualityImage(), event.getDates().getStart().getDateTime()));
+                    binding.recommendedEventLayout.setOnClickListener(v ->
+                            seeEventDetails(event.getId(), event.getHighQualityImage(), event.getDates().getStart().getDateTime()));
 
 
-                handler.postDelayed(runnable, 1000L * frequency);
+                    handler.postDelayed(runnable, 1000L * frequency);
+
+                }
             }
         };
         handler.post(runnable);
@@ -237,41 +231,5 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
         binding.cityLayout.setVisibility(View.VISIBLE);
         binding.categoryRecyclerView.setVisibility(View.VISIBLE);
 
-    }
-
-    private void requestNotificationPermission(View view) {
-        String permission = Manifest.permission.POST_NOTIFICATIONS;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(requireActivity(), permission) != PackageManager.PERMISSION_GRANTED) {
-                Snackbar.make(view, getString(R.string.notification_permission_text), // needed
-                        Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.give_permission_text),
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                permissionLauncher.launch(permission);
-                            }
-                        }).show();
-            } else {
-                permissionLauncher.launch(permission); // granted
-            }
-        } else { // dont need permission
-            notificationHelper.sendNotification();
-        }
-    }
-
-    private void registerLauncher() {
-
-        permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
-            @Override
-            public void onActivityResult(Boolean result) {
-                if (result) {
-                    //permission granted
-                    notificationHelper.sendNotification();
-                } else {
-                    //permission denied
-                    Toast.makeText(requireActivity(), getString(R.string.notification_permission_text), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
     }
 }

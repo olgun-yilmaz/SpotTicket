@@ -19,36 +19,85 @@ package com.olgunyilmaz.spotticket.util;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
 import com.olgunyilmaz.spotticket.R;
+import com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Date;
 
 public class NotificationHelper {
     private final Context context;
     private final NotificationManager notificationManager;
-    private final String eventName;
 
-    public NotificationHelper(Context context, String eventName) {
+    public NotificationHelper(Context context) {
         this.context = context;
         this.notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        this.eventName = eventName;
     }
 
-    public void sendNotification(){
-        String channelID = "channel_id";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelID,"Example Channel", NotificationManager.IMPORTANCE_DEFAULT);
+    public void sendNotification(Long daysLeft, String event) {
+        if(daysLeft != null){
+            Intent intent = new Intent(context, OnBoardingActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-            notificationManager.createNotificationChannel(channel);
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                    context,
+                    0,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+            );
+
+            LocalDataManager localDataManager = new LocalDataManager(context);
+            int id = localDataManager.getIntegerData(context.getString(R.string.notification_id_key), 1);
+
+            String channelID = id+event;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel(channelID, event, NotificationManager.IMPORTANCE_DEFAULT);
+
+                notificationManager.createNotificationChannel(channel);
+            }
+
+            String content = (daysLeft == 0)
+                    ? context.getString(R.string.notification_last_day_content, event) //if
+                    : context.getString(R.string.notification_content, daysLeft); //else
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelID)
+                    .setSmallIcon(R.drawable.entertainment)
+                    .setContentTitle(event)
+                    .setContentText(content)
+                    .setAutoCancel(true) // notification gone on click
+                    .setContentIntent(pendingIntent);
+
+            notificationManager.notify(id, builder.build());
+            id ++; // don't overwrite
+
+            localDataManager.updateIntegerData(context.getString(R.string.notification_id_key),id);
         }
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context,channelID)
-                .setSmallIcon(R.drawable.entertainment)
-                .setContentTitle(eventName)
-                .setContentText(context.getString(R.string.notification_context));
+    }
 
-        notificationManager.notify(1,builder.build());
+    public Long calculateDaysLeft(String date){
+        long days;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Instant eventTime = Instant.parse(date);
+            Instant now = Instant.now();
+
+            Duration duration = Duration.between(now, eventTime);
+            days = duration.toDays();
+
+        } else {
+            Date fixedDate = new Date(date);
+            Date now = new Date();
+
+            long diffInMillis = fixedDate.getTime() - now.getTime();
+            days = diffInMillis / (1000 * 60 * 60 * 24);
+        }
+        return days;
     }
 }

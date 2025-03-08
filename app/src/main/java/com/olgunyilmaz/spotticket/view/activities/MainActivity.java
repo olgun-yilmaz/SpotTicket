@@ -17,8 +17,12 @@
 
 package com.olgunyilmaz.spotticket.view.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -27,13 +31,18 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityMainBinding;
+import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
+import com.olgunyilmaz.spotticket.util.NotificationHelper;
+import com.olgunyilmaz.spotticket.util.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.util.UserManager;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.view.fragments.DisplayFragment;
@@ -50,21 +59,25 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private FirebaseAuth auth;
     private List<ImageView> menuButtons;
+    private ActivityResultLauncher<String> permissionLauncher;
+    private NotificationHelper notificationHelper;
+    private List<Pair<Long, String>> pendingNotifications = new ArrayList<>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        registerLauncher();
 
         getMenuButtons();
 
         auth = FirebaseAuth.getInstance();
 
         String countryKey = getString(R.string.language_code_key);
-        String countryCode = new LocalDataManager(this).getStringData(countryKey,"tr");
+        String countryCode = new LocalDataManager(this).getStringData(countryKey, "tr");
 
         auth.setLanguageCode(countryCode);
 
@@ -72,14 +85,16 @@ public class MainActivity extends AppCompatActivity {
 
         binding.homeButton.setEnabled(false); // first page button disabled
 
+        setNotificationAlert();
+
         binding.displayButton.setOnClickListener(v -> replaceFragment(new DisplayFragment(), v));
 
-        binding.homeButton.setOnClickListener(v-> replaceFragment(new HomePageFragment(), v));
+        binding.homeButton.setOnClickListener(v -> replaceFragment(new HomePageFragment(), v));
 
         binding.myEventsButton.setOnClickListener(v -> replaceFragment(new FavoritesFragment(), v));
     }
 
-    private void getMenuButtons(){
+    private void getMenuButtons() {
         menuButtons = new ArrayList<>();
         menuButtons.add(binding.profileButton);
         menuButtons.add(binding.myEventsButton);
@@ -112,11 +127,11 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    private void disableButton(View selectedButton){ // disable chosen button
-        for(ImageView button : menuButtons){
-            if (button == selectedButton){
+    private void disableButton(View selectedButton) { // disable chosen button
+        for (ImageView button : menuButtons) {
+            if (button == selectedButton) {
                 button.setEnabled(false);
-            }else{
+            } else {
                 button.setEnabled(true);
             }
 
@@ -127,4 +142,59 @@ public class MainActivity extends AppCompatActivity {
         replaceFragment(new ProfileFragment(), view);
     }
 
+    private void setNotificationAlert() {
+        pendingNotifications.clear();
+        notificationHelper = new NotificationHelper(MainActivity.this);
+
+        for (FavoriteEventModel event : UserFavoritesManager.getInstance().userFavorites) {
+            Long daysLeft = notificationHelper.calculateDaysLeft(event.getDate());
+
+            if (daysLeft != null && daysLeft < 7) {
+                pendingNotifications.add(new Pair<>(daysLeft, event.getEventName()));
+            }
+        }
+
+        if (!pendingNotifications.isEmpty()) {
+            requestNotificationPermission(binding.homeButton);
+        }
+    }
+
+    private void requestNotificationPermission(View view) {
+        String permission = Manifest.permission.POST_NOTIFICATIONS;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(MainActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
+                Snackbar.make(view, getString(R.string.notification_permission_text),
+                        Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.give_permission_text),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                permissionLauncher.launch(permission); // ask permission
+                            }
+                        }).show();
+            } else { // granted
+                permissionLauncher.launch(permission);
+            }
+        } else { // don't need permission
+            sendAllNotifications();
+        }
+    }
+
+    private void registerLauncher() {
+        permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
+            @Override
+            public void onActivityResult(Boolean result) {
+                if (result) {
+                    sendAllNotifications();
+                } else {
+                    Toast.makeText(MainActivity.this, getString(R.string.notification_permission_text), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    private void sendAllNotifications() {
+        for (Pair<Long, String> notification : pendingNotifications) {
+            notificationHelper.sendNotification(notification.first, notification.second);
+        }
+    }
 }

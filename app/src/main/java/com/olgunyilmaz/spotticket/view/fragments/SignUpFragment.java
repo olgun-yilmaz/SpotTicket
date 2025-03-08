@@ -134,12 +134,12 @@ public class SignUpFragment extends Fragment {
                             }
                         });
             } else {
-                Toast.makeText(getContext(), getString(R.string.pleae_check_your_info_text), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getString(R.string.please_check_your_info_text), Toast.LENGTH_LONG).show();
             }
 
         }else{
             Toast.makeText(requireActivity(),
-                    requireActivity().getString(R.string.pleae_check_your_info_text),Toast.LENGTH_SHORT).show();
+                    requireActivity().getString(R.string.please_check_your_info_text),Toast.LENGTH_SHORT).show();
         }
     }
 

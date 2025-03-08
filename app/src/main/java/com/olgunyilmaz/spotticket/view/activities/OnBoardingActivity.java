@@ -131,7 +131,7 @@ public class OnBoardingActivity extends AppCompatActivity {
     }
 
     private void selectLanguage(){
-        languageCounter = localDataManager.getIntegerData(getString(R.string.language_counter_key));
+        languageCounter = localDataManager.getIntegerData(getString(R.string.language_counter_key),0);
 
         int selectedId = languageCounter % languageList.size();
 
@@ -151,7 +151,7 @@ public class OnBoardingActivity extends AppCompatActivity {
     }
 
     private void changeLanguage(){
-        languageCounter = localDataManager.getIntegerData(getString(R.string.language_counter_key));
+        languageCounter = localDataManager.getIntegerData(getString(R.string.language_counter_key),0);
 
         languageCounter += 1;
 
