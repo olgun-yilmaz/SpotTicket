@@ -67,9 +67,13 @@
 
     <string name="my_events_text">My Events</string>
 
+    <string name="notification_content">Your favorite event is coming up. Last %d days left! Just wanted to remind you :)</string>
+    <string name="notification_last_day_content">Today is the day of the %s ! Come on, dont miss the event...</string>
+    <string name="notification_permission_text">Should Spot Ticket send you notifications?</string>
+
     <string name="password_text">Password :</string>
     <string name="plain_loading_text">Loading </string>
-    <string name="pleae_check_your_info_text">Please check the information you entered!</string>
+    <string name="please_check_your_info_text">Please check the information you entered!</string>
     <string name="please_wait_text">Please Wait </string>
 
     <string name="remember_me_text">Remember Me</string>

@@ -19,7 +19,7 @@ package com.olgunyilmaz.spotticket.util;
 
 import static android.content.ContentValues.TAG;
 
-import static com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity.TICKETMASTER_API_KEY;
+import static com.olgunyilmaz.spotticket.util.Constants.TICKETMASTER_API_KEY;
 
 import android.content.Context;
 import android.content.Intent;
@@ -44,15 +44,20 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class OnBoardingHelper {
-    private Context context;
+    private final Context context;
 
     public OnBoardingHelper(Context context) {
         this.context = context;
     }
 
-    public void goToActivity(Class<?> activityClass) {
+    public void goToActivity(Class<?> activityClass,String eventName) {
         Intent intent = new Intent(context, activityClass);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        if(eventName != null){
+            intent.putExtra(context.getString(R.string.event_name_key),eventName);
+        }
+
         context.startActivity(intent);
     }
 
@@ -84,7 +89,7 @@ public class OnBoardingHelper {
                                    LocalDataManager ldm, Runnable letsGo) { // download 2
 
         String path = userEmail + context.getString(R.string.my_events_key);
-        db.collection(path).orderBy(context.getString(R.string.event_name_key)).get()
+        db.collection(path).orderBy(context.getString(R.string.event_date_key)).get() // order by date
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -98,8 +103,10 @@ public class OnBoardingHelper {
                                 String eventID = (String) document.get(context.getString(R.string.event_id_key));
                                 String imageUrl = (String) document.get(context.getString(R.string.image_url_key));
                                 String eventName = (String) document.get(context.getString(R.string.event_name_key));
+                                String eventDate = (String) document.get(context.getString(R.string.event_date_key));
+                                Long categoryIcon = (Long) document.get(context.getString(R.string.category_icon_key));
 
-                                FavoriteEventModel myEventModel = new FavoriteEventModel(eventID, eventName, imageUrl);
+                                FavoriteEventModel myEventModel = new FavoriteEventModel(eventID, eventName, imageUrl,eventDate,categoryIcon);
                                 UserFavoritesManager.getInstance().addFavorite(myEventModel);
                             }
                             getRecommendedEvents(ldm, letsGo);

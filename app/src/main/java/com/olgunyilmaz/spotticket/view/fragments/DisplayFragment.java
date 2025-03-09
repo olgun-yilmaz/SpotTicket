@@ -17,7 +17,7 @@
 
 package com.olgunyilmaz.spotticket.view.fragments;
 
-import static com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity.TICKETMASTER_API_KEY;
+import static com.olgunyilmaz.spotticket.util.Constants.TICKETMASTER_API_KEY;
 
 import android.os.Bundle;
 

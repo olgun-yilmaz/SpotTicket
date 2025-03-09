@@ -17,6 +17,7 @@
 
 package com.olgunyilmaz.spotticket.view.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -31,6 +32,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityOnBoardingBinding;
+import com.olgunyilmaz.spotticket.util.Constants;
 import com.olgunyilmaz.spotticket.util.OnBoardingHelper;
 import com.olgunyilmaz.spotticket.util.Language;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
@@ -41,10 +43,6 @@ import java.util.Locale;
 
 public class OnBoardingActivity extends AppCompatActivity {
     private ActivityOnBoardingBinding binding;
-    public static String TICKETMASTER_BASE_URL;
-    public static String TICKETMASTER_API_KEY;
-    public static String MAPS_BASE_URL;
-    public static String MAPS_API_KEY;
     private FirebaseUser currentUser;
     private FirebaseFirestore db;
     private Runnable runnable;
@@ -71,11 +69,7 @@ public class OnBoardingActivity extends AppCompatActivity {
         binding.languageButton.setImageResource(selectedLanguage.getImageID());
         binding.languageText.setText(selectedLanguage.getLanguageText());
 
-        TICKETMASTER_BASE_URL = getString(R.string.ticketmaster_base_url);
-        TICKETMASTER_API_KEY = getString(R.string.ticketmaster_api_key);
-
-        MAPS_BASE_URL = getString(R.string.maps_base_url);
-        MAPS_API_KEY = getString(R.string.maps_api_key);
+        Constants constants = new Constants(this);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.setLanguageCode(selectedLanguage.getCode());
@@ -87,6 +81,8 @@ public class OnBoardingActivity extends AppCompatActivity {
         boolean isFromLogin = getIntent().getBooleanExtra(getString(R.string.from_login_key), false);
 
         boolean isRemember = localDataManager.getBooleanData(getString(R.string.remember_me_key));
+
+        String eventName = getIntent().getStringExtra(getString(R.string.event_name_key));
 
         if (isFromLogin) {
             String email = getIntent().getStringExtra(getString(R.string.user_email_key));
@@ -121,17 +117,18 @@ public class OnBoardingActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (currentUser != null) {
-                    helper.goToActivity(MainActivity.class);
+                    helper.goToActivity(MainActivity.class, eventName);
                     finish(); // if user in app, won't back by intent
                 } else {
-                    helper.goToActivity(EmailPasswordActivity.class);
+                    helper.goToActivity(EmailPasswordActivity.class,"");
                 }
             }
         });
     }
 
+    @SuppressLint("ObsoleteSdkInt")
     private void selectLanguage(){
-        languageCounter = localDataManager.getIntegerData(getString(R.string.language_counter_key));
+        languageCounter = localDataManager.getIntegerData(getString(R.string.language_counter_key),0);
 
         int selectedId = languageCounter % languageList.size();
 
@@ -151,12 +148,12 @@ public class OnBoardingActivity extends AppCompatActivity {
     }
 
     private void changeLanguage(){
-        languageCounter = localDataManager.getIntegerData(getString(R.string.language_counter_key));
+        languageCounter = localDataManager.getIntegerData(getString(R.string.language_counter_key),0);
 
         languageCounter += 1;
 
-        if(languageCounter == languageList.size() * 1000){ // reset if it's very big
-            languageCounter = languageList.size();
+        if(languageCounter == languageList.size() * 10000){ // reset if it's very big
+            languageCounter = 0;
         }
 
         localDataManager.updateIntegerData(getString(R.string.language_counter_key),languageCounter);

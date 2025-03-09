@@ -67,9 +67,13 @@
 
     <string name="my_events_text">Etkinliklerim</string>
 
+    <string name="notification_content">Favori etkinliğin yaklaşıyor. Son %d gün kaldı! Hatırlatmak istedik :)</string>
+    <string name="notification_last_day_content">Bugün günlerden %s ! Haydi, etkinliğini kaçırma...</string>
+    <string name="notification_permission_text">Spot Ticket size bildirim göndersin mi?</string>
+
     <string name="password_text">Şifre :</string>
     <string name="plain_loading_text">Yükleniyor </string>
-    <string name="pleae_check_your_info_text">Lütfen girdiğiniz bilgileri kontrol edin!</string>
+    <string name="please_check_your_info_text">Lütfen girdiğiniz bilgileri kontrol edin!</string>
     <string name="please_wait_text">Lütfen Bekleyiniz </string>
 
     <string name="remember_me_text">Beni Hatırla</string>

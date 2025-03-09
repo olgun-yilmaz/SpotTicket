@@ -18,7 +18,7 @@
 package com.olgunyilmaz.spotticket.view.fragments;
 
 import static android.content.ContentValues.TAG;
-import static com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity.TICKETMASTER_API_KEY;
+import static com.olgunyilmaz.spotticket.util.Constants.TICKETMASTER_API_KEY;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -70,6 +70,7 @@ public class EventDetailsFragment extends Fragment {
 
     private String eventName;
     private EventDetailsHelper detailsHelper;
+    private LocalDataManager localDataManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,10 +90,10 @@ public class EventDetailsFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
-        String countryKey = getString(R.string.language_code_key);
-        String countryCode = new LocalDataManager(requireActivity()).getStringData(countryKey,"tr");
+        localDataManager = new LocalDataManager(requireActivity());
 
-        auth.setLanguageCode(countryCode);
+        String languageCode = localDataManager.getStringData(getString(R.string.language_code_key),"tr");
+        auth.setLanguageCode(languageCode);
 
         detailsHelper = new EventDetailsHelper(requireContext());
 
@@ -109,6 +110,8 @@ public class EventDetailsFragment extends Fragment {
             eventId = args.getString(getString(R.string.event_id_key));
             String imageUrl = args.getString(getString(R.string.image_url_key));
             eventName = args.getString(getString(R.string.event_name_key));
+            String eventDate = args.getString(getString(R.string.event_date_key));
+            Long categoryIconId = args.getLong(getString(R.string.category_icon_key));
 
             if (isLiked()) {
                 binding.favCheckBox.setChecked(true);
@@ -119,7 +122,7 @@ public class EventDetailsFragment extends Fragment {
                 int imgId;
                 if (isChecked) {
                     imgId = R.drawable.fav_filled_icon;
-                    addFavorite(eventId, eventName, imageUrl);
+                    addFavorite(eventId, eventName, imageUrl, eventDate, categoryIconId);
                 } else {
                     imgId = R.drawable.fav_empty_icon;
                     removeFavorite(eventId);
@@ -143,20 +146,22 @@ public class EventDetailsFragment extends Fragment {
         return false;
     }
 
-    private void addFavorite(String eventId, String eventName, String imageUrl) {
+    private void addFavorite(String eventId, String eventName, String imageUrl, String eventDate, Long categoryIconId) {
         Map<String, Object> favorite = new HashMap<>();
         favorite.put(getString(R.string.event_id_key), eventId);
         favorite.put(getString(R.string.event_name_key), eventName);
         favorite.put(getString(R.string.image_url_key), imageUrl);
+        favorite.put(getString(R.string.event_date_key), eventDate);
+        favorite.put(getString(R.string.category_icon_key),categoryIconId);
 
         db.collection(collectionPath)
-            .add(favorite)
-            .addOnSuccessListener(documentReference -> {
-                UserFavoritesManager.getInstance().addFavorite(
-                    new FavoriteEventModel(eventId, eventName, imageUrl)
-                );
-            })
-            .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+                .add(favorite)
+                .addOnSuccessListener(documentReference -> {
+                    UserFavoritesManager.getInstance().addFavorite(
+                            new FavoriteEventModel(eventId, eventName, imageUrl, eventDate, categoryIconId)
+                    );
+                })
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }
 
     private void removeFavorite(String eventId) {
@@ -173,6 +178,7 @@ public class EventDetailsFragment extends Fragment {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 UserFavoritesManager.getInstance().removeFavorite(eventId);
+                                                localDataManager.deleteData(eventId);
                                             }
                                         });
                             }
@@ -197,7 +203,7 @@ public class EventDetailsFragment extends Fragment {
                             String eventDate = event.getDates().getStart().getDateTime();
 
                             binding.detailsDateText.setText(getString(R.string.date_text) +
-                                    " " +detailsHelper.getFormattedDate(eventDate));
+                                    " " + detailsHelper.getFormattedDate(eventDate));
 
                             Picasso.get().
                                     load(imageUrl)
@@ -205,7 +211,7 @@ public class EventDetailsFragment extends Fragment {
                                     .error(R.drawable.error)
                                     .into(binding.detailsImage);
 
-                            binding.detailsTypeText.setText(getString(R.string.event_type_text) + " "+
+                            binding.detailsTypeText.setText(getString(R.string.event_type_text) + " " +
                                     detailsHelper.getEventSegmentInfo(event, event.getClassifications()));
 
                             binding.detailsVenueText.setText
@@ -218,7 +224,7 @@ public class EventDetailsFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<EventResponse.Event> call, Throwable t) {
-                        Toast.makeText(requireContext(),t.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(requireContext(), t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 
                     }
                 });

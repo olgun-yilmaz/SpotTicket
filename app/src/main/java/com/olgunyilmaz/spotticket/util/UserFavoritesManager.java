@@ -45,11 +45,6 @@ public class UserFavoritesManager {
     }
 
     public void removeFavorite(String eventID) {
-        for (FavoriteEventModel event : userFavorites) {
-            if (eventID.equals(event.getEventId())) {
-                userFavorites.remove(event);
-                break;
-            }
-        }
+        userFavorites.removeIf(event -> eventID.equals(event.getEventId()));
     }
 }

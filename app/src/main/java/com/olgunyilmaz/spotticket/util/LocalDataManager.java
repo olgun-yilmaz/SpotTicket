@@ -76,9 +76,9 @@ public class LocalDataManager {
         }
     }
 
-    public int getIntegerData(String key){
+    public int getIntegerData(String key, int defaultValue){
         if (key != null){
-            return sharedPreferences.getInt(key,0);
+            return sharedPreferences.getInt(key,defaultValue);
         }
         return 0;
     }

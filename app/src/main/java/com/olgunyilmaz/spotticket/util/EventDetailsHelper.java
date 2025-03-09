@@ -18,8 +18,8 @@
 package com.olgunyilmaz.spotticket.util;
 
 import static android.content.ContentValues.TAG;
-import static com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity.MAPS_API_KEY;
-import static com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity.MAPS_BASE_URL;
+import static com.olgunyilmaz.spotticket.util.Constants.MAPS_API_KEY;
+import static com.olgunyilmaz.spotticket.util.Constants.MAPS_BASE_URL;
 
 import android.content.Context;
 import android.os.Build;
@@ -158,5 +158,16 @@ public class EventDetailsHelper {
         }
 
         return result.toString().trim();
+    }
+
+    public Long getCategoryIconId(String category){
+        long id = R.drawable.electro;
+        switch (category){
+            case "Film"  : id = R.drawable.movie; break;
+            case "Music" : id = R.drawable.music; break;
+            case "Arts & Theatre" : id = R.drawable.theater; break;
+            case "Sports" : id = R.drawable.sports;
+        }
+        return id;
     }
 }
