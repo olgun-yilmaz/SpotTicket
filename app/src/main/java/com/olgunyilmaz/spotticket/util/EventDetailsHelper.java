@@ -159,4 +159,15 @@ public class EventDetailsHelper {
 
         return result.toString().trim();
     }
+
+    public Long getCategoryIconId(String category){
+        long id = R.drawable.electro;
+        switch (category){
+            case "Film"  : id = R.drawable.movie; break;
+            case "Music" : id = R.drawable.music; break;
+            case "Arts & Theatre" : id = R.drawable.theater; break;
+            case "Sports" : id = R.drawable.sports;
+        }
+        return id;
+    }
 }

@@ -111,6 +111,7 @@ public class EventDetailsFragment extends Fragment {
             String imageUrl = args.getString(getString(R.string.image_url_key));
             eventName = args.getString(getString(R.string.event_name_key));
             String eventDate = args.getString(getString(R.string.event_date_key));
+            Long categoryIconId = args.getLong(getString(R.string.category_icon_key));
 
             if (isLiked()) {
                 binding.favCheckBox.setChecked(true);
@@ -121,7 +122,7 @@ public class EventDetailsFragment extends Fragment {
                 int imgId;
                 if (isChecked) {
                     imgId = R.drawable.fav_filled_icon;
-                    addFavorite(eventId, eventName, imageUrl, eventDate);
+                    addFavorite(eventId, eventName, imageUrl, eventDate, categoryIconId);
                 } else {
                     imgId = R.drawable.fav_empty_icon;
                     removeFavorite(eventId);
@@ -145,18 +146,19 @@ public class EventDetailsFragment extends Fragment {
         return false;
     }
 
-    private void addFavorite(String eventId, String eventName, String imageUrl, String eventDate) {
+    private void addFavorite(String eventId, String eventName, String imageUrl, String eventDate, Long categoryIconId) {
         Map<String, Object> favorite = new HashMap<>();
         favorite.put(getString(R.string.event_id_key), eventId);
         favorite.put(getString(R.string.event_name_key), eventName);
         favorite.put(getString(R.string.image_url_key), imageUrl);
         favorite.put(getString(R.string.event_date_key), eventDate);
+        favorite.put(getString(R.string.category_icon_key),categoryIconId);
 
         db.collection(collectionPath)
                 .add(favorite)
                 .addOnSuccessListener(documentReference -> {
                     UserFavoritesManager.getInstance().addFavorite(
-                            new FavoriteEventModel(eventId, eventName, imageUrl, eventDate)
+                            new FavoriteEventModel(eventId, eventName, imageUrl, eventDate, categoryIconId)
                     );
                 })
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));

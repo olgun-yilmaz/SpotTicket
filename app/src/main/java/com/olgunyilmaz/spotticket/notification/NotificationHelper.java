@@ -43,7 +43,7 @@ public class NotificationHelper {
         this.notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
-    public void sendNotification(Long daysLeft, String event) {
+    public void sendNotification(Long daysLeft, String event, Long categoryIconId) {
         if(daysLeft != null){
             Intent intent = new Intent(context, OnBoardingActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -73,8 +73,12 @@ public class NotificationHelper {
                     ? "Spot Ticket"
                     : event;
 
+            categoryIconId = (categoryIconId == 0)
+                    ? R.drawable.electro
+                    : categoryIconId;
+
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelID)
-                    .setSmallIcon(R.drawable.entertainment)
+                    .setSmallIcon(Math.toIntExact(categoryIconId))
                     .setContentTitle(title)
                     .setContentText(content)
                     .setAutoCancel(true) // notification gone on click

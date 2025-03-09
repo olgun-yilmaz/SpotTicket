@@ -30,7 +30,8 @@ public class NotificationReceiver extends BroadcastReceiver {
         NotificationHelper helper = new NotificationHelper(context);
         Long daysLeft = intent.getLongExtra(context.getString(R.string.days_left_key),0L);
         String eventName = intent.getStringExtra(context.getString(R.string.event_name_key));
+        Long categoryIconId = intent.getLongExtra(context.getString(R.string.category_icon_key),R.drawable.mma);
 
-        helper.sendNotification(daysLeft,eventName);
+        helper.sendNotification(daysLeft,eventName,categoryIconId);
     }
 }

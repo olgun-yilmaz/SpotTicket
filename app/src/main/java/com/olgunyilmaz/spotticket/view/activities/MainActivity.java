@@ -53,6 +53,7 @@ import com.olgunyilmaz.spotticket.view.fragments.ProfileFragment;
 import com.olgunyilmaz.spotticket.view.fragments.HomePageFragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityResultLauncher<String> permissionLauncher;
     private LocalDataManager localDataManager;
     private NotificationHelper notificationHelper;
-    private List<Pair<Long, String>> pendingNotifications = new ArrayList<>();
+    private ArrayList<HashMap<String,Object> > pendingNotifications = new ArrayList<>();
 
 
     @Override
@@ -156,7 +157,11 @@ public class MainActivity extends AppCompatActivity {
             Long daysLeft = notificationHelper.calculateDaysLeft(event.getDate());
 
             if ( !( daysLeft == null || isSentBefore) ) {
-                pendingNotifications.add(new Pair<>(daysLeft, event.getEventName()));
+                HashMap<String,Object> hashMap = new HashMap<>();
+                hashMap.put(getString(R.string.category_icon_key),event.getCategoryIcon());
+                hashMap.put(getString(R.string.days_left_key),daysLeft);
+                hashMap.put(getString(R.string.event_name_key),event.getEventName());
+                pendingNotifications.add(hashMap);
                 localDataManager.updateBooleanData(event.getEventId(),true); // update for the next
             }
         }
@@ -171,13 +176,13 @@ public class MainActivity extends AppCompatActivity {
 
         int lowerLimit, upperLimit;
 
-        if(daysLeft == 0){ // last day
-            lowerLimit = 1; // 1
-            upperLimit = 3; // 3 hours
+        if(daysLeft == 0){ // last day -> sent it immediately
+            lowerLimit = 1;
+            upperLimit = 2;
 
         } else if (daysLeft < 7) { // last week
-            lowerLimit = 23; // 23 hours
-            upperLimit = (int) (24 * (daysLeft - 1)); // example 4 days : 3 * 24 hours
+            lowerLimit = 12; // 12 hours
+            upperLimit = 1 + (int) (23 * (daysLeft - 1)); // example 4 days : 3 * 23 + 1 = 70 hours
 
         }else{
             lowerLimit = 24; // 1 day
@@ -233,10 +238,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendAllNotifications() {
-        for (Pair<Long, String> notification : pendingNotifications) {
-            int hours = calculateSendDelayInHours(notification.first);
+        for (HashMap<String,Object> hashMap : pendingNotifications) {
 
-            NotificationScheduler scheduler = new NotificationScheduler(notification.first,notification.second);
+            Long daysLeft = (Long) hashMap.get(getString(R.string.days_left_key));
+            String eventName = (String) hashMap.get(getString(R.string.event_name_key));
+            Long categoryIconId = (Long) hashMap.get(getString(R.string.category_icon_key));
+
+            int hours = calculateSendDelayInHours(daysLeft);
+
+            NotificationScheduler scheduler = new NotificationScheduler(daysLeft,eventName,categoryIconId);
             scheduler.scheduleNotification(this,hours*3600L); // hours to seconds
         }
     }

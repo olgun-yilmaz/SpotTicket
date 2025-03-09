@@ -17,6 +17,7 @@
 
 <resources>
     <string name="category_key">category</string>
+    <string name="category_icon_key">categoryIcon</string>
     <string name="cities_key">cities</string>
     <string name="city_key">city</string>
     <string name="cities_json_file">cities.json</string>

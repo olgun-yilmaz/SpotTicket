@@ -76,6 +76,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 args.putString(activity.getString(R.string.image_url_key), event.getHighQualityImage());
                 args.putString(activity.getString(R.string.event_name_key), event.getName());
                 args.putString(activity.getString(R.string.event_date_key),event.getDates().getStart().getDateTime());
+
+                String category = helper.getEventSegmentInfo(event,event.getClassifications());
+
+                args.putLong(activity.getString(R.string.category_icon_key),helper.getCategoryIconId(category));
                 fragment.setArguments(args);
 
                 activity.getSupportFragmentManager()

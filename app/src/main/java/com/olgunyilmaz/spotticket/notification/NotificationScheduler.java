@@ -29,28 +29,35 @@ import com.olgunyilmaz.spotticket.R;
 public class NotificationScheduler {
     private final String eventName;
     private final long daysLeft;
+    private final long categoryIconId;
 
-    public NotificationScheduler(long daysLeft,String eventName) {
+    public NotificationScheduler(Long daysLeft, String eventName, Long categoryIconId) {
         this.eventName = eventName;
         this.daysLeft = daysLeft;
+        this.categoryIconId = categoryIconId;
     }
 
     @SuppressLint("MissingPermission")
     public void scheduleNotification(Context context, Long delayInSeconds) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
         Intent intent = new Intent(context, NotificationReceiver.class);
         intent.putExtra(context.getString(R.string.days_left_key),this.daysLeft);
         intent.putExtra(context.getString(R.string.event_name_key),this.eventName);
+        intent.putExtra(context.getString(R.string.category_icon_key),this.categoryIconId);
 
         int requestCode = (int) System.currentTimeMillis();
         PendingIntent pendingIntent = PendingIntent.getBroadcast
                 (context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        long triggerTime = SystemClock.elapsedRealtime() + (delayInSeconds * 1000);
+        long triggerTime = System.currentTimeMillis() + (delayInSeconds * 1000);
+
+        AlarmManager.AlarmClockInfo alarmClockInfo =
+                new AlarmManager.AlarmClockInfo(triggerTime, pendingIntent);
+
 
         if (alarmManager != null) {
-            alarmManager.setExactAndAllowWhileIdle(
-                    AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, pendingIntent);
+            alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
         }
 
     }

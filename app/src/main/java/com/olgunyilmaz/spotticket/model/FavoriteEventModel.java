@@ -21,17 +21,19 @@ public class FavoriteEventModel {
     // is notification sent data saving in sharedPreferences
     // (eventId, true) -> example :
     // ("AzzsDvmnfdj",false) : never sent any remember notification about this event.
-    public FavoriteEventModel(String eventId, String eventName, String imageUrl, String date) {
+    public FavoriteEventModel(String eventId, String eventName, String imageUrl, String date, Long categoryIcon) {
         this.eventId = eventId;
         this.imageUrl = imageUrl;
         this.eventName = eventName;
         this.date = date;
+        this.categoryIcon = categoryIcon;
     }
 
     private final String eventId;
     private final String eventName;
     private final String imageUrl;
     private final String date;
+    private final Long categoryIcon; // for notification icon
 
     public String getEventName() {
         return eventName;
@@ -48,5 +50,9 @@ public class FavoriteEventModel {
 
     public String getDate() {
         return date;
+    }
+
+    public Long getCategoryIcon() {
+        return categoryIcon;
     }
 }

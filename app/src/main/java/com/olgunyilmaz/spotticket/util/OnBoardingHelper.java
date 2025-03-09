@@ -99,8 +99,9 @@ public class OnBoardingHelper {
                                 String imageUrl = (String) document.get(context.getString(R.string.image_url_key));
                                 String eventName = (String) document.get(context.getString(R.string.event_name_key));
                                 String eventDate = (String) document.get(context.getString(R.string.event_date_key));
+                                Long categoryIcon = (Long) document.get(context.getString(R.string.category_icon_key));
 
-                                FavoriteEventModel myEventModel = new FavoriteEventModel(eventID, eventName, imageUrl,eventDate);
+                                FavoriteEventModel myEventModel = new FavoriteEventModel(eventID, eventName, imageUrl,eventDate,categoryIcon);
                                 UserFavoritesManager.getInstance().addFavorite(myEventModel);
                             }
                             getRecommendedEvents(ldm, letsGo);
