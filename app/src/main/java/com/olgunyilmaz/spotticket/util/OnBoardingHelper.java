@@ -50,9 +50,14 @@ public class OnBoardingHelper {
         this.context = context;
     }
 
-    public void goToActivity(Class<?> activityClass) {
+    public void goToActivity(Class<?> activityClass,String eventName) {
         Intent intent = new Intent(context, activityClass);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        if(eventName != null){
+            intent.putExtra(context.getString(R.string.event_name_key),eventName);
+        }
+
         context.startActivity(intent);
     }
 

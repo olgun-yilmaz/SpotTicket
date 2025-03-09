@@ -46,6 +46,7 @@ public class NotificationHelper {
     public void sendNotification(Long daysLeft, String event, Long categoryIconId) {
         if(daysLeft != null){
             Intent intent = new Intent(context, OnBoardingActivity.class);
+            intent.putExtra(context.getString(R.string.event_name_key),event);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
             PendingIntent pendingIntent = PendingIntent.getActivity(

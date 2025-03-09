@@ -82,6 +82,8 @@ public class OnBoardingActivity extends AppCompatActivity {
 
         boolean isRemember = localDataManager.getBooleanData(getString(R.string.remember_me_key));
 
+        String eventName = getIntent().getStringExtra(getString(R.string.event_name_key));
+
         if (isFromLogin) {
             String email = getIntent().getStringExtra(getString(R.string.user_email_key));
             isRemember = true; // dont update data just give permission for login
@@ -115,10 +117,10 @@ public class OnBoardingActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (currentUser != null) {
-                    helper.goToActivity(MainActivity.class);
+                    helper.goToActivity(MainActivity.class, eventName);
                     finish(); // if user in app, won't back by intent
                 } else {
-                    helper.goToActivity(EmailPasswordActivity.class);
+                    helper.goToActivity(EmailPasswordActivity.class,"");
                 }
             }
         });

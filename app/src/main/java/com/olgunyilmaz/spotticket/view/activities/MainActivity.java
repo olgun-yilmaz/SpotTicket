@@ -19,13 +19,10 @@ package com.olgunyilmaz.spotticket.view.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -33,9 +30,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,6 +39,7 @@ import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityMainBinding;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.notification.NotificationHelper;
+import com.olgunyilmaz.spotticket.util.MainHelper;
 import com.olgunyilmaz.spotticket.util.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.util.UserManager;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
@@ -54,19 +50,16 @@ import com.olgunyilmaz.spotticket.view.fragments.HomePageFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
     public ActivityMainBinding binding;
     private FragmentManager fragmentManager;
     private FirebaseAuth auth;
-    private List<ImageView> menuButtons;
     private ActivityResultLauncher<String> permissionLauncher;
     private LocalDataManager localDataManager;
-    private NotificationHelper notificationHelper;
-    private ArrayList<HashMap<String,Object> > pendingNotifications = new ArrayList<>();
+    private final ArrayList<HashMap<String, Object>> pendingNotifications = new ArrayList<>();
+    private MainHelper helper;
 
 
     @Override
@@ -77,13 +70,13 @@ public class MainActivity extends AppCompatActivity {
 
         registerLauncher();
 
-        getMenuButtons();
+        helper = new MainHelper(this);
 
         auth = FirebaseAuth.getInstance();
 
         localDataManager = new LocalDataManager(this);
 
-        String languageCode = localDataManager.getStringData(getString(R.string.language_code_key),"tr");
+        String languageCode = localDataManager.getStringData(getString(R.string.language_code_key), "tr");
         auth.setLanguageCode(languageCode);
 
         fragmentManager = getSupportFragmentManager();
@@ -92,31 +85,20 @@ public class MainActivity extends AppCompatActivity {
 
         setNotificationAlert();
 
-        binding.displayButton.setOnClickListener(v -> replaceFragment(new DisplayFragment(), v));
+        String eventName = getIntent().getStringExtra(getString(R.string.event_name_key));
 
-        binding.homeButton.setOnClickListener(v -> replaceFragment(new HomePageFragment(), v));
+        helper.directToEventDetails(eventName, fragmentManager);
 
-        binding.myEventsButton.setOnClickListener(v -> replaceFragment(new FavoritesFragment(), v));
-    }
+        binding.displayButton.setOnClickListener(v -> helper.replaceFragment(new DisplayFragment(), v, fragmentManager));
 
-    private void getMenuButtons() {
-        menuButtons = new ArrayList<>();
-        menuButtons.add(binding.profileButton);
-        menuButtons.add(binding.myEventsButton);
-        menuButtons.add(binding.homeButton);
-        menuButtons.add(binding.displayButton);
-        menuButtons.add(binding.signOutButton);
-    }
+        binding.homeButton.setOnClickListener(v -> helper.replaceFragment(new HomePageFragment(), v, fragmentManager));
 
-    private void replaceFragment(Fragment fragment, View sender) {
-        disableButton(sender);
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
+        binding.myEventsButton.setOnClickListener(v -> helper.replaceFragment(new FavoritesFragment(), v, fragmentManager));
     }
 
     public void signOut(View view) {
         auth.signOut();
-        goToLoginActivity();
+        helper.goToLoginActivity();
 
         LocalDataManager localDataManager = new LocalDataManager(MainActivity.this);
         localDataManager.deleteData(getString(R.string.city_key));
@@ -125,83 +107,32 @@ public class MainActivity extends AppCompatActivity {
         UserManager.getInstance().ppUrl = ""; // clean for next user
     }
 
-    private void goToLoginActivity() {
-        Intent intent = new Intent(MainActivity.this, EmailPasswordActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
-    }
-
-    private void disableButton(View selectedButton) { // disable chosen button
-        for (ImageView button : menuButtons) {
-            if (button == selectedButton) {
-                button.setEnabled(false);
-            } else {
-                button.setEnabled(true);
-            }
-
-        }
-    }
-
     public void goToProfileScreen(View view) {
-        replaceFragment(new ProfileFragment(), view);
+        helper.replaceFragment(new ProfileFragment(), view, fragmentManager);
     }
 
     private void setNotificationAlert() {
         pendingNotifications.clear();
-        notificationHelper = new NotificationHelper(MainActivity.this);
+        NotificationHelper notificationHelper = new NotificationHelper(MainActivity.this);
 
         for (FavoriteEventModel event : UserFavoritesManager.getInstance().userFavorites) {
             boolean isSentBefore = localDataManager.getBooleanData(event.getEventId()); // default false
 
             Long daysLeft = notificationHelper.calculateDaysLeft(event.getDate());
 
-            if ( !( daysLeft == null || isSentBefore) ) {
-                HashMap<String,Object> hashMap = new HashMap<>();
-                hashMap.put(getString(R.string.category_icon_key),event.getCategoryIcon());
-                hashMap.put(getString(R.string.days_left_key),daysLeft);
-                hashMap.put(getString(R.string.event_name_key),event.getEventName());
+            if (!(daysLeft == null || isSentBefore)) {
+                HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put(getString(R.string.category_icon_key), event.getCategoryIcon());
+                hashMap.put(getString(R.string.days_left_key), daysLeft);
+                hashMap.put(getString(R.string.event_name_key), event.getEventName());
                 pendingNotifications.add(hashMap);
-                localDataManager.updateBooleanData(event.getEventId(),true); // update for the next
+                localDataManager.updateBooleanData(event.getEventId(), true); // update for the next
             }
         }
 
         if (!pendingNotifications.isEmpty()) {
             requestNotificationPermission(binding.homeButton);
         }
-    }
-
-    private int calculateSendDelayInHours(Long daysLeft){
-        Random random = new Random();
-
-        int lowerLimit, upperLimit;
-
-        if(daysLeft == 0){ // last day -> sent it immediately
-            lowerLimit = 1;
-            upperLimit = 2;
-
-        } else if (daysLeft < 7) { // last week
-            lowerLimit = 12; // 12 hours
-            upperLimit = 1 + (int) (23 * (daysLeft - 1)); // example 4 days : 3 * 23 + 1 = 70 hours
-
-        }else{
-            lowerLimit = 24; // 1 day
-            upperLimit = 24 * 6; // 6 day
-        }
-
-        int delayInHours = lowerLimit + random.nextInt(upperLimit); // random between 1-6 days
-
-        if (daysLeft >= 7){
-            delayInHours += (int) ((daysLeft - 7) * 24);
-        }
-
-        /* 1-6 days + daysLeft-7
-           example : daysLeft = 30
-           sentDelayInHours = 24 * 23 (if condition) + 24 * 3 (random) = 26 * 24 (total)
-           result : sent before 4 days*/
-
-        return delayInHours;
-
     }
 
     private void requestNotificationPermission(View view) {
@@ -238,16 +169,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendAllNotifications() {
-        for (HashMap<String,Object> hashMap : pendingNotifications) {
+        for (HashMap<String, Object> hashMap : pendingNotifications) {
 
             Long daysLeft = (Long) hashMap.get(getString(R.string.days_left_key));
             String eventName = (String) hashMap.get(getString(R.string.event_name_key));
             Long categoryIconId = (Long) hashMap.get(getString(R.string.category_icon_key));
 
-            int hours = calculateSendDelayInHours(daysLeft);
+            int hours = helper.calculateSendDelayInHours(daysLeft);
 
-            NotificationScheduler scheduler = new NotificationScheduler(daysLeft,eventName,categoryIconId);
-            scheduler.scheduleNotification(this,hours*3600L); // hours to seconds
+            NotificationScheduler scheduler = new NotificationScheduler(daysLeft, eventName, categoryIconId);
+            scheduler.scheduleNotification(this, hours * 3600L); // hours to seconds
         }
     }
 }
