@@ -18,6 +18,7 @@
 package com.olgunyilmaz.spotticket.view.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -38,11 +39,11 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.olgunyilmaz.spotticket.NotificationScheduler;
+import com.olgunyilmaz.spotticket.notification.NotificationScheduler;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityMainBinding;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
-import com.olgunyilmaz.spotticket.util.NotificationHelper;
+import com.olgunyilmaz.spotticket.notification.NotificationHelper;
 import com.olgunyilmaz.spotticket.util.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.util.UserManager;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
@@ -53,6 +54,7 @@ import com.olgunyilmaz.spotticket.view.fragments.HomePageFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -61,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private List<ImageView> menuButtons;
     private ActivityResultLauncher<String> permissionLauncher;
+    private LocalDataManager localDataManager;
     private NotificationHelper notificationHelper;
     private List<Pair<Long, String>> pendingNotifications = new ArrayList<>();
 
@@ -77,10 +80,10 @@ public class MainActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
 
-        String countryKey = getString(R.string.language_code_key);
-        String countryCode = new LocalDataManager(this).getStringData(countryKey, "tr");
+        localDataManager = new LocalDataManager(this);
 
-        auth.setLanguageCode(countryCode);
+        String languageCode = localDataManager.getStringData(getString(R.string.language_code_key),"tr");
+        auth.setLanguageCode(languageCode);
 
         fragmentManager = getSupportFragmentManager();
 
@@ -148,10 +151,13 @@ public class MainActivity extends AppCompatActivity {
         notificationHelper = new NotificationHelper(MainActivity.this);
 
         for (FavoriteEventModel event : UserFavoritesManager.getInstance().userFavorites) {
+            boolean isSentBefore = localDataManager.getBooleanData(event.getEventId()); // default false
+
             Long daysLeft = notificationHelper.calculateDaysLeft(event.getDate());
 
-            if (daysLeft != null && daysLeft < 7) {
+            if ( !( daysLeft == null || isSentBefore) ) {
                 pendingNotifications.add(new Pair<>(daysLeft, event.getEventName()));
+                localDataManager.updateBooleanData(event.getEventId(),true); // update for the next
             }
         }
 
@@ -160,8 +166,41 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private int calculateSendDelayInHours(Long daysLeft){
+        Random random = new Random();
+
+        int lowerLimit, upperLimit;
+
+        if(daysLeft == 0){ // last day
+            lowerLimit = 1; // 1
+            upperLimit = 3; // 3 hours
+
+        } else if (daysLeft < 7) { // last week
+            lowerLimit = 23; // 23 hours
+            upperLimit = (int) (24 * (daysLeft - 1)); // example 4 days : 3 * 24 hours
+
+        }else{
+            lowerLimit = 24; // 1 day
+            upperLimit = 24 * 6; // 6 day
+        }
+
+        int delayInHours = lowerLimit + random.nextInt(upperLimit); // random between 1-6 days
+
+        if (daysLeft >= 7){
+            delayInHours += (int) ((daysLeft - 7) * 24);
+        }
+
+        /* 1-6 days + daysLeft-7
+           example : daysLeft = 30
+           sentDelayInHours = 24 * 23 (if condition) + 24 * 3 (random) = 26 * 24 (total)
+           result : sent before 4 days*/
+
+        return delayInHours;
+
+    }
+
     private void requestNotificationPermission(View view) {
-        String permission = Manifest.permission.POST_NOTIFICATIONS;
+        @SuppressLint("InlinedApi") String permission = Manifest.permission.POST_NOTIFICATIONS;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(MainActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
                 Snackbar.make(view, getString(R.string.notification_permission_text),
@@ -193,11 +232,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void sendAllNotifications() { // main activity
+    private void sendAllNotifications() {
         for (Pair<Long, String> notification : pendingNotifications) {
-            NotificationScheduler scheduler = new NotificationScheduler(notification.second,notification.first);
-            scheduler.scheduleNotification(this,30);
-            //notificationHelper.sendNotification(notification.first, notification.second);
+            int hours = calculateSendDelayInHours(notification.first);
+
+            NotificationScheduler scheduler = new NotificationScheduler(notification.first,notification.second);
+            scheduler.scheduleNotification(this,hours*3600L); // hours to seconds
         }
     }
 }

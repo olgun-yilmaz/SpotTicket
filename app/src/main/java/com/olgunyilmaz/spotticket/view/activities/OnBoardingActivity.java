@@ -17,6 +17,7 @@
 
 package com.olgunyilmaz.spotticket.view.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -31,6 +32,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityOnBoardingBinding;
+import com.olgunyilmaz.spotticket.util.Constants;
 import com.olgunyilmaz.spotticket.util.OnBoardingHelper;
 import com.olgunyilmaz.spotticket.util.Language;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
@@ -41,10 +43,6 @@ import java.util.Locale;
 
 public class OnBoardingActivity extends AppCompatActivity {
     private ActivityOnBoardingBinding binding;
-    public static String TICKETMASTER_BASE_URL;
-    public static String TICKETMASTER_API_KEY;
-    public static String MAPS_BASE_URL;
-    public static String MAPS_API_KEY;
     private FirebaseUser currentUser;
     private FirebaseFirestore db;
     private Runnable runnable;
@@ -71,11 +69,7 @@ public class OnBoardingActivity extends AppCompatActivity {
         binding.languageButton.setImageResource(selectedLanguage.getImageID());
         binding.languageText.setText(selectedLanguage.getLanguageText());
 
-        TICKETMASTER_BASE_URL = getString(R.string.ticketmaster_base_url);
-        TICKETMASTER_API_KEY = getString(R.string.ticketmaster_api_key);
-
-        MAPS_BASE_URL = getString(R.string.maps_base_url);
-        MAPS_API_KEY = getString(R.string.maps_api_key);
+        Constants constants = new Constants(this);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.setLanguageCode(selectedLanguage.getCode());
@@ -130,6 +124,7 @@ public class OnBoardingActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("ObsoleteSdkInt")
     private void selectLanguage(){
         languageCounter = localDataManager.getIntegerData(getString(R.string.language_counter_key),0);
 

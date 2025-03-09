@@ -57,8 +57,6 @@ public class FavoriteEventAdapter extends RecyclerView.Adapter<FavoriteEventAdap
         FavoriteEventModel favoriteEvent = favoriteEventList.get(position);
         holder.binding.favoriteEventName.setText(favoriteEvent.getEventName());
 
-        System.out.println("event date 1:"+favoriteEvent.getDate());
-
         if (!favoriteEvent.getImageUrl().isEmpty()) {
             Picasso.get()
                     .load(favoriteEvent.getImageUrl())

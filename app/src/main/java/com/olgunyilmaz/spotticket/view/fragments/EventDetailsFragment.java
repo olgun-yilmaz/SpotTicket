@@ -18,7 +18,7 @@
 package com.olgunyilmaz.spotticket.view.fragments;
 
 import static android.content.ContentValues.TAG;
-import static com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity.TICKETMASTER_API_KEY;
+import static com.olgunyilmaz.spotticket.util.Constants.TICKETMASTER_API_KEY;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -70,6 +70,7 @@ public class EventDetailsFragment extends Fragment {
 
     private String eventName;
     private EventDetailsHelper detailsHelper;
+    private LocalDataManager localDataManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,10 +90,10 @@ public class EventDetailsFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
-        String countryKey = getString(R.string.language_code_key);
-        String countryCode = new LocalDataManager(requireActivity()).getStringData(countryKey, "tr");
+        localDataManager = new LocalDataManager(requireActivity());
 
-        auth.setLanguageCode(countryCode);
+        String languageCode = localDataManager.getStringData(getString(R.string.language_code_key),"tr");
+        auth.setLanguageCode(languageCode);
 
         detailsHelper = new EventDetailsHelper(requireContext());
 
@@ -151,8 +152,6 @@ public class EventDetailsFragment extends Fragment {
         favorite.put(getString(R.string.image_url_key), imageUrl);
         favorite.put(getString(R.string.event_date_key), eventDate);
 
-        System.out.println("ETKİNLİK TARİHİ : "+eventDate);
-
         db.collection(collectionPath)
                 .add(favorite)
                 .addOnSuccessListener(documentReference -> {
@@ -177,6 +176,7 @@ public class EventDetailsFragment extends Fragment {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 UserFavoritesManager.getInstance().removeFavorite(eventId);
+                                                localDataManager.deleteData(eventId);
                                             }
                                         });
                             }

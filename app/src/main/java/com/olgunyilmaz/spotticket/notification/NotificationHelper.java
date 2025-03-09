@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.olgunyilmaz.spotticket.util;
+package com.olgunyilmaz.spotticket.notification;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -27,6 +27,7 @@ import android.os.Build;
 import androidx.core.app.NotificationCompat;
 
 import com.olgunyilmaz.spotticket.R;
+import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity;
 
 import java.time.Duration;
@@ -68,9 +69,13 @@ public class NotificationHelper {
                     ? context.getString(R.string.notification_last_day_content, event) //if
                     : context.getString(R.string.notification_content, daysLeft); //else
 
+            String title = (daysLeft == 0)
+                    ? "Spot Ticket"
+                    : event;
+
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelID)
                     .setSmallIcon(R.drawable.entertainment)
-                    .setContentTitle(event)
+                    .setContentTitle(title)
                     .setContentText(content)
                     .setAutoCancel(true) // notification gone on click
                     .setContentIntent(pendingIntent);

@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package com.olgunyilmaz.spotticket;
+package com.olgunyilmaz.spotticket.notification;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.olgunyilmaz.spotticket.util.NotificationHelper;
+import com.olgunyilmaz.spotticket.R;
 
 public class NotificationReceiver extends BroadcastReceiver {
 

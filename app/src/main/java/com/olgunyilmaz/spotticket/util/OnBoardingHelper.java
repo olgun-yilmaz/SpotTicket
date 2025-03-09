@@ -19,7 +19,7 @@ package com.olgunyilmaz.spotticket.util;
 
 import static android.content.ContentValues.TAG;
 
-import static com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity.TICKETMASTER_API_KEY;
+import static com.olgunyilmaz.spotticket.util.Constants.TICKETMASTER_API_KEY;
 
 import android.content.Context;
 import android.content.Intent;

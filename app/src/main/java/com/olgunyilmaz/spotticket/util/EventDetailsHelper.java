@@ -18,8 +18,8 @@
 package com.olgunyilmaz.spotticket.util;
 
 import static android.content.ContentValues.TAG;
-import static com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity.MAPS_API_KEY;
-import static com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity.MAPS_BASE_URL;
+import static com.olgunyilmaz.spotticket.util.Constants.MAPS_API_KEY;
+import static com.olgunyilmaz.spotticket.util.Constants.MAPS_BASE_URL;
 
 import android.content.Context;
 import android.os.Build;

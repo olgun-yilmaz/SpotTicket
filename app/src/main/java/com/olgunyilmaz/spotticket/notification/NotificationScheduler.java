@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.olgunyilmaz.spotticket;
+package com.olgunyilmaz.spotticket.notification;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
@@ -23,19 +23,20 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
-import android.util.Log;
+
+import com.olgunyilmaz.spotticket.R;
 
 public class NotificationScheduler {
     private final String eventName;
     private final long daysLeft;
 
-    public NotificationScheduler(String eventName, long daysLeft) {
+    public NotificationScheduler(long daysLeft,String eventName) {
         this.eventName = eventName;
         this.daysLeft = daysLeft;
     }
 
     @SuppressLint("MissingPermission")
-    public void scheduleNotification(Context context, int delayInSeconds) {
+    public void scheduleNotification(Context context, Long delayInSeconds) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, NotificationReceiver.class);
         intent.putExtra(context.getString(R.string.days_left_key),this.daysLeft);

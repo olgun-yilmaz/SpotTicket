@@ -48,7 +48,6 @@ public class UserFavoritesManager {
         for (FavoriteEventModel event : userFavorites) {
             if (eventID.equals(event.getEventId())) {
                 userFavorites.remove(event);
-                break;
             }
         }
     }

@@ -18,6 +18,9 @@
 package com.olgunyilmaz.spotticket.model;
 
 public class FavoriteEventModel {
+    // is notification sent data saving in sharedPreferences
+    // (eventId, true) -> example :
+    // ("AzzsDvmnfdj",false) : never sent any remember notification about this event.
     public FavoriteEventModel(String eventId, String eventName, String imageUrl, String date) {
         this.eventId = eventId;
         this.imageUrl = imageUrl;

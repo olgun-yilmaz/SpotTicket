@@ -17,7 +17,7 @@
 
 package com.olgunyilmaz.spotticket.service;
 
-import static com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity.TICKETMASTER_BASE_URL;
+import static com.olgunyilmaz.spotticket.util.Constants.TICKETMASTER_BASE_URL;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

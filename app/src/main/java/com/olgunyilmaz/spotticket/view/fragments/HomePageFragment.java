@@ -17,17 +17,10 @@
 
 package com.olgunyilmaz.spotticket.view.fragments;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -40,8 +33,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.olgunyilmaz.spotticket.util.NotificationHelper;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.adapter.CategoryAdapter;
 import com.olgunyilmaz.spotticket.databinding.FragmentHomePageBinding;
