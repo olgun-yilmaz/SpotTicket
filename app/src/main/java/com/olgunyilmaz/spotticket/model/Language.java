@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package com.olgunyilmaz.spotticket.util;
+package com.olgunyilmaz.spotticket.model;
 
-public class Language {
+public class Language { // language model class
     private final int imageID;
 
     private final String code;

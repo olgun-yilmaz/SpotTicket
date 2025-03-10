@@ -34,7 +34,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
 
-public class NotificationHelper {
+public class NotificationHelper { // sends a notification to the user about an upcoming event
     private final Context context;
     private final NotificationManager notificationManager;
 
@@ -44,20 +44,19 @@ public class NotificationHelper {
     }
 
     public void sendNotification(Long daysLeft, String event, Long categoryIconId) {
-        if(daysLeft != null){
+        if(daysLeft != null){ // be sure there is valid days left data
+
+            // navigate to the main activity when notification is clicked
             Intent intent = new Intent(context, OnBoardingActivity.class);
-            intent.putExtra(context.getString(R.string.event_name_key),event);
+            intent.putExtra(context.getString(R.string.event_name_key),event); // send event name for details
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-            PendingIntent pendingIntent = PendingIntent.getActivity(
-                    context,
-                    0,
-                    intent,
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,
                     PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-            );
+            ); // for the notification click action
 
             LocalDataManager localDataManager = new LocalDataManager(context);
-            int id = localDataManager.getIntegerData(context.getString(R.string.notification_id_key), 1);
+            int id = localDataManager.getIntegerData(context.getString(R.string.notification_id_key), 1); // a unique notification ID
 
             String channelID = id+event;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -71,10 +70,10 @@ public class NotificationHelper {
                     : context.getString(R.string.notification_content, daysLeft); //else
 
             String title = (daysLeft == 0)
-                    ? "Spot Ticket"
+                    ? "Spot Ticket" // event name is already included in the content
                     : event;
 
-            categoryIconId = (categoryIconId == 0)
+            categoryIconId = (categoryIconId == 0) // default category icon if none is provided
                     ? R.drawable.electro
                     : categoryIconId;
 
@@ -82,17 +81,17 @@ public class NotificationHelper {
                     .setSmallIcon(Math.toIntExact(categoryIconId))
                     .setContentTitle(title)
                     .setContentText(content)
-                    .setAutoCancel(true) // notification gone on click
+                    .setAutoCancel(true) // dismiss the notification on click
                     .setContentIntent(pendingIntent);
 
             notificationManager.notify(id, builder.build());
-            id ++; // don't overwrite
+            id ++; // avoid overwriting
 
             localDataManager.updateIntegerData(context.getString(R.string.notification_id_key),id);
         }
     }
 
-    public Long calculateDaysLeft(String date){
+    public Long calculateDaysLeft(String date){ // number of days left until the event
         long days;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Instant eventTime = Instant.parse(date);

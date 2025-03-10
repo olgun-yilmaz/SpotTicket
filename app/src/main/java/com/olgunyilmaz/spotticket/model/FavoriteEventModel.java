@@ -17,10 +17,12 @@
 
 package com.olgunyilmaz.spotticket.model;
 
-public class FavoriteEventModel {
-    // is notification sent data saving in sharedPreferences
-    // (eventId, true) -> example :
-    // ("AzzsDvmnfdj",false) : never sent any remember notification about this event.
+public class FavoriteEventModel { // stores important data about user-favorite events.
+
+    // notification status is saved in SharedPreferences:
+    // (eventId, true) -> Example:
+    // ("AzzsDvmnfdj", false): No reminder notification has been sent for this event.
+
     public FavoriteEventModel(String eventId, String eventName, String imageUrl, String date, Long categoryIcon) {
         this.eventId = eventId;
         this.imageUrl = imageUrl;
@@ -29,9 +31,12 @@ public class FavoriteEventModel {
         this.categoryIcon = categoryIcon;
     }
 
+    // this class is designed to store important data about favorite events.
+
+
     private final String eventId;
     private final String eventName;
-    private final String imageUrl;
+    private final String imageUrl; // event high quality image url
     private final String date;
     private final Long categoryIcon; // for notification icon
 

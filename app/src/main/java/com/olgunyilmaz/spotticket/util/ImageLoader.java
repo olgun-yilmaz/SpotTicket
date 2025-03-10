@@ -30,7 +30,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class ImageLoader {
+public class ImageLoader { // makes image saving operations
     private final int maxSize;
     private final Uri imageUri;
     @NonNull
@@ -42,7 +42,7 @@ public class ImageLoader {
         this.maxSize = maxSize;
     }
 
-    private Bitmap makeImgSmall(int maxSize) {
+    private Bitmap makeImgSmall(int maxSize) { // make smaller it for memory reduce and faster user experiment
         try {
             Bitmap img = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
 
@@ -69,7 +69,7 @@ public class ImageLoader {
         }
     }
 
-    private Matrix getImageMatrix(Uri imageUri) throws IOException {
+    private Matrix getImageMatrix(Uri imageUri) throws IOException { // matrix operations
         ExifInterface exif = new ExifInterface(context.getContentResolver().openInputStream(imageUri));
         int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
 
@@ -92,7 +92,7 @@ public class ImageLoader {
 
     }
 
-    public Uri getResizedImageUri() {
+    public Uri getResizedImageUri() { // bitmap to uri
         Bitmap bitmap = makeImgSmall(maxSize);
         File file = new File(context.getCacheDir(), "small_image.jpg");
         try {

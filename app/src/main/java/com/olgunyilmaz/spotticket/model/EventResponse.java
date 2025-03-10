@@ -21,7 +21,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class EventResponse {
+public class EventResponse { // model for event details from api
 
     @SerializedName("_embedded")
     private Embedded _embedded;

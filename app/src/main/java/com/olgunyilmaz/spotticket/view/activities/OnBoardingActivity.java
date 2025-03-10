@@ -34,7 +34,7 @@ import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityOnBoardingBinding;
 import com.olgunyilmaz.spotticket.util.Constants;
 import com.olgunyilmaz.spotticket.util.OnBoardingHelper;
-import com.olgunyilmaz.spotticket.util.Language;
+import com.olgunyilmaz.spotticket.model.Language;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 
 import java.util.ArrayList;
@@ -88,7 +88,6 @@ public class OnBoardingActivity extends AppCompatActivity {
             String email = getIntent().getStringExtra(getString(R.string.user_email_key));
             isRemember = true; // dont update data just give permission for login
 
-            //binding.imageView.setImageResource(R.drawable.loading); // will use a diff background
             downloadData(email);
         }
 

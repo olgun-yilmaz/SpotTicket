@@ -33,12 +33,12 @@ public class Categories {
 
     public Map<String, String> CATEGORIES = new HashMap<>();
 
-    public void loadCategories() {
+    public void loadCategories() { // all categories and their ticketmaster id's
 
         if (context != null) {
             CATEGORIES.put(context.getString(R.string.all_categories), "");
 
-            // Music
+            // music
             CATEGORIES.put(context.getString(R.string.music), "KZFzniwnSyZfZ7v7nJ");
             CATEGORIES.put(context.getString(R.string.rock), "KnvZfZ7vAeA");
             CATEGORIES.put(context.getString(R.string.pop_music), "KnvZfZ7vAev");
@@ -50,7 +50,7 @@ public class Categories {
             CATEGORIES.put(context.getString(R.string.rb), "KnvZfZ7vAee");
             CATEGORIES.put(context.getString(R.string.electro), "KnvZfZ7vAvF");
 
-            // Sports
+            // sports
             CATEGORIES.put(context.getString(R.string.sports), "KZFzniwnSyZfZ7v7nE");
             CATEGORIES.put(context.getString(R.string.basketball), "KnvZfZ7vAde");
             CATEGORIES.put(context.getString(R.string.ice_hockey), "KnvZfZ7vAdI");
@@ -58,25 +58,25 @@ public class Categories {
             CATEGORIES.put(context.getString(R.string.baseball), "KnvZfZ7vAdv");
             CATEGORIES.put(context.getString(R.string.mma), "KnvZfZ7vA7k");
 
-            // Theater
+            // theater
             CATEGORIES.put(context.getString(R.string.theater_art), "KZFzniwnSyZfZ7v7na");
             CATEGORIES.put(context.getString(R.string.theater), "KnvZfZ7v7na");
             CATEGORIES.put(context.getString(R.string.opera), "KnvZfZ7v7n1");
             CATEGORIES.put(context.getString(R.string.musical), "KnvZfZ7v7l1");
             CATEGORIES.put(context.getString(R.string.dancing), "KnvZfZ7v7nI");
 
-            // Family Events
+            // family events
             CATEGORIES.put(context.getString(R.string.family), "KZFzniwnSyZfZ7v7n1");
             CATEGORIES.put(context.getString(R.string.disney), "KnvZfZ7vA1n");
 
-            // Movie
+            // movie
             CATEGORIES.put(context.getString(R.string.movie), "KZFzniwnSyZfZ7v7nn");
 
-            // Fest
+            // fest
             CATEGORIES.put(context.getString(R.string.food), "KnvZfZ7vAeF");
             CATEGORIES.put(context.getString(R.string.cultural), "KnvZfZ7vAeE");
 
-            // Other
+            // other
             CATEGORIES.put(context.getString(R.string.conference), "KnvZfZ7vAe7");
             CATEGORIES.put(context.getString(R.string.entertainment), "KZFzniwnSyZfZ7v7nX");
             CATEGORIES.put(context.getString(R.string.exhibition), "KZFzniwnSyZfZ7v7nY");

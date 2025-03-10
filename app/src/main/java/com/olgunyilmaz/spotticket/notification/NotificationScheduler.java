@@ -42,14 +42,15 @@ public class NotificationScheduler {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(context, NotificationReceiver.class);
-        intent.putExtra(context.getString(R.string.days_left_key),this.daysLeft);
-        intent.putExtra(context.getString(R.string.event_name_key),this.eventName);
-        intent.putExtra(context.getString(R.string.category_icon_key),this.categoryIconId);
+        intent.putExtra(context.getString(R.string.days_left_key), this.daysLeft);
+        intent.putExtra(context.getString(R.string.event_name_key), this.eventName);
+        intent.putExtra(context.getString(R.string.category_icon_key), this.categoryIconId); // send necessary params
 
-        int requestCode = (int) System.currentTimeMillis();
+        int requestCode = (int) System.currentTimeMillis(); // unique request code
         PendingIntent pendingIntent = PendingIntent.getBroadcast
                 (context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
+        // trigger time: current time + delay in milliseconds
         long triggerTime = System.currentTimeMillis() + (delayInSeconds * 1000);
 
         AlarmManager.AlarmClockInfo alarmClockInfo =
@@ -57,7 +58,7 @@ public class NotificationScheduler {
 
 
         if (alarmManager != null) {
-            alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
+            alarmManager.setAlarmClock(alarmClockInfo, pendingIntent); // schedule the alarm
         }
 
     }

@@ -17,6 +17,7 @@
 
 package com.olgunyilmaz.spotticket.util;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -134,5 +135,14 @@ public class MainHelper {
 
         return delayInHours;
 
+    }
+
+    public void showExitDialog() {
+        new AlertDialog.Builder(activity)
+                .setTitle(activity.getString(R.string.exit_text))
+                .setMessage(activity.getString(R.string.exit_question_text))
+                .setPositiveButton(activity.getString(R.string.answer_yes), (dialog, which) -> activity.finish())
+                .setNegativeButton(activity.getString(R.string.answer_no), null)
+                .show();
     }
 }

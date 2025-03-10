@@ -22,6 +22,7 @@ import android.content.Context;
 
 import com.olgunyilmaz.spotticket.R;
 
+// stores static constants for API keys and base URLs used throughout the app.
 public class Constants {
     public static String TICKETMASTER_BASE_URL;
     public static String TICKETMASTER_API_KEY;

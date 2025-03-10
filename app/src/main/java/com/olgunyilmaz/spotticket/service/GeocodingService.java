@@ -23,11 +23,11 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-public interface GeocodingService {
+public interface GeocodingService { // google maps api service
 
     @GET("geocode/json")
     Call<GeocodingResponse> getLatLng(
-            @Query("address") String address,
+            @Query("address") String address, // search location by address name
             @Query("key") String apiKey
     );
 }

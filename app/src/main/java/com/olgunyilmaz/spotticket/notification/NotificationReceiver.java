@@ -23,6 +23,7 @@ import android.content.Intent;
 
 import com.olgunyilmaz.spotticket.R;
 
+// handles scheduled notifications when triggered by the system
 public class NotificationReceiver extends BroadcastReceiver {
 
     @Override
@@ -32,6 +33,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         String eventName = intent.getStringExtra(context.getString(R.string.event_name_key));
         Long categoryIconId = intent.getLongExtra(context.getString(R.string.category_icon_key),R.drawable.mma);
 
+        // send parameters from the scheduler to the NotificationHelper
         helper.sendNotification(daysLeft,eventName,categoryIconId);
     }
 }

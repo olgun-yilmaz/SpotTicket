@@ -19,7 +19,7 @@ package com.olgunyilmaz.spotticket.model;
 
 import java.util.List;
 
-public class GeocodingResponse {
+public class GeocodingResponse { //  google maps api model class
     private List<Result> results;
 
     public List<Result> getResults() {

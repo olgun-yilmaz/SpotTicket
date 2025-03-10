@@ -25,6 +25,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -72,6 +74,14 @@ public class MainActivity extends AppCompatActivity {
 
         helper = new MainHelper(this);
 
+        OnBackPressedDispatcher dispatcher = getOnBackPressedDispatcher();
+        dispatcher.addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                helper.showExitDialog();
+            }
+        });
+
         auth = FirebaseAuth.getInstance();
 
         localDataManager = new LocalDataManager(this);
@@ -85,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
         setNotificationAlert();
 
-        String eventName = getIntent().getStringExtra(getString(R.string.event_name_key));
+        String eventName = getIntent().getStringExtra(getString(R.string.event_name_key)); // if it comes from notification
 
         helper.directToEventDetails(eventName, fragmentManager);
 
@@ -139,14 +149,19 @@ public class MainActivity extends AppCompatActivity {
         @SuppressLint("InlinedApi") String permission = Manifest.permission.POST_NOTIFICATIONS;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(MainActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
-                Snackbar.make(view, getString(R.string.notification_permission_text),
-                        Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.give_permission_text),
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                permissionLauncher.launch(permission); // ask permission
-                            }
-                        }).show();
+                if(shouldShowRequestPermissionRationale(permission)){
+                    Snackbar.make(view, getString(R.string.notification_permission_text),
+                            Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.give_permission_text),
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    permissionLauncher.launch(permission); // ask permission
+                                }
+                            }).show();
+                }else{
+                    Toast.makeText(MainActivity.this,getString(R.string.gallery_permission_text),Toast.LENGTH_SHORT).show();
+                }
+
             } else { // granted
                 permissionLauncher.launch(permission);
             }

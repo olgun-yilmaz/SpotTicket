@@ -23,6 +23,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
+
+    // retrofit singleton class for making API requests.
+
     private static Retrofit retrofit;
 
     public static Retrofit getClient() {

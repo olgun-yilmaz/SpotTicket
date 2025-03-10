@@ -43,7 +43,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class EventDetailsHelper {
+
+
+public class EventDetailsHelper { // simplifies event data management, reducing clutter in the Event Details fragment.
     private double venueLatitude;
     private double venueLongitude;
     private String venueName;
@@ -72,7 +74,7 @@ public class EventDetailsHelper {
         return venueLongitude;
     }
 
-    public String getFormattedDate(String eventDate) {
+    public String getFormattedDate(String eventDate) { // return formatted date
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && eventDate != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
             ZonedDateTime dateTime = ZonedDateTime.parse(eventDate, formatter);
@@ -89,15 +91,15 @@ public class EventDetailsHelper {
 
             venueName = venue.getName() + " " + venue.getCity().getName();
 
-            venueName = removeDuplicateWords(venueName);
+            venueName = removeDuplicateWords(venueName); // show this in TextView
 
-            findVenueLocation(getSearchAddress(venueName));
+            findVenueLocation(getSearchAddress(venueName)); // find venue location
 
             return venueName;
         }
         return "";
     }
-    private String getSearchAddress(String address) {
+    private String getSearchAddress(String address) { // encode it to url format example " " -> "%"
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 return URLEncoder.encode(address, StandardCharsets.UTF_8);
@@ -111,11 +113,11 @@ public class EventDetailsHelper {
     public String getEventSegmentInfo(EventResponse.Event eventDetails, List classifications) {
         if (classifications != null) {
             EventResponse.Classification classification = eventDetails.getClassifications().get(0);
-            return classification.getSegment().getName();
+            return classification.getSegment().getName(); // like -> Music,Sports etc.
         }
         return "";
     }
-    private void findVenueLocation(String address) {
+    private void findVenueLocation(String address) { // get location using by maps api
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MAPS_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -130,6 +132,9 @@ public class EventDetailsHelper {
                 if (response.isSuccessful()) {
                     GeocodingResponse geocodingResponse = response.body();
                     if (geocodingResponse != null && !geocodingResponse.getResults().isEmpty()) {
+
+                        // get(0) -> get first result
+
                         double lat = geocodingResponse.getResults().get(0).getGeometry().getLocation().getLat();
                         double lng = geocodingResponse.getResults().get(0).getGeometry().getLocation().getLng();
                         venueLatitude = lat;
@@ -145,7 +150,7 @@ public class EventDetailsHelper {
         });
     }
 
-    private String removeDuplicateWords(String str) {
+    private String removeDuplicateWords(String str) { // example : stadium istanbul istanbul -> stadium istanbul
         String[] words = str.split(" ");
         StringBuilder result = new StringBuilder();
         String previousWord = "";
@@ -160,8 +165,8 @@ public class EventDetailsHelper {
         return result.toString().trim();
     }
 
-    public Long getCategoryIconId(String category){
-        long id = R.drawable.electro;
+    public Long getCategoryIconId(String category){ // get notification icon by category name
+        long id = R.drawable.electro; // default icon
         switch (category){
             case "Film"  : id = R.drawable.movie; break;
             case "Music" : id = R.drawable.music; break;

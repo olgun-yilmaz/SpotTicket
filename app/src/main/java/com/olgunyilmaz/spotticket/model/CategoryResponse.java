@@ -17,7 +17,7 @@
 
 package com.olgunyilmaz.spotticket.model;
 
-public class CategoryResponse {
+public class CategoryResponse { // category model class -> id & name
     private final int imageID;
 
     public CategoryResponse(int imageID, String categoryName) {

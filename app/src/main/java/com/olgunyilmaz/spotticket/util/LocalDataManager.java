@@ -27,7 +27,7 @@ public class LocalDataManager {
     private static String PREF_NAME;
     private Context context;
 
-    public LocalDataManager(Context context) {
+    public LocalDataManager(Context context) { // specify SharedPreferences class
         this.context = context;
 
         if (context != null){
@@ -38,10 +38,7 @@ public class LocalDataManager {
     }
 
     public void deleteAllData(){ // clear phone memory
-        deleteData(context.getString(R.string.user_email_key));
-        deleteData(context.getString(R.string.city_key));
-        deleteData(context.getString(R.string.category_key));
-        deleteData(context.getString(R.string.remember_me_key));
+        sharedPreferences.edit().clear().apply();
     }
 
     public void deleteData(String key){
@@ -49,6 +46,8 @@ public class LocalDataManager {
             sharedPreferences.edit().remove(key).apply();
         }
     }
+
+    // other functions same with shared preferences
 
     public String getStringData(String key, String defaultValue){
         if (key != null){
@@ -65,7 +64,7 @@ public class LocalDataManager {
 
     public boolean getBooleanData(String key){
         if (key != null){
-            return sharedPreferences.getBoolean(key,false);
+            return sharedPreferences.getBoolean(key,false); //  default return false
         }
         return false;
     }

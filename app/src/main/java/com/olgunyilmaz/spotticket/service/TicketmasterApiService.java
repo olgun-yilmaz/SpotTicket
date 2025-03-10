@@ -28,13 +28,13 @@ public interface TicketmasterApiService {
     @GET("events.json")
     Call<EventResponse> getEvents(
             @Query("apikey") String apiKey,
-            @Query("city") String city,
-            @Query("classificationId") String categoryId,
-            @Query("keyword") String keyword
+            @Query("city") String city, // search by city name
+            @Query("classificationId") String categoryId, // search by category
+            @Query("keyword") String keyword // search by keyword
     );
     @GET("events/{eventId}.json")
     Call<EventResponse.Event> getEventDetails(
-            @Path("eventId") String eventId,
+            @Path("eventId") String eventId, // get event details by unique event ID
             @Query("apikey") String apiKey
     );
 }
