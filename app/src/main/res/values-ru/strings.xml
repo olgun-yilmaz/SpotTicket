@@ -66,8 +66,8 @@
 
     <string name="my_events_text">Мои события</string>
 
-    <string name="notification_content">Ваше любимое событие уже скоро. Осталось 5 дней! Просто напоминаем :)</string>
-    <string name="notification_last_day_content">Сегодня день концерта Metallica! Не пропустите событие...</string>
+    <string name="notification_content">Ваше любимое событие уже скоро. Осталось %d дней! Просто напоминаем :)</string>
+    <string name="notification_last_day_content">Сегодня день концерта %s ! Не пропустите событие...</string>
     <string name="notification_permission_text">Разрешить SpotTicket отправлять вам уведомления?</string>
 
     <string name="password_text">Пароль:</string>

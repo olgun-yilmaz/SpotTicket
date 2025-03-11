@@ -66,8 +66,8 @@
 
     <string name="my_events_text">I miei eventi</string>
 
-    <string name="notification_content">Il tuo evento preferito si avvicina. Mancano solo 5 giorni! Volevamo solo ricordartelo :)</string>
-    <string name="notification_last_day_content">Oggi è il giorno dei Metallica! Dai, non perdere l evento...</string>
+    <string name="notification_content">Il tuo evento preferito si avvicina. Mancano solo %d giorni! Volevamo solo ricordartelo :)</string>
+    <string name="notification_last_day_content">Oggi è il giorno dei %s ! Dai, non perdere l evento...</string>
     <string name="notification_permission_text">Vuoi ricevere notifiche da SpotTicket?</string>
 
     <string name="password_text">Password :</string>

@@ -17,6 +17,7 @@
 
 <resources>
     <string name="app_name">SpotTicket</string>
+
     <string name="answer_cancel">취소</string>
     <string name="answer_confirm">확인</string>
     <string name="answer_no">아니요</string>
@@ -65,8 +66,8 @@
 
     <string name="my_events_text">내 이벤트</string>
 
-    <string name="notification_content">즐겨찾는 이벤트가 다가오고 있습니다. 5일 남았습니다! 잊지 마세요 :)</string>
-    <string name="notification_last_day_content">오늘은 메탈리카 공연날입니다! 놓치지 마세요…</string>
+    <string name="notification_content">즐겨찾는 이벤트가 다가오고 있습니다. %d일 남았습니다! 잊지 마세요 :)</string>
+    <string name="notification_last_day_content">오늘은 %s 공연날입니다! 놓치지 마세요…</string>
     <string name="notification_permission_text">SpotTicket에서 알림을 보내도록 허용하시겠습니까?</string>
 
     <string name="password_text">비밀번호 :</string>
