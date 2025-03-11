@@ -1,0 +1,64 @@
+<!--
+   Project: SpotTicket
+   Copyright 2025 Olgun Yılmaz
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<resources>
+    <string name="all_categories">모든 카테고리</string>
+
+    <string name="basketball">농구</string>
+    <string name="baseball">야구</string>
+    <string name="blues">블루스</string>
+
+    <string name="classical_music">클래식 음악</string>
+    <string name="conference">컨퍼런스</string>
+
+    <string name="dancing">댄스</string>
+    <string name="disney">디즈니</string>
+
+    <string name="electro">일렉트로닉</string>
+    <string name="entertainment">엔터테인먼트</string>
+    <string name="exhibition">전시회</string>
+
+    <string name="family">가족</string>
+    <string name="folk">포크 음악</string>
+    <string name="food">푸드 페스티벌</string>
+
+    <string name="hip_hop">힙합/랩</string>
+
+    <string name="jazz">재즈</string>
+
+    <string name="cultural">문화 축제</string>
+
+    <string name="ice_hockey">아이스 하키</string>
+
+    <string name="mma">종합격투기 (MMA)</string>
+    <string name="movie">영화</string>
+    <string name="music">음악</string>
+    <string name="musical">뮤지컬</string>
+
+    <string name="opera">오페라</string>
+
+    <string name="pop_music">팝 음악</string>
+
+    <string name="rb">R&amp;B</string>
+    <string name="rock">록</string>
+
+    <string name="tennis">테니스</string>
+    <string name="theater">연극</string>
+    <string name="theater_art">연극 &amp; 예술</string>
+
+    <string name="sports">스포츠</string>
+</resources>

@@ -104,12 +104,15 @@ public class MainHelper {
         }
     }
 
-    public int calculateSendDelayInHours(Long daysLeft) {
+    public Integer calculateSendDelayInHours(Long daysLeft) {
         Random random = new Random();
 
         int lowerLimit, upperLimit;
 
-        if (daysLeft == 0) { // last day -> sent it immediately
+        if(daysLeft < 0){ // past event
+            return null;
+        }
+        else if (daysLeft == 0) { // last day -> sent it immediately
             lowerLimit = 1;
             upperLimit = 2;
 

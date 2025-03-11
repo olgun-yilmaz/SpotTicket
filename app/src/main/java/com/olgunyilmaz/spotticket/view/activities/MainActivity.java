@@ -31,6 +31,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 
@@ -149,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         @SuppressLint("InlinedApi") String permission = Manifest.permission.POST_NOTIFICATIONS;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(MainActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
-                if(shouldShowRequestPermissionRationale(permission)){
+                if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, permission)) {
                     Snackbar.make(view, getString(R.string.notification_permission_text),
                             Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.give_permission_text),
                             new View.OnClickListener() {
@@ -159,11 +160,11 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }).show();
                 }else{
-                    Toast.makeText(MainActivity.this,getString(R.string.gallery_permission_text),Toast.LENGTH_SHORT).show();
+                    permissionLauncher.launch(permission); // ask permission
                 }
 
             } else { // granted
-                permissionLauncher.launch(permission);
+                sendAllNotifications();
             }
         } else { // don't need permission
             sendAllNotifications();
@@ -187,13 +188,15 @@ public class MainActivity extends AppCompatActivity {
         for (HashMap<String, Object> hashMap : pendingNotifications) {
 
             Long daysLeft = (Long) hashMap.get(getString(R.string.days_left_key));
-            String eventName = (String) hashMap.get(getString(R.string.event_name_key));
-            Long categoryIconId = (Long) hashMap.get(getString(R.string.category_icon_key));
 
-            int hours = helper.calculateSendDelayInHours(daysLeft);
+            Integer hours = helper.calculateSendDelayInHours(daysLeft);
 
-            NotificationScheduler scheduler = new NotificationScheduler(daysLeft, eventName, categoryIconId);
-            scheduler.scheduleNotification(this, hours * 3600L); // hours to seconds
+            if(hours != null){ // negative -> past event
+                String eventName = (String) hashMap.get(getString(R.string.event_name_key));
+                Long categoryIconId = (Long) hashMap.get(getString(R.string.category_icon_key));
+                NotificationScheduler scheduler = new NotificationScheduler(daysLeft, eventName, categoryIconId);
+                scheduler.scheduleNotification(this, hours * 3600L); // hours to seconds
+            }
         }
     }
 }

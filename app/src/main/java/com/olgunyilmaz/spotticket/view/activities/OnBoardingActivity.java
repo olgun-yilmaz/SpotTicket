@@ -51,8 +51,7 @@ public class OnBoardingActivity extends AppCompatActivity {
     private LocalDataManager localDataManager;
     private ArrayList<Language> languageList;
     private Language selectedLanguage;
-    private int counter = 0;
-    private int languageCounter = 0;
+    private int pointCounter, languageCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,6 +165,11 @@ public class OnBoardingActivity extends AppCompatActivity {
         languageList.add(new Language(R.drawable.icon_tr,"tr","Türkçe"));
         languageList.add(new Language(R.drawable.icon_en,"en","English"));
         languageList.add(new Language(R.drawable.icon_de,"de","Deutsch"));
+        languageList.add(new Language(R.drawable.icon_fr,"fr","Français"));
+        languageList.add(new Language(R.drawable.icon_it,"it","Italiano"));
+        languageList.add(new Language(R.drawable.icon_ko,"ko","한국인"));
+        languageList.add(new Language(R.drawable.icon_es,"es","Español"));
+        languageList.add(new Language(R.drawable.icon_ru,"ru","Русский"));
 
         selectLanguage(); // after get data select language
     }
@@ -186,8 +190,8 @@ public class OnBoardingActivity extends AppCompatActivity {
         runnable = new Runnable() {
             @Override
             public void run() {
-                counter++;
-                int numPoint = counter % 4;
+                pointCounter++;
+                int numPoint = pointCounter % 4;
                 String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
                 binding.getStartText.setText(getString(R.string.plain_loading_text) + numPointText);
                 handler.postDelayed(runnable, 1000);
