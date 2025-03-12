@@ -53,7 +53,7 @@
             app:layout_constraintHorizontal_bias="0.15"
             app:layout_constraintVertical_bias="0.3"
 
-            android:text="Welcome Back"
+            android:text="@string/welcome_message"
             android:textColor="@color/welcome_back_text_color"
 
             android:textSize="14sp"
@@ -83,7 +83,7 @@
 
             android:fontFamily="@font/lexend_medium"
             android:gravity="left"
-            android:text="Kyle James"
+            android:text="Olgun Yılmaz"
             android:textColor="@color/white"
 
             android:textSize="24sp"
@@ -296,7 +296,7 @@
 
             android:fontFamily="@font/lexend_light"
 
-            android:text="See all"
+            android:text="@string/see_all_text"
             android:textColor="@color/welcome_back_text_color"
             android:gravity="center"
 

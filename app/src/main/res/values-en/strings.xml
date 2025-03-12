@@ -86,6 +86,7 @@
     <string name="search_city_text">Search City . . .</string>
     <string name="search_events_text">Search Event . . .</string>
     <string name="searching_text">Searching . . .</string>
+    <string name="see_all_text">See all</string>
     <string name="send_password_reset_link">You can reset your password from the link sent.</string>
     <string name="sign_up_text">SIGN UP</string>
 
@@ -99,5 +100,5 @@
     <string name="title_activity_maps">MapsActivity</string>
 
     <string name="weak_search_error">You must enter at least 3 letters!</string>
-    <string name="welcome_message">Welcome :</string>
+    <string name="welcome_message">Welcome Back</string>
 </resources>

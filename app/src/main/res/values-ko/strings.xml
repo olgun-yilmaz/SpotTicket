@@ -83,6 +83,7 @@
     <string name="search_city_text">도시 검색 . . .</string>
     <string name="search_events_text">이벤트 검색 . . .</string>
     <string name="searching_text">검색 중 . . .</string>
+    <string name="see_all_text">모두 보기</string>
     <string name="send_password_reset_link">전송된 링크에서 비밀번호를 재설정할 수 있습니다.</string>
     <string name="sign_up_text">가입하기</string>
 
@@ -96,5 +97,5 @@
     <string name="title_activity_maps">MapsActivity</string>
 
     <string name="weak_search_error">최소 3자 이상 입력해야 합니다!</string>
-    <string name="welcome_message">환영합니다 : </string>
+    <string name="welcome_message">돌아온 것을 환영합니다</string>
 </resources>

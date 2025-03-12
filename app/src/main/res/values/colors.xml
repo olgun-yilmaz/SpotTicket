@@ -24,4 +24,6 @@
     <color name="welcome_back_text_color">#94A3B8</color>
     <color name="search_event_hint_color">#666666</color>
     <color name="natural_gray">#E2E8F0</color>
+    <color name="event_name_gray">#F8FAFC</color>
+
 </resources>

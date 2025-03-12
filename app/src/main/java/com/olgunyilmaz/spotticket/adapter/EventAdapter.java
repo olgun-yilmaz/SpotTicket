@@ -17,6 +17,9 @@
 
 package com.olgunyilmaz.spotticket.adapter;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +34,7 @@ import com.olgunyilmaz.spotticket.view.fragments.EventDetailsFragment;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.List;
 
@@ -53,21 +57,18 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         MainActivity activity = (MainActivity) holder.itemView.getContext();
 
         EventResponse.Event event = eventList.get(position);
-        holder.binding.eventName.setText(event.getName());
+        holder.binding.rowEventName.setText(event.getName());
 
         EventDetailsHelper helper = new EventDetailsHelper(activity);
         String formattedDate = helper.getFormattedDate(event.getDates().getStart().getDateTime());
-        holder.binding.eventDate.setText(formattedDate);
 
-        if(event.getHighQualityImage() != null){
-            Picasso.get()
-                    .load(event.getHighQualityImage())
-                    .placeholder(R.drawable.loading)
-                    .error(R.drawable.error)
-                    .into(holder.binding.eventImage);
-        }
+        Picasso.get().load(event.getHighQualityImage())
+                .placeholder(R.drawable.loading)
+                .error(R.drawable.error)
+                .into(holder.binding.eventBackgroundImage);
 
-        holder.binding.bookButton.setOnClickListener(new View.OnClickListener() {
+
+        holder.binding.eventRowInnerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EventDetailsFragment fragment = new EventDetailsFragment();
@@ -75,11 +76,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 args.putString(activity.getString(R.string.event_id_key), event.getId());
                 args.putString(activity.getString(R.string.image_url_key), event.getHighQualityImage());
                 args.putString(activity.getString(R.string.event_name_key), event.getName());
-                args.putString(activity.getString(R.string.event_date_key),event.getDates().getStart().getDateTime());
+                args.putString(activity.getString(R.string.event_date_key), event.getDates().getStart().getDateTime());
 
-                String category = helper.getEventSegmentInfo(event,event.getClassifications());
+                String category = helper.getEventSegmentInfo(event, event.getClassifications());
 
-                args.putLong(activity.getString(R.string.category_icon_key),helper.getCategoryIconId(category));
+                args.putLong(activity.getString(R.string.category_icon_key), helper.getCategoryIconId(category));
                 fragment.setArguments(args);
 
                 activity.getSupportFragmentManager()

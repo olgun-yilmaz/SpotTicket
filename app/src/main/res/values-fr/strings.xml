@@ -83,6 +83,7 @@
     <string name="search_city_text">Rechercher une ville . . .</string>
     <string name="search_events_text">Rechercher un événement . . .</string>
     <string name="searching_text">Recherche en cours . . .</string>
+    <string name="see_all_text">Voir tout</string>
     <string name="send_password_reset_link">Vous pouvez réinitialiser votre mot de passe via le lien envoyé.</string>
     <string name="sign_up_text">INSCRIPTION</string>
 
@@ -96,5 +97,5 @@
     <string name="title_activity_maps">MapsActivity</string>
 
     <string name="weak_search_error">Veuillez saisir au moins 3 lettres !</string>
-    <string name="welcome_message">Bienvenue : </string>
+    <string name="welcome_message">Content de te revoir</string>
 </resources>

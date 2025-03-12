@@ -120,7 +120,8 @@ public class HomePageFragment extends Fragment {
             }
         });
 
-        binding.upcomingEventsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.upcomingEventsRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+
         displayUpcomingEvents();
 
     }
