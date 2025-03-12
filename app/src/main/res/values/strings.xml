@@ -89,6 +89,7 @@
     <string name="send_password_reset_link">Şifrenizi gönderilen linkten sıfırlayabilirsiniz.</string>
     <string name="sign_up_text">KAYIT OL</string>
 
+    <string name="upcoming_events_text">Yaklaşan Etkinlikler</string>
     <string name="username_text">Kullanıcı Adı : </string>
 
     <string name="valid_password_text">Şifre Tekrar</string>

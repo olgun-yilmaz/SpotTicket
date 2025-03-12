@@ -46,38 +46,14 @@ public class HomePageHelper {
     public ArrayList<CategoryResponse> getCategories() {
         ArrayList<CategoryResponse> categories = new ArrayList<>();
 
-        categories.add(new CategoryResponse(R.drawable.all_categories,context.getString(R.string.all_categories)));
-        categories.add(new CategoryResponse(R.drawable.family, context.getString(R.string.family)));
-        categories.add(new CategoryResponse(R.drawable.basketball, context.getString(R.string.basketball)));
-        categories.add(new CategoryResponse(R.drawable.baseball, context.getString(R.string.baseball)));
-        categories.add(new CategoryResponse(R.drawable.blues, context.getString(R.string.blues)));
-        categories.add(new CategoryResponse(R.drawable.ice_hockey, context.getString(R.string.ice_hockey)));
-        categories.add(new CategoryResponse(R.drawable.dancing, context.getString(R.string.dancing)));
-        categories.add(new CategoryResponse(R.drawable.disney, context.getString(R.string.disney)));
-        categories.add(new CategoryResponse(R.drawable.movie, context.getString(R.string.movie)));
-        categories.add(new CategoryResponse(R.drawable.folk, context.getString(R.string.folk)));
 
+        categories.add(new CategoryResponse(R.drawable.movie, context.getString(R.string.movie)));
         categories.add(new CategoryResponse(R.drawable.electro, context.getString(R.string.electro)));
-        categories.add(new CategoryResponse(R.drawable.entertainment,context.getString(R.string.entertainment)));
-        categories.add(new CategoryResponse(R.drawable.hip_hop, context.getString(R.string.hip_hop)));
-        categories.add(new CategoryResponse(R.drawable.jazz, context.getString(R.string.jazz)));
-        categories.add(new CategoryResponse(R.drawable.classical_music, context.getString(R.string.classical_music)));
-        categories.add(new CategoryResponse(R.drawable.conference, context.getString(R.string.conference)));
-        categories.add(new CategoryResponse(R.drawable.cultural, context.getString(R.string.cultural)));
         categories.add(new CategoryResponse(R.drawable.mma, context.getString(R.string.mma)));
         categories.add(new CategoryResponse(R.drawable.music, context.getString(R.string.music)));
-        categories.add(new CategoryResponse(R.drawable.musical, context.getString(R.string.musical)));
 
-        categories.add(new CategoryResponse(R.drawable.opera, context.getString(R.string.opera)));
-        categories.add(new CategoryResponse(R.drawable.rb, context.getString(R.string.rb)));
-        categories.add(new CategoryResponse(R.drawable.rock, context.getString(R.string.rock)));
-        categories.add(new CategoryResponse(R.drawable.pop_music, context.getString(R.string.pop_music)));
-        categories.add(new CategoryResponse(R.drawable.theater_art, context.getString(R.string.theater_art)));
-        categories.add(new CategoryResponse(R.drawable.exhibition,context.getString(R.string.exhibition)));
         categories.add(new CategoryResponse(R.drawable.sports, context.getString(R.string.sports)));
-        categories.add(new CategoryResponse(R.drawable.tennis, context.getString(R.string.tennis)));
         categories.add(new CategoryResponse(R.drawable.theater, context.getString(R.string.theater)));
-        categories.add(new CategoryResponse(R.drawable.food, context.getString(R.string.food)));
 
         return categories;
 

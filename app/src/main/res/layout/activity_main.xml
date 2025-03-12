@@ -30,7 +30,7 @@
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -49,59 +49,99 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout"
+
         android:layout_width="0dp"
         android:layout_height="0dp"
 
+        android:background="@drawable/bar_fixed_menu"
+
         android:orientation="horizontal"
 
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.95"
+        app:layout_constraintHeight_percent="0.115"
+        app:layout_constraintWidth_percent="0.948"
 
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.05"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.95">
+        >
 
+
+        <ImageView
+            android:id="@+id/homeButton"
+
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            app:srcCompat="@drawable/home_icon"
+
+            app:layout_constraintHorizontal_bias="0.05"
+
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintHeight_percent="0.7"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/displayButton"
+
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            app:layout_constraintHorizontal_bias="0.35"
+
+            app:layout_constraintWidth_percent="0.2"
+
+            app:srcCompat="@drawable/display_icon"
+
+            app:layout_constraintBottom_toBottomOf="@id/homeButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/homeButton"/>
+
+        <ImageView
+            android:id="@+id/myEventsButton"
+
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            app:layout_constraintHorizontal_bias="0.65"
+
+            app:layout_constraintWidth_percent="0.2"
+
+            app:srcCompat="@drawable/my_events_icon"
+
+            app:layout_constraintBottom_toBottomOf="@id/homeButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/homeButton"/>
 
         <ImageView
             android:id="@+id/profileButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
+
+            app:layout_constraintHorizontal_bias="0.95"
+
+            app:layout_constraintWidth_percent="0.2"
+
             android:onClick="goToProfileScreen"
-            app:srcCompat="@drawable/profile_icon" />
+            app:srcCompat="@drawable/settings_icon"
 
-        <ImageView
-            android:id="@+id/myEventsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/my_events_icon" />
+            app:layout_constraintBottom_toBottomOf="@id/homeButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/homeButton"/>
 
-        <ImageView
-            android:id="@+id/homeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/home_icon" />
 
-        <ImageView
-            android:id="@+id/displayButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/display_icon" />
 
-        <ImageView
-            android:id="@+id/signOutButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="signOut"
-            app:srcCompat="@drawable/sign_out" />
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

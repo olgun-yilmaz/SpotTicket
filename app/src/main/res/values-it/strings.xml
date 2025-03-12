@@ -86,6 +86,7 @@
     <string name="send_password_reset_link">Puoi reimpostare la password dal link inviato.</string>
     <string name="sign_up_text">REGISTRATI</string>
 
+    <string name="upcoming_events_text">Prossimi eventi</string>
     <string name="username_text">Nome utente: </string>
 
     <string name="valid_password_text">Ripeti Password</string>

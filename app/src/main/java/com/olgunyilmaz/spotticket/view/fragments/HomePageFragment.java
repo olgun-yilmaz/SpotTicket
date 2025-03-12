@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -33,29 +34,33 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.olgunyilmaz.spotticket.CircleTransform;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.adapter.CategoryAdapter;
+import com.olgunyilmaz.spotticket.adapter.EventAdapter;
 import com.olgunyilmaz.spotticket.databinding.FragmentHomePageBinding;
 import com.olgunyilmaz.spotticket.model.CategoryResponse;
 import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.util.HomePageHelper;
 import com.olgunyilmaz.spotticket.util.RecommendedEventManager;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
+import com.olgunyilmaz.spotticket.util.UserFavoritesManager;
+import com.olgunyilmaz.spotticket.util.UserManager;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 
-public class HomePageFragment extends Fragment implements SelectCityFragment.CitySelectListener {
+public class HomePageFragment extends Fragment {
     private FragmentHomePageBinding binding;
     private FragmentManager fragmentManager;
-    private CategoryAdapter categoryAdapter;
     private ArrayList<CategoryResponse> categories;
     private Runnable runnable;
     private Handler handler;
-    private LocalDataManager localDataManager;
     private HomePageHelper helper;
+    private FirebaseAuth auth;
 
 
     @Override
@@ -74,12 +79,27 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        localDataManager = new LocalDataManager(requireActivity());
         helper = new HomePageHelper(requireActivity());
 
         categories = helper.getCategories();
 
         fragmentManager = requireActivity().getSupportFragmentManager();
+
+        auth = FirebaseAuth.getInstance();
+
+        Picasso.get().load(UserFavoritesManager.getInstance().userFavorites.get(0).getImageUrl())
+                .placeholder(R.drawable.loading)
+                .error(R.drawable.error)
+                .into(binding.recommendedEventImage);
+
+        Picasso.get().load(UserManager.getInstance().ppUrl)
+                .placeholder(R.drawable.loading)
+                .error(R.drawable.error)
+                .transform(new CircleTransform())
+                .into(binding.homeProfileImage);
+
+        binding.homeUsernameText.setText("Olgun Yılmaz");
+
 
         if (RecommendedEventManager.getInstance().recommendedEvents != null) {
             if (!RecommendedEventManager.getInstance().recommendedEvents.isEmpty()) {
@@ -87,12 +107,6 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
             }
 
         }
-
-        String city = localDataManager.getStringData(getString(R.string.city_key), getString(R.string.default_city_name));
-        binding.selectCityText.setText(city);
-
-        ArrayList<String> cities = helper.getCities();
-        binding.cityLayout.setOnClickListener(v -> showCityPicker(cities));
 
         binding.homeSearchIcon.setOnClickListener(v -> searchEventByKeyword());
         binding.homeSearchEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -106,23 +120,15 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
             }
         });
 
+        binding.upcomingEventsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        displayUpcomingEvents();
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager
-                (requireContext(), 3, GridLayoutManager.HORIZONTAL, false);
+    }
 
-        binding.categoryRecyclerView.setLayoutManager(gridLayoutManager);
-
-        binding.categoryRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                binding.categoryRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                int width = binding.categoryRecyclerView.getWidth();
-                int itemWidth = width / 3;
-
-                categoryAdapter = new CategoryAdapter(categories, itemWidth);
-                binding.categoryRecyclerView.setAdapter(categoryAdapter);
-            }
-        });
+    private void displayUpcomingEvents(){
+        EventAdapter eventAdapter = new EventAdapter(RecommendedEventManager.getInstance().recommendedEvents);
+        binding.upcomingEventsRecyclerView.setAdapter(eventAdapter);
+        eventAdapter.notifyDataSetChanged();
     }
 
     private void searchEventByKeyword() {
@@ -151,7 +157,7 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
         runnable = new Runnable() {
             @Override
             public void run() {
-                if(isAdded()){
+                if (isAdded()) {
                     Random random = new Random();
                     int randomID = random.nextInt(RecommendedEventManager.getInstance().recommendedEvents.size());
                     EventResponse.Event event = RecommendedEventManager.getInstance().recommendedEvents.get(randomID);
@@ -191,36 +197,15 @@ public class HomePageFragment extends Fragment implements SelectCityFragment.Cit
         fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
     }
 
-    private void showCityPicker(ArrayList<String> cities) {
-        SelectCityFragment fragment = new SelectCityFragment();
-
-        Bundle args = new Bundle();
-        args.putStringArrayList(getString(R.string.cities_key), cities);
-
-        fragment.setArguments(args);
-        fragment.setListener(this);
-
-        fragment.show(getActivity().getSupportFragmentManager(), getString(R.string.city_picker_tag));
-    }
-
-    @Override
-    public void onCitySelected(String city) {
-        binding.selectCityText.setText(city);
-        localDataManager.updateStringData(getString(R.string.city_key), city);
-    }
 
     private void writingMode() {
         helper.setEnableHomeButton();
 
         binding.recommendedEventLayout.setVisibility(View.INVISIBLE);
-        binding.cityLayout.setVisibility(View.INVISIBLE);
-        binding.categoryRecyclerView.setVisibility(View.INVISIBLE);
     }
 
     private void normalMode() {
         binding.recommendedEventLayout.setVisibility(View.VISIBLE);
-        binding.cityLayout.setVisibility(View.VISIBLE);
-        binding.categoryRecyclerView.setVisibility(View.VISIBLE);
 
     }
 }

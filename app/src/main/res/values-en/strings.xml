@@ -89,6 +89,7 @@
     <string name="send_password_reset_link">You can reset your password from the link sent.</string>
     <string name="sign_up_text">SIGN UP</string>
 
+    <string name="upcoming_events_text">Upcoming Events</string>
     <string name="username_text">Username : </string>
 
     <string name="valid_password_text">Password Again</string>

@@ -89,6 +89,7 @@
     <string name="send_password_reset_link">Du kannst dein Passwort über den gesendeten Link zurücksetzen.</string>
     <string name="sign_up_text">ANMELDEN</string>
 
+    <string name="upcoming_events_text">Kommende Veranstaltungen</string>
     <string name="username_text">Benutzername : </string>
 
     <string name="valid_password_text">Passwort wiederholen</string>

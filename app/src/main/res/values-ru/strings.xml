@@ -86,6 +86,7 @@
     <string name="send_password_reset_link">Вы можете сбросить пароль по отправленной ссылке.</string>
     <string name="sign_up_text">РЕГИСТРАЦИЯ</string>
 
+    <string name="upcoming_events_text">Предстоящие события</string>
     <string name="username_text">Имя пользователя: </string>
 
     <string name="valid_password_text">Повторите пароль</string>

@@ -86,6 +86,7 @@
     <string name="send_password_reset_link">Vous pouvez réinitialiser votre mot de passe via le lien envoyé.</string>
     <string name="sign_up_text">INSCRIPTION</string>
 
+    <string name="upcoming_events_text">Événements à venir </string>
     <string name="username_text">Nom dutilisateur : </string>
 
     <string name="valid_password_text">Confirmez le mot de passe</string>

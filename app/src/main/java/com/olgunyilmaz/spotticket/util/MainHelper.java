@@ -70,7 +70,6 @@ public class MainHelper {
         menuButtons.add(activity.binding.myEventsButton);
         menuButtons.add(activity.binding.homeButton);
         menuButtons.add(activity.binding.displayButton);
-        menuButtons.add(activity.binding.signOutButton);
     }
 
     public void replaceFragment(Fragment fragment, View sender, FragmentManager fragmentManager) {
