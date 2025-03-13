@@ -39,6 +39,10 @@
     <string name="language_code_key">languageCode</string>
     <string name="language_counter_key">languageCounter</string>
 
+    <string name="menu_home_key">menuHome</string>
+    <string name="menu_display_key">menuDisplay</string>
+    <string name="menu_settings_key">menuSettings</string>
+    <string name="menu_my_events_key">menuMyEvents</string>
     <string name="my_events_key">_Events</string>
 
     <string name="notification_id_key">notificationID</string>

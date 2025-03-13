@@ -32,21 +32,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.olgunyilmaz.spotticket.CircleTransform;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.adapter.EventAdapter;
 import com.olgunyilmaz.spotticket.databinding.FragmentHomePageBinding;
-import com.olgunyilmaz.spotticket.model.CategoryResponse;
 import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.util.EventDetailsHelper;
 import com.olgunyilmaz.spotticket.util.HomePageHelper;
 import com.olgunyilmaz.spotticket.util.RecommendedEventManager;
-import com.olgunyilmaz.spotticket.util.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.util.UserManager;
+import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -91,6 +88,8 @@ public class HomePageFragment extends Fragment {
 
         binding.seeAllText.setOnClickListener(v -> seeAll());
 
+        binding.homeProfileImage.setOnClickListener(v -> goToSettings());
+
 
         if (RecommendedEventManager.getInstance().recommendedEvents != null) {
             if (!RecommendedEventManager.getInstance().recommendedEvents.isEmpty()) {
@@ -115,6 +114,15 @@ public class HomePageFragment extends Fragment {
 
         displayUpcomingEvents();
 
+    }
+
+    private void goToSettings(){
+        MainActivity activity = (MainActivity) requireActivity();
+        activity.binding.profileButton.setChecked(true);
+
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        ProfileFragment fragment = new ProfileFragment();
+        fragmentTransaction.replace(R.id.fragmentContainerView,fragment).commit();
     }
 
     private void displayUpcomingEvents(){
@@ -202,11 +210,20 @@ public class HomePageFragment extends Fragment {
     private void writingMode() {
         helper.setEnableHomeButton();
 
+        binding.profileLayout.setVisibility(View.INVISIBLE);
+        binding.upcomingEventsLayout.setVisibility(View.INVISIBLE);
+        binding.dateLayout.setVisibility(View.INVISIBLE);
+        binding.upcomingEventsLayout.setVisibility(View.INVISIBLE);
         binding.recommendedEventLayout.setVisibility(View.INVISIBLE);
+        binding.upcomingEventsRecyclerView.setVisibility(View.INVISIBLE);
     }
 
     private void normalMode() {
+        binding.profileLayout.setVisibility(View.VISIBLE);
+        binding.upcomingEventsLayout.setVisibility(View.VISIBLE);
+        binding.dateLayout.setVisibility(View.VISIBLE);
+        binding.upcomingEventsLayout.setVisibility(View.VISIBLE);
         binding.recommendedEventLayout.setVisibility(View.VISIBLE);
-
+        binding.upcomingEventsRecyclerView.setVisibility(View.VISIBLE);
     }
 }

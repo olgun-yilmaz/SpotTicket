@@ -49,7 +49,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RadioGroup
         android:id="@+id/fixedBar"
 
         android:layout_width="0dp"
@@ -60,8 +60,8 @@
         android:orientation="horizontal"
 
         app:layout_constraintVertical_bias="0.95"
-        app:layout_constraintHeight_percent="0.115"
-        app:layout_constraintWidth_percent="0.948"
+        app:layout_constraintHeight_percent="0.09"
+        app:layout_constraintWidth_percent="0.85"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,78 +70,91 @@
         >
 
 
-        <ImageView
+        <RadioButton
             android:id="@+id/homeButton"
 
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:background="@drawable/home_selected"
 
-            app:srcCompat="@drawable/home_selected"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
 
-            app:layout_constraintHorizontal_bias="0.05"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-            app:layout_constraintWidth_percent="0.2"
-            app:layout_constraintHeight_percent="0.7"
+            android:enabled="false"
+            android:layout_gravity="center"
 
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:text="@string/menu_home_key"
+            android:textSize="0sp"
 
-        <ImageView
+            android:layout_weight="1"
+
+            android:button="@null" />
+
+        <RadioButton
             android:id="@+id/displayButton"
 
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:background="@drawable/display_icon"
 
-            app:layout_constraintHorizontal_bias="0.35"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-            app:layout_constraintWidth_percent="0.2"
+            android:layout_gravity="center"
 
-            app:srcCompat="@drawable/display_icon"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
 
-            app:layout_constraintBottom_toBottomOf="@id/homeButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/homeButton"/>
+            android:layout_weight="1"
 
-        <ImageView
+            android:text="@string/menu_display_key"
+            android:textSize="0sp"
+
+            android:button="@null" />
+
+        <RadioButton
             android:id="@+id/myEventsButton"
 
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:background="@drawable/bookmark_icon"
 
-            app:layout_constraintHorizontal_bias="0.65"
-
-            app:layout_constraintWidth_percent="0.2"
-
-            app:srcCompat="@drawable/bookmark_icon"
-
-            app:layout_constraintBottom_toBottomOf="@id/homeButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/homeButton"/>
-
-        <ImageView
-            android:id="@+id/profileButton"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
 
-            app:layout_constraintHorizontal_bias="0.95"
+            android:layout_gravity="center"
 
-            app:layout_constraintWidth_percent="0.2"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
 
-            android:onClick="goToProfileScreen"
-            app:srcCompat="@drawable/settings_icon"
+            android:layout_weight="1"
 
-            app:layout_constraintBottom_toBottomOf="@id/homeButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/homeButton"/>
+            android:text="@string/menu_my_events_key"
+            android:textSize="0sp"
+
+            android:button="@null" />
+
+        <RadioButton
+            android:id="@+id/profileButton"
+
+            android:background="@drawable/settings_icon"
+
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+
+            android:layout_gravity="center"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_weight="1"
+
+            android:text="@string/menu_settings_key"
+            android:textSize="0sp"
+
+            android:button="@null"
+
+            android:onClick="goToProfileScreen" />
 
 
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RadioGroup>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

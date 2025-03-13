@@ -44,6 +44,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.model.EventResponse;
+import com.olgunyilmaz.spotticket.util.MainHelper;
 import com.olgunyilmaz.spotticket.util.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.databinding.FragmentEventDetailsBinding;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
@@ -104,10 +105,6 @@ public class EventDetailsFragment extends Fragment {
         detailsHelper = new EventDetailsHelper(requireContext());
 
         activity = (MainActivity) requireActivity();
-        activity.binding.homeButton.setEnabled(true); // for back to home page
-        activity.binding.myEventsButton.setEnabled(true); // for back to fav page
-        activity.binding.displayButton.setEnabled(true); // for back to display page
-
         activity.binding.fixedBar.setVisibility(View.GONE);
 
         String userEmail = auth.getCurrentUser().getEmail().toString();

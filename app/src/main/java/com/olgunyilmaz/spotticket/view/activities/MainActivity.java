@@ -92,8 +92,6 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
 
-        binding.homeButton.setEnabled(false); // first page button disabled
-
         setNotificationAlert();
 
         String eventName = getIntent().getStringExtra(getString(R.string.event_name_key)); // if it comes from notification

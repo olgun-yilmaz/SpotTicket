@@ -69,8 +69,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                 DisplayFragment displayFragment = new DisplayFragment();
 
                 MainActivity activity = (MainActivity) holder.itemView.getContext();
-                activity.binding.homeButton.setEnabled(true); // for back to home page
-                activity.binding.displayButton.setEnabled(false); // we're here
 
                 LocalDataManager localDataManager = new LocalDataManager(activity);
 

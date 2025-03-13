@@ -128,8 +128,8 @@ public class DisplayFragment extends Fragment {
 
     private void goToHomePage() {
         MainActivity activity = (MainActivity) requireActivity();
-        activity.binding.displayButton.setEnabled(true);
-        activity.binding.homeButton.setEnabled(false);
+
+        activity.binding.homeButton.setChecked(true);
 
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
