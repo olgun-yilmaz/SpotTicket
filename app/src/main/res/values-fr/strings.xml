@@ -44,6 +44,7 @@
     <string name="email_text">E-Mail :</string>
     <string name="enter_password_for_delete_account">Entrez votre mot de passe pour supprimer votre compte.</string>
     <string name="email_verification_message">Pour vous connecter, vous devez vérifier votre adresse e-mail via le lien envoyé.</string>
+    <string name="event_description_text">L"événement %s vous rencontre lors d'événements précieux sur %s | %s !</string>
     <string name="event_type_text">Type dévénement : </string>
     <string name="exit_text">Quitter</string>
     <string name="exit_question_text">Êtes-vous sûr de vouloir quitter lapplication ?</string>

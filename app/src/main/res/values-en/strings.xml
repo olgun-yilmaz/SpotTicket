@@ -46,6 +46,7 @@
     <string name="email_text">E-Mail :</string>
     <string name="enter_password_for_delete_account">Enter your password to delete your account.</string>
     <string name="email_verification_message">In order to log in, you must verify your e-mail address from the link sent.</string>
+    <string name="event_description_text">%s event meets with you valuable events on %s | %s!</string>
     <string name="event_type_text">Event Type : </string>
     <string name="exit_text">Exit</string>
     <string name="exit_question_text">Are you sure you want to exit the app?</string>

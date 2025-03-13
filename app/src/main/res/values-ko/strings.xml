@@ -44,6 +44,7 @@
     <string name="email_text">이메일 :</string>
     <string name="enter_password_for_delete_account">계정을 삭제하려면 비밀번호를 입력하세요.</string>
     <string name="email_verification_message">로그인하려면 전송된 링크에서 이메일을 확인해야 합니다.</string>
+    <string name="event_description_text">%s 이벤트가 %s의 귀중한 이벤트와 함께 합니다 | %s!</string>
     <string name="event_type_text">이벤트 유형 : </string>
     <string name="exit_text">종료</string>
     <string name="exit_question_text">앱을 종료하시겠습니까?</string>

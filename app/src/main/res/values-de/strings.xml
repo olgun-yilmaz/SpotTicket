@@ -46,6 +46,7 @@
     <string name="email_text">E-Mail :</string>
     <string name="enter_password_for_delete_account">Gib dein Passwort ein, um dein Konto zu löschen.</string>
     <string name="email_verification_message">Um dich anzumelden, musst du deine E-Mail-Adresse über den gesendeten Link verifizieren.</string>
+    <string name="event_description_text">%s Event trifft sich mit Ihnen zu wertvollen Events am %s | %s!</string>
     <string name="event_type_text">Veranstaltungstyp : </string>
     <string name="exit_text">Ausfahrt</string>
     <string name="exit_question_text">Möchten Sie die App wirklich beenden?</string>

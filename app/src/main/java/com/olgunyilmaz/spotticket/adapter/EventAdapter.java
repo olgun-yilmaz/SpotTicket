@@ -34,7 +34,6 @@ import com.olgunyilmaz.spotticket.view.fragments.EventDetailsFragment;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.List;
 
@@ -60,7 +59,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.binding.rowEventName.setText(event.getName());
 
         EventDetailsHelper helper = new EventDetailsHelper(activity);
-        String formattedDate = helper.getFormattedDate(event.getDates().getStart().getDateTime());
+        String formattedDate = helper.getFormattedDate(event.getDates().getStart().getDateTime(),false);
 
         Picasso.get().load(event.getHighQualityImage())
                 .placeholder(R.drawable.loading)

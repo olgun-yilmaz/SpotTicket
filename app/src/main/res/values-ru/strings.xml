@@ -44,6 +44,7 @@
     <string name="email_text">Электронная почта:</string>
     <string name="enter_password_for_delete_account">Введите пароль для удаления аккаунта.</string>
     <string name="email_verification_message">Для входа в систему необходимо подтвердить адрес электронной почты по отправленной ссылке.</string>
+    <string name="event_description_text">%s событие встречает вас ценными событиями на %s | %s!</string>
     <string name="event_type_text">Тип события: </string>
     <string name="exit_text">Выход</string>
     <string name="exit_question_text">Вы уверены, что хотите выйти из приложения?</string>

@@ -46,6 +46,7 @@
     <string name="email_text">E-Mail :</string>
     <string name="enter_password_for_delete_account">Hesabınızı silmek için şifrenizi girin</string>
     <string name="email_verification_message">Giriş yapabilmek için gönderilen linkten e-posta adresinizi doğrulamanız gerekmektedir.</string>
+    <string name="event_description_text">%s etkinliği, %s | %s tarihinde siz değerli etkinlikseverlerle buluşuyor!</string>
     <string name="event_type_text">Etkinlik türü : </string>
     <string name="exit_text">Çıkış</string>
     <string name="exit_question_text">Uygulamadan çıkmak istediğinize emin misiniz?</string>

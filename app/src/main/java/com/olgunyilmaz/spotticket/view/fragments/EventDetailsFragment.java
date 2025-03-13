@@ -28,6 +28,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -71,6 +73,8 @@ public class EventDetailsFragment extends Fragment {
     private String eventName;
     private EventDetailsHelper detailsHelper;
     private LocalDataManager localDataManager;
+    private FragmentManager fragmentManager;
+    private MainActivity activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,15 +96,19 @@ public class EventDetailsFragment extends Fragment {
 
         localDataManager = new LocalDataManager(requireActivity());
 
+        fragmentManager = requireActivity().getSupportFragmentManager();
+
         String languageCode = localDataManager.getStringData(getString(R.string.language_code_key),"tr");
         auth.setLanguageCode(languageCode);
 
         detailsHelper = new EventDetailsHelper(requireContext());
 
-        MainActivity activity = (MainActivity) requireActivity();
+        activity = (MainActivity) requireActivity();
         activity.binding.homeButton.setEnabled(true); // for back to home page
         activity.binding.myEventsButton.setEnabled(true); // for back to fav page
         activity.binding.displayButton.setEnabled(true); // for back to display page
+
+        activity.binding.fixedBar.setVisibility(View.GONE);
 
         String userEmail = auth.getCurrentUser().getEmail().toString();
         collectionPath = userEmail + getString(R.string.my_events_key);
@@ -130,11 +138,23 @@ public class EventDetailsFragment extends Fragment {
                 binding.favCheckBox.setButtonDrawable(imgId);
             });
 
-            binding.mapButton.setOnClickListener(v -> goToEvent());
+            binding.detailsBackButton.setOnClickListener(v -> goBack());
+
+            binding.detailsLocationIcon.setOnClickListener(v -> goToEvent());
 
             TicketmasterApiService apiService = RetrofitClient.getApiService();
             findEventDetails(apiService, eventId, imageUrl);
         }
+    }
+
+    private void goBack(){
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();;
+        HomePageFragment fragment = new HomePageFragment();
+
+        activity.binding.fixedBar.setVisibility(View.VISIBLE);
+
+        fragmentTransaction.replace(R.id.fragmentContainerView,fragment).commit();
+
     }
 
     private boolean isLiked() {
@@ -196,26 +216,27 @@ public class EventDetailsFragment extends Fragment {
                         if (response.isSuccessful()) {
                             EventResponse.Event event = response.body();
 
+                            String eventDate = event.getDates().getStart().getDateTime();
+
                             eventName = event.getName();
+                            String eventLocation = detailsHelper.getVenueInfo(event, event.getEmbedded().getVenues());
+
+                            String full_date = detailsHelper.getFormattedDate(eventDate,true);
 
                             binding.detailsNameText.setText(eventName);
 
-                            String eventDate = event.getDates().getStart().getDateTime();
+                            binding.detailsLocationText.setText(event.getEmbedded().getVenues().get(0).getCity().getName());
 
-                            binding.detailsDateText.setText(getString(R.string.date_text) +
-                                    " " + detailsHelper.getFormattedDate(eventDate));
+                            binding.detailsDescriptionText.setText(
+                                    getString(R.string.event_description_text,eventName,eventLocation,full_date));
+
+                            binding.detailsDateText.setText(detailsHelper.getFormattedDate(eventDate,false));
 
                             Picasso.get().
                                     load(imageUrl)
                                     .placeholder(R.drawable.loading)
                                     .error(R.drawable.error)
                                     .into(binding.detailsImage);
-
-                            binding.detailsTypeText.setText(getString(R.string.event_type_text) + " " +
-                                    detailsHelper.getEventSegmentInfo(event, event.getClassifications()));
-
-                            binding.detailsVenueText.setText
-                                    (detailsHelper.getVenueInfo(event, event.getEmbedded().getVenues()));
 
                             binding.buyTicketButton.setOnClickListener(v -> buyTicket(event.getUrl()));
                         }

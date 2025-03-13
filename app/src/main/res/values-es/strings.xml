@@ -44,6 +44,7 @@
     <string name="email_text">Correo electrónico :</string>
     <string name="enter_password_for_delete_account">Ingresa tu contraseña para eliminar tu cuenta.</string>
     <string name="email_verification_message">Para iniciar sesión, debes verificar tu dirección de correo electrónico desde el enlace enviado.</string>
+    <string name="event_description_text">¡El evento %s se reúne con usted para recibir eventos valiosos el %s | %s!</string>
     <string name="event_type_text">Tipo de evento: </string>
     <string name="exit_text">Salir</string>
     <string name="exit_question_text">¿Estás seguro de que deseas salir de la aplicación?</string>

@@ -2,6 +2,7 @@
 <resources>
     <array name="preloaded_fonts" translatable="false">
         <item>@font/lexend</item>
+        <item>@font/lexend_bold</item>
         <item>@font/lexend_light</item>
         <item>@font/lexend_medium</item>
     </array>

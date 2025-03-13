@@ -36,6 +36,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -74,14 +75,23 @@ public class EventDetailsHelper { // simplifies event data management, reducing 
         return venueLongitude;
     }
 
-    public String getFormattedDate(String eventDate) { // return formatted date
+    public String getFormattedDate(String eventDate, boolean shouldShowHours) { // return formatted date
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && eventDate != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+
             ZonedDateTime dateTime = ZonedDateTime.parse(eventDate, formatter);
             ZonedDateTime localDateTime = dateTime.withZoneSameInstant(ZoneId.systemDefault());
-            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm");
-            String formattedDate = localDateTime.format(outputFormatter);
-            return formattedDate;
+
+
+            String format = (shouldShowHours)
+                    ? "dd/MM/yyyy - HH:mm"
+                    : "dd MMMM yyyy";
+
+            String code = new LocalDataManager(context).
+                    getStringData(context.getString(R.string.language_code_key),"tr");
+
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(format,new Locale(code));
+            return localDateTime.format(outputFormatter);
         }
         return context.getString(R.string.date_not_founded_text);
     }

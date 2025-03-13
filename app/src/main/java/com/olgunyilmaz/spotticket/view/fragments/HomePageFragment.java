@@ -25,26 +25,23 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.olgunyilmaz.spotticket.CircleTransform;
 import com.olgunyilmaz.spotticket.R;
-import com.olgunyilmaz.spotticket.adapter.CategoryAdapter;
 import com.olgunyilmaz.spotticket.adapter.EventAdapter;
 import com.olgunyilmaz.spotticket.databinding.FragmentHomePageBinding;
 import com.olgunyilmaz.spotticket.model.CategoryResponse;
 import com.olgunyilmaz.spotticket.model.EventResponse;
+import com.olgunyilmaz.spotticket.util.EventDetailsHelper;
 import com.olgunyilmaz.spotticket.util.HomePageHelper;
 import com.olgunyilmaz.spotticket.util.RecommendedEventManager;
-import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.util.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.util.UserManager;
 import com.squareup.picasso.Picasso;
@@ -56,11 +53,10 @@ import java.util.Random;
 public class HomePageFragment extends Fragment {
     private FragmentHomePageBinding binding;
     private FragmentManager fragmentManager;
-    private ArrayList<CategoryResponse> categories;
     private Runnable runnable;
     private Handler handler;
     private HomePageHelper helper;
-    private FirebaseAuth auth;
+    private EventDetailsHelper detailsHelper;
 
 
     @Override
@@ -81,16 +77,9 @@ public class HomePageFragment extends Fragment {
 
         helper = new HomePageHelper(requireActivity());
 
-        categories = helper.getCategories();
-
         fragmentManager = requireActivity().getSupportFragmentManager();
 
-        auth = FirebaseAuth.getInstance();
-
-        Picasso.get().load(UserFavoritesManager.getInstance().userFavorites.get(0).getImageUrl())
-                .placeholder(R.drawable.loading)
-                .error(R.drawable.error)
-                .into(binding.recommendedEventImage);
+        detailsHelper = new EventDetailsHelper(requireActivity());
 
         Picasso.get().load(UserManager.getInstance().ppUrl)
                 .placeholder(R.drawable.loading)
@@ -100,10 +89,12 @@ public class HomePageFragment extends Fragment {
 
         binding.homeUsernameText.setText("Olgun Yılmaz");
 
+        binding.seeAllText.setOnClickListener(v -> seeAll());
+
 
         if (RecommendedEventManager.getInstance().recommendedEvents != null) {
             if (!RecommendedEventManager.getInstance().recommendedEvents.isEmpty()) {
-                updateImage(10); // update per 10 seconds
+                updateEvent(10); // update per 10 seconds
             }
 
         }
@@ -132,6 +123,12 @@ public class HomePageFragment extends Fragment {
         eventAdapter.notifyDataSetChanged();
     }
 
+    private void seeAll(){
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        DisplayFragment fragment = new DisplayFragment();
+        fragmentTransaction.replace(R.id.fragmentContainerView,fragment).commit();
+    }
+
     private void searchEventByKeyword() {
         String keyword = binding.homeSearchEditText.getText().toString();
 
@@ -153,7 +150,7 @@ public class HomePageFragment extends Fragment {
 
     }
 
-    private void updateImage(int frequency) {
+    private void updateEvent(int frequency) {
         handler = new Handler();
         runnable = new Runnable() {
             @Override
@@ -170,6 +167,9 @@ public class HomePageFragment extends Fragment {
                             .placeholder(R.drawable.loading)
                             .error(R.drawable.error)
                             .into(binding.recommendedEventImage);
+
+                    String date = event.getDates().getStart().getDateTime();
+                    binding.homeDateText.setText(detailsHelper.getFormattedDate(date,false));
 
 
                     binding.recommendedEventLayout.setOnClickListener(v ->

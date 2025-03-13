@@ -50,7 +50,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/fixedBar"
 
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -76,7 +76,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
 
-            app:srcCompat="@drawable/home_icon"
+            app:srcCompat="@drawable/home_selected"
 
             app:layout_constraintHorizontal_bias="0.05"
 
@@ -115,7 +115,7 @@
 
             app:layout_constraintWidth_percent="0.2"
 
-            app:srcCompat="@drawable/my_events_icon"
+            app:srcCompat="@drawable/bookmark_icon"
 
             app:layout_constraintBottom_toBottomOf="@id/homeButton"
             app:layout_constraintEnd_toEndOf="parent"

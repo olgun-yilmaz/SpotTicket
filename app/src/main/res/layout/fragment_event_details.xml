@@ -22,166 +22,264 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.fragments.EventDetailsFragment">
 
-    <ImageView
-        android:id="@+id/detailsImage"
-
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.4"
+        android:id="@+id/recommendedEventLayout"
 
-        android:scaleType="centerCrop"
+        app:layout_constraintHeight_percent="0.55"
 
-        android:src="@drawable/loading"
-
-        app:layout_constraintVertical_bias="0.13"
+        app:layout_constraintVertical_bias="0.35"
 
         app:layout_constraintEnd_toEndOf="parent"
+
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <CheckBox
-        android:id="@+id/favCheckBox"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/homeCardView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clipToOutline="true"
 
-        app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/homeImageContainer"
+                android:layout_width="match_parent"
+                android:background="@color/black"
+                android:layout_height="match_parent">
 
-        android:button="@drawable/fav_empty_icon"
+                <ImageView
+                    android:background="@color/white"
+                    android:id="@+id/detailsImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/loading"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
 
-        app:layout_constraintEnd_toEndOf="@id/detailsImage"
-        app:layout_constraintStart_toStartOf="@+id/detailsImage"
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/detailsImage">
+        </androidx.cardview.widget.CardView>
 
-    </CheckBox>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <TextView
-        android:id="@+id/detailsNameText"
-
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-
-        app:layout_constraintVertical_bias="0.55"
-
-        android:text="@string/loading_text"
-        android:textSize="20sp"
-        android:gravity="center"
-
-        app:layout_constraintEnd_toEndOf="@+id/detailsImage"
-        app:layout_constraintStart_toStartOf="@+id/detailsImage"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <TextView
-        android:id="@+id/detailsTypeText"
-
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.03"
-
-        app:layout_constraintVertical_bias="0.62"
-
-        android:text="@string/loading_text"
-        android:textSize="17sp"
-        android:gravity="center"
-
-        app:layout_constraintEnd_toEndOf="@+id/detailsDateText"
-        app:layout_constraintStart_toStartOf="@+id/detailsDateText"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <TextView
-        android:id="@+id/detailsVenueText"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/detailsBar"
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.03"
 
-        app:layout_constraintVertical_bias="0.69"
-
-        android:text="@string/loading_text"
-        android:textSize="17sp"
-        android:gravity="center"
-
-        app:layout_constraintEnd_toEndOf="@+id/detailsDateText"
-        app:layout_constraintStart_toStartOf="@+id/detailsDateText"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <TextView
-        android:id="@+id/detailsDateText"
-
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.03"
-
-        app:layout_constraintVertical_bias="0.76"
-
-        android:text="@string/loading_text"
-        android:textSize="17sp"
-        android:gravity="center"
-
-        app:layout_constraintEnd_toEndOf="@+id/detailsNameText"
-        app:layout_constraintStart_toStartOf="@+id/detailsNameText"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <ImageView
-        android:id="@+id/mapButton"
-
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.1"
-        app:layout_constraintWidth_percent="0.8"
-
-        app:layout_constraintVertical_bias="0.87"
-
-        app:srcCompat="@drawable/map_button_icon"
-
-        android:onClick="goToEvent"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintVertical_bias="0.02"
 
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/detailsBackButton"
+
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:src="@drawable/back_button"
+
+            app:layout_constraintWidth_percent="0.15"
+            app:layout_constraintHorizontal_bias="0.05"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            />
+
+        <CheckBox
+            android:id="@+id/favCheckBox"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            app:layout_constraintWidth_percent="0.15"
+
+            app:layout_constraintHorizontal_bias="0.95"
+
+            android:button="@drawable/fav_empty_icon"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:fontFamily="@font/lexend_medium"
+        android:id="@+id/detailsNameText"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:text="@string/loading_text"
+        android:textColor="@color/event_name_gray"
+        android:textSize="24sp"
+        app:layout_constraintWidth_percent="0.7"
+
+        app:layout_constraintVertical_bias="0.62"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/eventDetailsLayout"
 
 
-        />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        app:layout_constraintVertical_bias="0.7"
+
+        app:layout_constraintHeight_percent="0.05"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/detailsLocationIcon"
+
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:src="@drawable/placeholder"
+
+            app:layout_constraintWidth_percent="0.1"
+            app:layout_constraintHorizontal_bias="0.12"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/detailsLocationText"
+
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+
+            app:layout_constraintWidth_percent="0.3"
+            app:layout_constraintHorizontal_bias="0.27"
+
+            android:gravity="center"
+
+            android:text="@string/loading_text"
+            android:textColor="@color/welcome_back_text_color"
+            android:textSize="16sp"
+            android:fontFamily="@font/lexend_light"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+        <ImageView
+            android:id="@+id/detailsDateIcon"
+
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:src="@drawable/calendar"
+
+            app:layout_constraintWidth_percent="0.1"
+            app:layout_constraintHorizontal_bias="0.6"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/detailsDateText"
+
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            app:layout_constraintWidth_percent="0.25"
+            app:layout_constraintHorizontal_bias="0.85"
+
+            android:gravity="center"
+
+            android:text="@string/loading_text"
+            android:textColor="@color/welcome_back_text_color"
+            android:textSize="16sp"
+            android:fontFamily="@font/lexend_light"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/detailsDescriptionText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:text="@string/loading_text"
+        android:fontFamily="@font/lexend_light"
+        android:textSize="16sp"
+        android:textColor="@color/description_text_color"
+
+        app:layout_constraintHeight_percent="0.12"
+
+        android:gravity="center"
+
+        app:layout_constraintVertical_bias="0.83"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/buyTicketButton"
+        app:layout_constraintStart_toStartOf="@id/buyTicketButton"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 
     <Button
         android:id="@+id/buyTicketButton"
 
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
 
-        android:background="#611F1F"
-        android:shadowColor="#835656"
-        app:strokeColor="#BFA2A2"
+        android:background="@drawable/buy_ticket_background"
 
+        android:fontFamily="@font/lexend_bold"
         android:text="@string/buy_text"
-        android:textColor="#BD1515"
-        android:textColorHighlight="#BD8F8F"
-        android:textColorHint="#DEB3B3"
-        android:textColorLink="#DE1E1E"
+        android:textSize="32sp"
+        android:textColor="@color/white"
+
+        app:layout_constraintHeight_percent="0.0925"
+        app:layout_constraintWidth_percent="0.85"
 
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapButton"
-
-        app:layout_constraintEnd_toEndOf="@+id/mapButton"
-        app:layout_constraintStart_toStartOf="@+id/mapButton"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detailsDescriptionText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
