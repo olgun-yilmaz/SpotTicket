@@ -62,6 +62,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         String formattedDate = helper.getFormattedDate(event.getDates().getStart().getDateTime(),false);
 
         Picasso.get().load(event.getHighQualityImage())
+                .resize(1024,1024)
+                .onlyScaleDown() // if smaller don't resize
                 .placeholder(R.drawable.loading)
                 .error(R.drawable.error)
                 .into(holder.binding.eventBackgroundImage);

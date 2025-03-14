@@ -44,7 +44,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.model.EventResponse;
-import com.olgunyilmaz.spotticket.util.MainHelper;
 import com.olgunyilmaz.spotticket.util.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.databinding.FragmentEventDetailsBinding;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
@@ -231,6 +230,8 @@ public class EventDetailsFragment extends Fragment {
 
                             Picasso.get().
                                     load(imageUrl)
+                                    .resize(1024,1024)
+                                    .onlyScaleDown() // if smaller don't resize
                                     .placeholder(R.drawable.loading)
                                     .error(R.drawable.error)
                                     .into(binding.detailsImage);

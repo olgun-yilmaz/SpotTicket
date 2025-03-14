@@ -116,11 +116,13 @@ public class DisplayFragment extends Fragment {
         runnable = new Runnable() {
             @Override
             public void run() {
-                counter++;
-                int numPoint = counter % 4;
-                String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
-                binding.fragmentResultText.setText(getString(R.string.plain_loading_text) + numPointText);
-                handler.postDelayed(runnable, 1000);
+                if(isAdded()){
+                    counter++;
+                    int numPoint = counter % 4;
+                    String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
+                    binding.fragmentResultText.setText(getString(R.string.plain_loading_text) + numPointText);
+                    handler.postDelayed(runnable, 1000);
+                }
             }
         };
         handler.post(runnable);

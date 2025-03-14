@@ -90,7 +90,7 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
         return dialog;
     }
 
-    private void deleteProfileImage(String email, AlertDialog dialog){
+    private void deleteProfileImage(String email, AlertDialog dialog) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         String dir_name = "pp";
         StorageReference storageRef = storage.getReference();
@@ -115,7 +115,7 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
                                 .delete();
                     }
                     deleteUserData(email, dialog);
-                }else{
+                } else {
                     deleteAccount(dialog); // anyway delete account
                 }
             }
@@ -147,7 +147,7 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
 
     private void goBackToOnBoarding() {
         handler.removeCallbacks(runnable);
-        Toast.makeText(requireActivity(),getString(R.string.successfully_delete_account_text),Toast.LENGTH_LONG).show();
+        Toast.makeText(requireActivity(), getString(R.string.successfully_delete_account_text), Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getActivity(), OnBoardingActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
@@ -171,7 +171,7 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
         }
     }
 
-    private void deleteAccount(AlertDialog dialog){
+    private void deleteAccount(AlertDialog dialog) {
         user.delete()
                 .addOnSuccessListener(aVoid -> {
 
@@ -193,11 +193,13 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
         runnable = new Runnable() {
             @Override
             public void run() {
-                counter++;
-                int numPoint = counter % 4;
-                String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
-                dialog.setMessage(getString(R.string.deleting_text) + numPointText);
-                handler.postDelayed(runnable, 1000);
+                if (isAdded()) {
+                    counter++;
+                    int numPoint = counter % 4;
+                    String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
+                    dialog.setMessage(getString(R.string.deleting_text) + numPointText);
+                    handler.postDelayed(runnable, 1000);
+                }
             }
         };
         handler.post(runnable);

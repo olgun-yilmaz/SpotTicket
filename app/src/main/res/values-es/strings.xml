@@ -101,7 +101,7 @@
     <string name="title_language">Idioma : </string>
     <string name="title_log_out">Finalizar la sesión</string>
     <string name="title_notifications">Notificaciones</string>
-    <string name="title_settings">Ayarlar</string>
+    <string name="title_settings">Ajustes</string>
 
     <string name="weak_search_error">¡Debes ingresar al menos 3 letras!</string>
     <string name="welcome_message">Bienvenido de nuevo</string>

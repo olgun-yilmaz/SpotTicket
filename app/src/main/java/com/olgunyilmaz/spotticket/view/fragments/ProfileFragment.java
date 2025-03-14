@@ -159,6 +159,8 @@ public class ProfileFragment extends Fragment {
         if (!UserManager.getInstance().ppUrl.isEmpty()) {
             Picasso.get()
                     .load(UserManager.getInstance().ppUrl)
+                    .resize(1024,1024)
+                    .onlyScaleDown() // if smaller don't resize
                     .placeholder(R.drawable.loading)
                     .error(R.drawable.error)
                     .into(binding.profileImage);

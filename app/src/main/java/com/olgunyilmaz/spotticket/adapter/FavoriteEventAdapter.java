@@ -60,6 +60,8 @@ public class FavoriteEventAdapter extends RecyclerView.Adapter<FavoriteEventAdap
         if (!favoriteEvent.getImageUrl().isEmpty()) {
             Picasso.get()
                     .load(favoriteEvent.getImageUrl())
+                    .resize(1024,1024)
+                    .onlyScaleDown()
                     .placeholder(R.drawable.loading)
                     .error(R.drawable.error)
                     .into(holder.binding.favoriteEventImage);

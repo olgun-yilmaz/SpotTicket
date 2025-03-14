@@ -79,6 +79,8 @@ public class HomePageFragment extends Fragment {
         detailsHelper = new EventDetailsHelper(requireActivity());
 
         Picasso.get().load(UserManager.getInstance().ppUrl)
+                .resize(1024,1024)
+                .onlyScaleDown() // if smaller don't resize
                 .placeholder(R.drawable.loading)
                 .error(R.drawable.error)
                 .transform(new CircleTransform())
@@ -132,6 +134,9 @@ public class HomePageFragment extends Fragment {
     }
 
     private void seeAll(){
+        MainActivity activity = (MainActivity) requireActivity();
+        activity.binding.displayButton.setChecked(true);
+
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         DisplayFragment fragment = new DisplayFragment();
         fragmentTransaction.replace(R.id.fragmentContainerView,fragment).commit();
@@ -172,6 +177,8 @@ public class HomePageFragment extends Fragment {
 
                     Picasso.get()
                             .load(event.getHighQualityImage())
+                            .resize(1024,1024)
+                            .onlyScaleDown() // if smaller don't resize
                             .placeholder(R.drawable.loading)
                             .error(R.drawable.error)
                             .into(binding.recommendedEventImage);

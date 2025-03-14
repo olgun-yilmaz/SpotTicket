@@ -43,7 +43,6 @@ import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.util.OnBoardingHelper;
 import com.olgunyilmaz.spotticket.util.UserManager;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
-import com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -83,6 +82,8 @@ public class SettingsFragment extends Fragment {
         fragmentManager = activity.getSupportFragmentManager();
 
         Picasso.get().load(UserManager.getInstance().ppUrl)
+                .resize(1024,1024)
+                .onlyScaleDown() // if smaller don't resize
                 .placeholder(R.drawable.loading)
                 .error(R.drawable.error)
                 .transform(new CircleTransform())
@@ -134,7 +135,7 @@ public class SettingsFragment extends Fragment {
         localDataManager.updateIntegerData(getString(R.string.language_counter_key), languageCounter);
 
         int selectedId = languageCounter % languages.size();
-        Language selectedLanguage = languages.get(selectedId);
+        selectedLanguage = languages.get(selectedId);
 
         localDataManager.updateStringData(getString(R.string.language_code_key), selectedLanguage.getCode());
 
