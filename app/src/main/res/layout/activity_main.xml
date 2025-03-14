@@ -151,7 +151,7 @@
 
             android:button="@null"
 
-            android:onClick="goToProfileScreen" />
+            android:onClick="goToSettingsScreen" />
 
 
     </RadioGroup>

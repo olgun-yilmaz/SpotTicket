@@ -99,6 +99,12 @@
     <string name="validation_error_text">Authentifizierung fehlgeschlagen!</string>
 
     <string name="title_activity_maps">Kartenaktivität</string>
+    <string name="title_change_password">Passwort ändern</string>
+    <string name="title_edit">Bearbeiten</string>
+    <string name="title_language">Sprache :</string>
+    <string name="title_log_out">Abmelden</string>
+    <string name="title_notifications">Benachrichtigungen</string>
+    <string name="title_settings">Einstellungen</string>
 
     <string name="weak_search_error">Du musst mindestens 3 Buchstaben eingeben!</string>
     <string name="welcome_message">Willkommen zurück</string>

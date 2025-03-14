@@ -96,6 +96,12 @@
     <string name="validation_error_text">Ошибка аутентификации!</string>
 
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_change_password">Изменение пароля</string>
+    <string name="title_edit">Редактировать</string>
+    <string name="title_language">Язык : </string>
+    <string name="title_log_out">Выход</string>
+    <string name="title_notifications">Уведомления</string>
+    <string name="title_settings">Настройки</string>
 
     <string name="weak_search_error">Вы должны ввести минимум 3 буквы!</string>
     <string name="welcome_message">Добро пожаловать</string>

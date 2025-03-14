@@ -96,6 +96,12 @@
     <string name="validation_error_text">Échec de lauthentification !</string>
 
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_change_password">Changer le mot de passe</string>
+    <string name="title_edit">Modifier</string>
+    <string name="title_language">Langue : </string>
+    <string name="title_log_out">Se déconnecter</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_settings">Paramètres</string>
 
     <string name="weak_search_error">Veuillez saisir au moins 3 lettres !</string>
     <string name="welcome_message">Content de te revoir</string>

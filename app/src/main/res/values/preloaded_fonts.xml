@@ -5,5 +5,7 @@
         <item>@font/lexend_bold</item>
         <item>@font/lexend_light</item>
         <item>@font/lexend_medium</item>
+        <item>@font/roboto</item>
+        <item>@font/roboto_medium</item>
     </array>
 </resources>

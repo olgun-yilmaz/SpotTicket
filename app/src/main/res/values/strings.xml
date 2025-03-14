@@ -99,6 +99,12 @@
     <string name="validation_error_text">Kimlik doğrulama başarısız!</string>
 
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_change_password">Şifre Değiştirme</string>
+    <string name="title_edit">Düzenle</string>
+    <string name="title_language">Dil : </string>
+    <string name="title_log_out">Oturumu Kapat</string>
+    <string name="title_notifications">Bildirimler</string>
+    <string name="title_settings">Ayarlar</string>
 
     <string name="weak_search_error">En az 3 harf girmelisiniz!</string>
     <string name="welcome_message">Seni tekrar görmek güzel</string>

@@ -32,7 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.olgunyilmaz.spotticket.CircleTransform;
+import com.olgunyilmaz.spotticket.util.CircleTransform;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.adapter.EventAdapter;
 import com.olgunyilmaz.spotticket.databinding.FragmentHomePageBinding;

@@ -36,8 +36,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
+import com.olgunyilmaz.spotticket.model.Language;
 import com.olgunyilmaz.spotticket.service.RetrofitClient;
 import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
+
+import java.util.ArrayList;
+import java.util.function.Consumer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,6 +52,26 @@ public class OnBoardingHelper {
 
     public OnBoardingHelper(Context context) {
         this.context = context;
+    }
+
+    public ArrayList<Language> getLanguageData(Consumer<ArrayList<Language>> function){
+        ArrayList<Language> languageList = new ArrayList<>();
+        languageList.add(new Language(R.drawable.icon_tr,"tr","Türkçe"));
+        languageList.add(new Language(R.drawable.icon_en,"en","English"));
+        languageList.add(new Language(R.drawable.icon_de,"de","Deutsch"));
+        languageList.add(new Language(R.drawable.icon_fr,"fr","Français"));
+        languageList.add(new Language(R.drawable.icon_it,"it","Italiano"));
+        languageList.add(new Language(R.drawable.icon_ko,"ko","한국인"));
+        languageList.add(new Language(R.drawable.icon_es,"es","Español"));
+        languageList.add(new Language(R.drawable.icon_ru,"ru","Русский"));
+
+        if(function != null){
+            function.accept(languageList);
+        }else{
+            return languageList;
+        }
+
+        return null;
     }
 
     public void goToActivity(Class<?> activityClass,String eventName) {

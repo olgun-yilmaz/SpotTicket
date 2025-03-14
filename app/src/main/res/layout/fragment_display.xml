@@ -20,6 +20,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.fragments.DisplayFragment">
 
@@ -105,7 +106,7 @@
         android:layout_width="0dp"
         app:layout_constraintWidth_percent="0.9"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.83"
+        app:layout_constraintHeight_percent="0.65"
 
         app:layout_constraintVertical_bias="0.1"
 
@@ -121,12 +122,13 @@
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.05"
 
-        app:layout_constraintVertical_bias="1"
+        app:layout_constraintVertical_bias="0.83"
 
         android:text="@string/searching_text"
         android:textAlignment="textEnd"
         android:textSize="15sp"
         android:textStyle="bold"
+        android:textColor="@color/natural_gray"
 
         app:layout_constraintEnd_toEndOf="@id/selectLayout"
         app:layout_constraintStart_toStartOf="@id/selectLayout"

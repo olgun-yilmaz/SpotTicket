@@ -49,7 +49,6 @@ public class OnBoardingActivity extends AppCompatActivity {
     private Handler handler;
     private OnBoardingHelper helper;
     private LocalDataManager localDataManager;
-    private ArrayList<Language> languageList;
     private Language selectedLanguage;
     private int pointCounter, languageCounter = 0;
 
@@ -57,8 +56,10 @@ public class OnBoardingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        helper = new OnBoardingHelper(OnBoardingActivity.this);
         localDataManager = new LocalDataManager(OnBoardingActivity.this);
-        getLanguageData();
+
+        helper.getLanguageData(this::selectLanguage);
         localDataManager.updateStringData(getString(R.string.language_code_key),selectedLanguage.getCode());
 
         binding = ActivityOnBoardingBinding.inflate(getLayoutInflater());
@@ -74,8 +75,6 @@ public class OnBoardingActivity extends AppCompatActivity {
         auth.setLanguageCode(selectedLanguage.getCode());
 
         db = FirebaseFirestore.getInstance();
-
-        helper = new OnBoardingHelper(OnBoardingActivity.this);
 
         boolean isFromLogin = getIntent().getBooleanExtra(getString(R.string.from_login_key), false);
 
@@ -108,7 +107,7 @@ public class OnBoardingActivity extends AppCompatActivity {
             }
         }
 
-        binding.languageButton.setOnClickListener(v -> changeLanguage());
+        binding.languageButton.setOnClickListener(v -> changeLanguage(helper.getLanguageData(null)));
 
         binding.nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +124,7 @@ public class OnBoardingActivity extends AppCompatActivity {
     }
 
     @SuppressLint("ObsoleteSdkInt")
-    private void selectLanguage(){
+    private void selectLanguage(ArrayList<Language> languageList){
         languageCounter = localDataManager.getIntegerData(getString(R.string.language_counter_key),0);
 
         int selectedId = languageCounter % languageList.size();
@@ -145,7 +144,7 @@ public class OnBoardingActivity extends AppCompatActivity {
         }
     }
 
-    private void changeLanguage(){
+    public void changeLanguage(ArrayList<Language> languageList){
         languageCounter = localDataManager.getIntegerData(getString(R.string.language_counter_key),0);
 
         languageCounter += 1;
@@ -160,19 +159,6 @@ public class OnBoardingActivity extends AppCompatActivity {
 
     }
 
-    private void getLanguageData(){
-        languageList = new ArrayList<>();
-        languageList.add(new Language(R.drawable.icon_tr,"tr","Türkçe"));
-        languageList.add(new Language(R.drawable.icon_en,"en","English"));
-        languageList.add(new Language(R.drawable.icon_de,"de","Deutsch"));
-        languageList.add(new Language(R.drawable.icon_fr,"fr","Français"));
-        languageList.add(new Language(R.drawable.icon_it,"it","Italiano"));
-        languageList.add(new Language(R.drawable.icon_ko,"ko","한국인"));
-        languageList.add(new Language(R.drawable.icon_es,"es","Español"));
-        languageList.add(new Language(R.drawable.icon_ru,"ru","Русский"));
-
-        selectLanguage(); // after get data select language
-    }
 
     private void letsGo() { // end process
         binding.nextButton.setEnabled(true); // u can go

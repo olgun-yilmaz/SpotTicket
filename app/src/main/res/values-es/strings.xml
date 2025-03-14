@@ -96,6 +96,12 @@
     <string name="validation_error_text">¡Autenticación fallida!</string>
 
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_change_password">Cambiar contraseña</string>
+    <string name="title_edit">Editar</string>
+    <string name="title_language">Idioma : </string>
+    <string name="title_log_out">Finalizar la sesión</string>
+    <string name="title_notifications">Notificaciones</string>
+    <string name="title_settings">Ayarlar</string>
 
     <string name="weak_search_error">¡Debes ingresar al menos 3 letras!</string>
     <string name="welcome_message">Bienvenido de nuevo</string>

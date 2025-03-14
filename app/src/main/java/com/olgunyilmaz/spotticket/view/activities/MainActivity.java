@@ -37,6 +37,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.olgunyilmaz.spotticket.view.fragments.SettingsFragment;
 import com.olgunyilmaz.spotticket.notification.NotificationScheduler;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityMainBinding;
@@ -48,7 +49,6 @@ import com.olgunyilmaz.spotticket.util.UserManager;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.view.fragments.DisplayFragment;
 import com.olgunyilmaz.spotticket.view.fragments.FavoritesFragment;
-import com.olgunyilmaz.spotticket.view.fragments.ProfileFragment;
 import com.olgunyilmaz.spotticket.view.fragments.HomePageFragment;
 
 import java.util.ArrayList;
@@ -116,8 +116,8 @@ public class MainActivity extends AppCompatActivity {
         UserManager.getInstance().ppUrl = ""; // clean for next user
     }
 
-    public void goToProfileScreen(View view) {
-        helper.replaceFragment(new ProfileFragment(), view, fragmentManager);
+    public void goToSettingsScreen(View view) {
+        helper.replaceFragment(new SettingsFragment(), view, fragmentManager);
     }
 
     private void setNotificationAlert() {
