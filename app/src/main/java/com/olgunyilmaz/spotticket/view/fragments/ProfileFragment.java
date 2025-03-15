@@ -37,6 +37,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.MediaStore;
 import android.util.Log;
@@ -81,6 +83,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseStorage storage;
     private FirebaseUser user;
     private String countryCode;
+    private FragmentManager fragmentManager;
 
 
     @Override
@@ -109,6 +112,8 @@ public class ProfileFragment extends Fragment {
 
         displayMode();
 
+        fragmentManager = requireActivity().getSupportFragmentManager();
+
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         String countryKey = getString(R.string.language_code_key);
@@ -126,6 +131,14 @@ public class ProfileFragment extends Fragment {
 
         binding.editButton.setOnClickListener(v -> editMode());
 
+        binding.profileBackButton.setOnClickListener(v -> goBackToSettings());
+
+    }
+
+    private void goBackToSettings(){
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        SettingsFragment fragment = new SettingsFragment();
+        transaction.replace(R.id.fragmentContainerView,fragment).commit();
     }
 
     private void showDeleteAccountDialog() {

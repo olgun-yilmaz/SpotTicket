@@ -27,5 +27,7 @@
     <color name="event_name_gray">#F8FAFC</color>
     <color name="date_text_color">#CBD5E1</color>
     <color name="description_text_color">#F8FAFC</color>
+    <color name="sign_up_background">#010827</color>
+    <color name="hint">#928787</color>
 
 </resources>

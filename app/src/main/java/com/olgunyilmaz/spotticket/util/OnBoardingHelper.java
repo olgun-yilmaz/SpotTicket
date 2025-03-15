@@ -87,6 +87,7 @@ public class OnBoardingHelper {
 
     public void getPp(String email, Runnable updateLoadingText, FirebaseFirestore db,
                       LocalDataManager ldm, Runnable letsGo) { // download 1
+        UserManager.getInstance().ppUrl = "error.com";
 
         updateLoadingText.run(); // start process
         db.collection(context.getString(R.string.users_collection_key))
