@@ -45,7 +45,6 @@ import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.notification.NotificationHelper;
 import com.olgunyilmaz.spotticket.util.MainHelper;
 import com.olgunyilmaz.spotticket.util.UserFavoritesManager;
-import com.olgunyilmaz.spotticket.util.UserManager;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.view.fragments.DisplayFragment;
 import com.olgunyilmaz.spotticket.view.fragments.FavoritesFragment;
@@ -58,7 +57,6 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
     public ActivityMainBinding binding;
     private FragmentManager fragmentManager;
-    private FirebaseAuth auth;
     private ActivityResultLauncher<String> permissionLauncher;
     private LocalDataManager localDataManager;
     private final ArrayList<HashMap<String, Object>> pendingNotifications = new ArrayList<>();
@@ -83,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        auth = FirebaseAuth.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
 
         localDataManager = new LocalDataManager(this);
 
@@ -104,18 +102,6 @@ public class MainActivity extends AppCompatActivity {
 
         binding.myEventsButton.setOnClickListener(v -> helper.replaceFragment(new FavoritesFragment(), v, fragmentManager));
     }
-
-    public void signOut(View view) {
-        auth.signOut();
-        helper.goToLoginActivity();
-
-        LocalDataManager localDataManager = new LocalDataManager(MainActivity.this);
-        localDataManager.deleteData(getString(R.string.city_key));
-        localDataManager.deleteData(getString(R.string.category_key));
-
-        UserManager.getInstance().ppUrl = ""; // clean for next user
-    }
-
     public void goToSettingsScreen(View view) {
         helper.replaceFragment(new SettingsFragment(), view, fragmentManager);
     }

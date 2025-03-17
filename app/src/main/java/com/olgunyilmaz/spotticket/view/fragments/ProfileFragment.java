@@ -123,8 +123,8 @@ public class ProfileFragment extends Fragment {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        binding.emailText.setText(user.getDisplayName());
-        binding.usernameText.setText(user.getEmail());
+        binding.emailText.setText(UserManager.getInstance().name + " "+ UserManager.getInstance().surname);
+        binding.usernameText.setText(UserManager.getInstance().email);
         binding.creationDateText.setText(getCreationDate());
 
         binding.deleteMyAccountButton.setOnClickListener(v -> showDeleteAccountDialog());
@@ -267,6 +267,7 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    System.out.println(e.getMessage());
                 }
             });
         }

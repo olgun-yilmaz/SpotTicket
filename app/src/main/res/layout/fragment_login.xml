@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <!--
    Project: SpotTicket
    Copyright 2025 Olgun Yılmaz
@@ -17,122 +19,286 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".view.fragments.LoginFragment">
+    android:background="@color/sign_up_background"
+    tools:context=".view.fragments.SignUpFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/appTitleLayout"
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="@id/loginPasswordText"
+
+        app:layout_constraintHeight_percent="0.23"
+        app:layout_constraintStart_toStartOf="@id/loginPasswordText"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0">
+
+        <TextView
+            android:id="@+id/appNameText"
+
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+
+            android:fontFamily="@font/roboto_bold"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="41.58sp"
+
+            app:layout_constraintVertical_bias="0.13"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            app:layout_constraintHeight_percent="0.4"
+
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/appDescriptionText"
+
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+
+            android:fontFamily="@font/roboto_light"
+            android:gravity="center"
+
+            android:text="Etkinliğin adresi değiliz ama etkinliğin adresini size verebiliriz :)"
+            android:textColor="@color/white"
+
+            app:layout_constraintHeight_percent="0.3"
+
+            app:layout_constraintVertical_bias="0.8"
+
+            android:textSize="18.28sp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/line"
+
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:src="@drawable/line"
+
+            app:layout_constraintHeight_percent="0.03"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <EditText
         android:id="@+id/loginEmailText"
 
-        android:layout_height="0dp"
         android:layout_width="0dp"
+        android:layout_height="0dp"
 
-        app:layout_constraintHeight_percent="0.1"
-        app:layout_constraintWidth_percent="0.8"
-
-        app:layout_constraintVertical_bias="0.15"
+        android:textSize="18sp"
 
         android:hint="@string/email_text"
+
+        android:padding="10dp"
+        android:background="@drawable/rounded_corners"
+
         android:inputType="textEmailAddress"
 
+        android:textColor="@color/white"
+        android:textColorHint="@color/hint"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+
+        app:layout_constraintWidth_percent="0.9"
+
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.35" />
+
 
     <EditText
         android:id="@+id/loginPasswordText"
 
         android:layout_width="0dp"
-        app:layout_constraintHeight_percent="0.1"
         android:layout_height="0dp"
 
-        app:layout_constraintVertical_bias="0.35"
+        android:padding="10dp"
+        android:background="@drawable/rounded_corners"
+
+        android:textSize="18sp"
 
         android:hint="@string/password_text"
+
         android:inputType="textPassword"
 
+        android:textColor="@color/white"
+        android:textColorHint="@color/hint"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/loginEmailText"
+
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintStart_toStartOf="@id/loginEmailText"
+
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
 
-        app:layout_constraintEnd_toEndOf="@+id/loginEmailText"
-        app:layout_constraintStart_toStartOf="@+id/loginEmailText" />
-
-    <CheckBox
-        android:id="@+id/rememberMeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-
-        app:layout_constraintHeight_percent="0.05"
-
-        app:layout_constraintVertical_bias="0.5"
-        app:layout_constraintHorizontal_bias="0.9"
-
-        android:text="@string/remember_me_text"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        app:layout_constraintEnd_toEndOf="@+id/loginEmailText"
-        app:layout_constraintStart_toStartOf="@+id/loginEmailText">
-
-    </CheckBox>
-
-    <TextView
-        android:id="@+id/resetPasswordText"
-
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loginInnerLayout"
         android:layout_width="0dp"
-        app:layout_constraintHeight_percent="0.1"
         android:layout_height="0dp"
+
+        app:layout_constraintHeight_percent="0.1"
 
         app:layout_constraintVertical_bias="0.65"
+        app:layout_constraintHorizontal_bias="0.9"
 
-        android:text="@string/forgot_password_text"
-        android:textAlignment="center"
-        android:textColor="#03A9F4"
-        android:textSize="24sp"
-        android:gravity="center"
-
+        app:layout_constraintStart_toStartOf="@id/loginEmailText"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
 
-        app:layout_constraintEnd_toEndOf="@+id/loginPasswordText"
-        app:layout_constraintStart_toStartOf="@+id/loginPasswordText" />
+        app:layout_constraintEnd_toEndOf="@id/loginEmailText"
+
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/resetPasswordText"
+
+            android:layout_width="wrap_content"
+            app:layout_constraintHeight_percent="0.7"
+            android:layout_height="0dp"
+
+            app:layout_constraintVertical_bias="0.65"
+            app:layout_constraintHorizontal_bias="0"
+
+            android:text="@string/forgot_password_text"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:fontFamily="@font/roboto_bold"
+            android:gravity="center"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <CheckBox
+            android:id="@+id/rememberMeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+
+            app:layout_constraintHeight_percent="0.7"
+            app:layout_constraintHorizontal_bias="1"
+
+            android:text="@string/remember_me_text"
+            android:textColor="@color/white"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <Button
         android:id="@+id/loginButton"
-
         android:layout_width="0dp"
-        app:layout_constraintHeight_percent="0.08"
         android:layout_height="0dp"
-
-        app:layout_constraintVertical_bias="0.8"
 
         android:text="@string/login_text"
 
         app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="@id/loginPasswordText"
+
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintStart_toStartOf="@id/loginPasswordText"
+
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.8" />
 
-        app:layout_constraintEnd_toEndOf="@+id/resetPasswordText"
-        app:layout_constraintStart_toStartOf="@+id/resetPasswordText" />
 
-    <Button
-        android:id="@+id/loginSignUpButton"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loginLayout"
 
         android:layout_width="0dp"
-        app:layout_constraintHeight_percent="0.08"
         android:layout_height="0dp"
 
-        app:layout_constraintVertical_bias="0.95"
-
-        android:text="@string/sign_up_text"
-
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
 
-        app:layout_constraintEnd_toEndOf="@+id/resetPasswordText"
-        app:layout_constraintStart_toStartOf="@+id/resetPasswordText"/>
+        app:layout_constraintEnd_toEndOf="@id/loginPasswordText"
+
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintStart_toStartOf="@id/loginPasswordText"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.95">
+
+        <TextView
+            android:id="@+id/alreadyAccountText"
+
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+
+            android:fontFamily="@font/roboto_light"
+            android:gravity="center"
+            android:text="Hesabınız yok mu?"
+            android:textColor="@color/hint"
+            android:textSize="15sp"
+
+            app:layout_constraintHorizontal_bias="0.9"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            app:layout_constraintEnd_toStartOf="@id/loginSignUpButton"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.5" />
+
+        <TextView
+            android:id="@+id/loginSignUpButton"
+
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+
+            android:fontFamily="@font/roboto_bold"
+            android:gravity="center"
+
+            android:text="@string/sign_up_text"
+            android:textColor="@color/white"
+
+            app:layout_constraintHorizontal_bias="0.7"
+
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

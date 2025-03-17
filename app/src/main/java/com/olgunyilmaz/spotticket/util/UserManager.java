@@ -21,9 +21,17 @@ package com.olgunyilmaz.spotticket.util;
 public class UserManager {
     private static UserManager instance;
     public String ppUrl;
+    public String name;
+    public String surname;
+    public String city;
+    public String email;
 
     private UserManager(){
         ppUrl = "";
+        name = "";
+        city = "";
+        email = "";
+        surname = "";
     }
 
     public static UserManager getInstance() {

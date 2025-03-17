@@ -85,9 +85,8 @@ public class OnBoardingHelper {
         context.startActivity(intent);
     }
 
-    public void getPp(String email, Runnable updateLoadingText, FirebaseFirestore db,
-                      LocalDataManager ldm, Runnable letsGo) { // download 1
-        UserManager.getInstance().ppUrl = "error.com";
+    public void getUserData(String email, Runnable updateLoadingText, FirebaseFirestore db,
+                            LocalDataManager ldm, Runnable letsGo) { // download 1
 
         updateLoadingText.run(); // start process
         db.collection(context.getString(R.string.users_collection_key))
@@ -101,8 +100,14 @@ public class OnBoardingHelper {
                             if (result != null && !result.isEmpty()) {
                                 QueryDocumentSnapshot document = (QueryDocumentSnapshot) result.getDocuments().get(0);
                                 String ppUrl = document.getString(context.getString(R.string.profile_image_url_key));
-                                if (ppUrl != null) {
+                                String name = document.getString(context.getString(R.string.name_key));
+                                String surname = document.getString(context.getString(R.string.surname_key));
+                                String city = document.getString(context.getString(R.string.city_key));
+                                if (ppUrl != null) { // just pp is nullable
                                     UserManager.getInstance().ppUrl = ppUrl;
+                                    UserManager.getInstance().name = name;
+                                    UserManager.getInstance().surname = surname;
+                                    UserManager.getInstance().city = city;
                                 }
                             }
                         }
@@ -143,8 +148,10 @@ public class OnBoardingHelper {
     }
 
     private void getRecommendedEvents(LocalDataManager localDataManager, Runnable letsGo) { // download 3
-        String city = localDataManager.getStringData
-                (context.getString(R.string.city_key), context.getString(R.string.default_city_name));
+        //String city = localDataManager.getStringData
+                //(context.getString(R.string.city_key), context.getString(R.string.default_city_name));
+
+        String city = UserManager.getInstance().city;
 
         TicketmasterApiService apiService = RetrofitClient.getApiService();
         apiService.getEvents(TICKETMASTER_API_KEY, city, "", "")

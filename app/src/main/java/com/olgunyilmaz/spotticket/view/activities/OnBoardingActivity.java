@@ -36,6 +36,7 @@ import com.olgunyilmaz.spotticket.util.Constants;
 import com.olgunyilmaz.spotticket.util.OnBoardingHelper;
 import com.olgunyilmaz.spotticket.model.Language;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
+import com.olgunyilmaz.spotticket.util.UserManager;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -86,6 +87,8 @@ public class OnBoardingActivity extends AppCompatActivity {
             String email = getIntent().getStringExtra(getString(R.string.user_email_key));
             isRemember = true; // dont update data just give permission for login
 
+            UserManager.getInstance().email = email;
+
             downloadData(email);
         }
 
@@ -101,6 +104,7 @@ public class OnBoardingActivity extends AppCompatActivity {
                 String email = currentUser.getEmail().toString();
 
                 if (!email.isEmpty()) {
+                    UserManager.getInstance().email = email;
                     downloadData(email);
                 }
 
@@ -168,7 +172,7 @@ public class OnBoardingActivity extends AppCompatActivity {
 
     private void downloadData(String email) {
         binding.nextButton.setEnabled(false);
-        helper.getPp(email,this::updateLoadingText,db,localDataManager,this::letsGo);
+        helper.getUserData(email,this::updateLoadingText,db,localDataManager,this::letsGo);
     }
 
     private void updateLoadingText() {

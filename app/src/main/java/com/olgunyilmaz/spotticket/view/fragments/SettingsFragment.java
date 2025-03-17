@@ -35,11 +35,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.olgunyilmaz.spotticket.model.Language;
 import com.olgunyilmaz.spotticket.util.CircleTransform;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentSettingsBinding;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
+import com.olgunyilmaz.spotticket.util.MainHelper;
 import com.olgunyilmaz.spotticket.util.OnBoardingHelper;
 import com.olgunyilmaz.spotticket.util.UserManager;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
@@ -81,16 +83,22 @@ public class SettingsFragment extends Fragment {
 
         fragmentManager = activity.getSupportFragmentManager();
 
-        Picasso.get().load(UserManager.getInstance().ppUrl)
-                .resize(1024,1024)
-                .onlyScaleDown() // if smaller don't resize
-                .placeholder(R.drawable.loading)
-                .error(R.drawable.error)
-                .transform(new CircleTransform())
-                .into(binding.settingsProfileImage);
+        if(UserManager.getInstance().ppUrl.isEmpty()){
+            binding.settingsProfileImage.setImageResource(R.drawable.sample_profile_image);
+        }else{
+            Picasso.get().load(UserManager.getInstance().ppUrl)
+                    .resize(1024,1024)
+                    .onlyScaleDown() // if smaller don't resize
+                    .placeholder(R.drawable.loading)
+                    .error(R.drawable.error)
+                    .transform(new CircleTransform())
+                    .into(binding.settingsProfileImage);
+
+        }
 
         binding.settingsEditButton.setOnClickListener(v -> goToProfile());
         binding.settingsLanguageLayout.setOnClickListener(v -> changeLanguage(helper.getLanguageData(null)));
+        binding.settingsLogOutLayout.setOnClickListener(v ->signOut());
     }
 
     private void goToProfile() {
@@ -143,5 +151,18 @@ public class SettingsFragment extends Fragment {
 
         recreate(activity);
     }
+
+    private void signOut() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.signOut();
+        new MainHelper((MainActivity) requireContext()).goToLoginActivity();
+
+        LocalDataManager localDataManager = new LocalDataManager(requireContext());
+        localDataManager.deleteData(getString(R.string.city_key));
+        localDataManager.deleteData(getString(R.string.category_key));
+
+        UserManager.getInstance().ppUrl = ""; // clean for next user
+    }
+
 
 }

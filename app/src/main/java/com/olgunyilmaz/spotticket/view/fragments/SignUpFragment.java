@@ -246,7 +246,7 @@ public class SignUpFragment extends Fragment implements SelectCityFragment.CityS
                     user.put(getString(R.string.name_key), name);
                     user.put(getString(R.string.surname_key), surname);
                     user.put(getString(R.string.city_key), city);
-                    user.put(getString(R.string.profile_image_url_key), R.drawable.sample_profile_image);
+                    user.put(getString(R.string.profile_image_url_key), "");
 
                     db.collection(getString(R.string.users_collection_key)).add(user)
                             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

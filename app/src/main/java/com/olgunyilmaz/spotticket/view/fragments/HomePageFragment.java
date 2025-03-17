@@ -78,16 +78,20 @@ public class HomePageFragment extends Fragment {
 
         detailsHelper = new EventDetailsHelper(requireActivity());
 
-        Picasso.get().load(UserManager.getInstance().ppUrl)
+        if(UserManager.getInstance().ppUrl.isEmpty()){
+            binding.homeProfileImage.setImageResource(R.drawable.sample_profile_image);
+        }else{
+            Picasso.get().load(UserManager.getInstance().ppUrl)
                     .resize(1024,1024)
                     .onlyScaleDown() // if smaller don't resize
                     .placeholder(R.drawable.loading)
-                    .error(R.drawable.sample_profile_image)
+                    .error(R.drawable.error)
                     .transform(new CircleTransform())
                     .into(binding.homeProfileImage);
 
+        }
 
-        binding.homeUsernameText.setText("Olgun Yılmaz");
+        binding.homeUsernameText.setText(UserManager.getInstance().name + " " + UserManager.getInstance().surname);
 
         binding.seeAllText.setOnClickListener(v -> seeAll());
 
