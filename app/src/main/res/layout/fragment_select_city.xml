@@ -20,6 +20,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/sign_up_background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.fragments.SelectCityFragment">
 
@@ -28,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:background="@android:drawable/editbox_background"
+        android:background="@color/natural_gray"
         app:iconifiedByDefault="false"
         app:queryHint="@string/search_city_text"
         app:layout_constraintTop_toTopOf="parent"

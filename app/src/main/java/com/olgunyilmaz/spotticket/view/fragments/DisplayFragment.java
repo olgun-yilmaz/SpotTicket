@@ -24,10 +24,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Handler;
 import android.util.Log;
@@ -43,8 +40,9 @@ import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.service.RetrofitClient;
 import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
 import com.olgunyilmaz.spotticket.util.Categories;
+import com.olgunyilmaz.spotticket.util.DisplayHelper;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
-import com.olgunyilmaz.spotticket.view.activities.MainActivity;
+import com.olgunyilmaz.spotticket.util.UserManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -55,13 +53,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class DisplayFragment extends Fragment {
+public class DisplayFragment extends Fragment implements FilterDialogFragment.FilterDialogListener {
     private FragmentDisplayBinding binding;
     private EventAdapter eventAdapter;
-    private TicketmasterApiService apiService;
     private Runnable runnable;
     private Handler handler;
+    private DisplayHelper helper;
+    private LocalDataManager localDataManager;
     int counter = 0;
+    private TicketmasterApiService apiService;
 
 
     @Override
@@ -82,10 +82,12 @@ public class DisplayFragment extends Fragment {
 
         binding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
-        LocalDataManager localDataManager = new LocalDataManager(requireActivity());
+        localDataManager = new LocalDataManager(requireActivity());
+
+        helper = new DisplayHelper(requireActivity());
 
         String city = localDataManager.getStringData
-                (getString(R.string.city_key), getString(R.string.default_city_name));
+                (getString(R.string.city_key), UserManager.getInstance().city);
 
         binding.fragmentCityText.setText(city);
 
@@ -94,7 +96,12 @@ public class DisplayFragment extends Fragment {
 
         binding.fragmentCategoryText.setText(category);
 
-        binding.selectLayout.setOnClickListener(v -> goToHomePage());
+        binding.selectLayout.setOnClickListener(v -> {
+            FilterDialogFragment fragment = new FilterDialogFragment();
+            fragment.setTargetFragment(this, 0); // Fragment'e target olarak ayarla
+            fragment.show(getParentFragmentManager(), "Filter");
+        });
+
 
         String keyword = "";
         boolean searchByKeyword = false;
@@ -102,13 +109,13 @@ public class DisplayFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             searchByKeyword = args.getBoolean(getString(R.string.search_by_keyword_key), false);
-            if (searchByKeyword){
-                keyword = args.getString(getString(R.string.keyword_key),"");
+            if (searchByKeyword) {
+                keyword = args.getString(getString(R.string.keyword_key), "");
             }
         }
 
         apiService = RetrofitClient.getApiService();
-        findEvent(apiService, city, category, keyword,searchByKeyword);
+        findEvent(city, category, "", keyword, searchByKeyword);
     }
 
     private void updateLoadingText() {
@@ -116,7 +123,7 @@ public class DisplayFragment extends Fragment {
         runnable = new Runnable() {
             @Override
             public void run() {
-                if(isAdded()){
+                if (isAdded()) {
                     counter++;
                     int numPoint = counter % 4;
                     String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
@@ -128,33 +135,25 @@ public class DisplayFragment extends Fragment {
         handler.post(runnable);
     }
 
-    private void goToHomePage() {
-        MainActivity activity = (MainActivity) requireActivity();
-
-        activity.binding.homeButton.setChecked(true);
-
-        FragmentManager fragmentManager = activity.getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        HomePageFragment fragment = new HomePageFragment();
-        fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
-    }
-
-    private void findEvent(TicketmasterApiService service, String city, String category,
+    private void findEvent(String city, String category, String date,
                            String keyword, boolean searchByKeyword) {
         updateLoadingText();
 
-        if(searchByKeyword){
+        if (searchByKeyword) {
             keywordMode(keyword);
             city = ""; // don't save, just for this request
             category = "";
-        }else{
+        } else {
             selectMode();
         }
+
+        date = helper.formatDate(date);
+        System.out.println(date);
 
         Categories categories = new Categories(requireContext());
         categories.loadCategories();
 
-        service.getEvents(TICKETMASTER_API_KEY, city, categories.CATEGORIES.get(category), keyword)
+        apiService.getEvents(TICKETMASTER_API_KEY, city, categories.CATEGORIES.get(category), keyword, date)
                 .enqueue(new Callback<EventResponse>() {
                     @Override
                     public void onResponse(Call<EventResponse> call, Response<EventResponse> response) {
@@ -192,36 +191,28 @@ public class DisplayFragment extends Fragment {
                 });
     }
 
-    private void selectMode(){
+    private void selectMode() {
         binding.displayKeywordText.setVisibility(View.GONE);
         binding.fragmentCategoryText.setVisibility(View.VISIBLE);
         binding.fragmentCityText.setVisibility(View.VISIBLE);
     }
 
-    private void keywordMode(String keyword){
-        binding.displayKeywordText.setText(capitalizeWords(keyword));
+    private void keywordMode(String keyword) {
+        binding.displayKeywordText.setText(helper.capitalizeWords(keyword));
         binding.displayKeywordText.setVisibility(View.VISIBLE);
         binding.fragmentCategoryText.setVisibility(View.GONE);
         binding.fragmentCityText.setVisibility(View.GONE);
-
     }
 
-    private String capitalizeWords(String str) {
-        if (str == null || str.isEmpty()) {
-            return str;
-        }
+    @Override
+    public void onFiltersSelected(String date, String city, String category) {
+        localDataManager.updateStringData(getString(R.string.city_key),city);
+        localDataManager.updateStringData(getString(R.string.category_key),category);
+        localDataManager.updateStringData(getString(R.string.event_date_key),date);
 
-        String[] words = str.split(" ");
-        StringBuilder result = new StringBuilder();
+        binding.fragmentCityText.setText(city);
+        binding.fragmentCategoryText.setText(category);
 
-        for (String word : words) {
-            if (!word.isEmpty()) {
-                result.append(word.substring(0, 1).toUpperCase())
-                        .append(word.substring(1)).append(" ");
-            }
-        }
-
-        return result.toString().trim();
+        findEvent(city,category,date,"",false);
     }
-
 }

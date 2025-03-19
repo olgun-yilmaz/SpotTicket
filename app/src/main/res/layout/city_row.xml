@@ -25,5 +25,6 @@
     android:padding="16dp"
     android:textSize="16sp"
     android:text="City"
+    android:textColor="@color/natural_gray"
     android:gravity="center"
-    android:background="?attr/selectableItemBackground"/>
+    android:background="@color/sign_up_background"/>

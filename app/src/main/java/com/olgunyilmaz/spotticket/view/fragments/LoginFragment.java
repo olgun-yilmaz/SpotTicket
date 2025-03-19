@@ -110,6 +110,7 @@ public class LoginFragment extends Fragment {
         binding.loginButton.setVisibility(View.VISIBLE);
         binding.loginPasswordText.setVisibility(View.VISIBLE);
         binding.rememberMeButton.setVisibility(View.VISIBLE);
+        binding.alreadyAccountText.setVisibility(View.INVISIBLE);
 
         handler.removeCallbacks(runnable);
 
@@ -124,6 +125,7 @@ public class LoginFragment extends Fragment {
         binding.loginButton.setVisibility(View.INVISIBLE);
         binding.loginPasswordText.setVisibility(View.INVISIBLE);
         binding.rememberMeButton.setVisibility(View.INVISIBLE);
+        binding.alreadyAccountText.setVisibility(View.INVISIBLE);
     }
 
     private void login() {

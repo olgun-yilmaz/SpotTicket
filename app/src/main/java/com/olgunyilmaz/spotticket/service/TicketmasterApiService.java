@@ -30,7 +30,8 @@ public interface TicketmasterApiService {
             @Query("apikey") String apiKey,
             @Query("city") String city, // search by city name
             @Query("classificationId") String categoryId, // search by category
-            @Query("keyword") String keyword // search by keyword
+            @Query("keyword") String keyword, // search by keyword
+            @Query("startDateTime") String startDateTime // filter by start date -> utc format : 2025-03-18T00:00:00Z
     );
     @GET("events/{eventId}.json")
     Call<EventResponse.Event> getEventDetails(
