@@ -131,10 +131,8 @@ public class HomePageFragment extends Fragment {
 
     private void seeAll(){
         activity.binding.displayButton.setChecked(true);
-
         Bundle args = new Bundle();
         args.putBoolean(getString(R.string.see_all_key),true);
-
         DisplayFragment fragment = new DisplayFragment();
         fragment.setArguments(args);
         helper.replaceFragment(fragment);

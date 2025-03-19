@@ -42,6 +42,7 @@ import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
 import com.olgunyilmaz.spotticket.util.Categories;
 import com.olgunyilmaz.spotticket.helper.DisplayHelper;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
+import com.olgunyilmaz.spotticket.util.RecommendedEventManager;
 import com.olgunyilmaz.spotticket.util.UserManager;
 
 import java.io.IOException;
@@ -60,8 +61,8 @@ public class DisplayFragment extends Fragment implements FilterDialogFragment.Fi
     private Handler handler;
     private DisplayHelper helper;
     private LocalDataManager localDataManager;
-    int counter = 0;
-    private TicketmasterApiService apiService;
+    private int counter = 0;
+    private boolean shouldCityShow;
 
 
     @Override
@@ -105,17 +106,26 @@ public class DisplayFragment extends Fragment implements FilterDialogFragment.Fi
 
         String keyword = "";
         boolean searchByKeyword = false;
+        boolean seeAll = false;
 
         Bundle args = getArguments();
         if (args != null) {
+            seeAll = args.getBoolean(getString(R.string.see_all_key),false);
             searchByKeyword = args.getBoolean(getString(R.string.search_by_keyword_key), false);
             if (searchByKeyword) {
                 keyword = args.getString(getString(R.string.keyword_key), "");
             }
         }
 
-        apiService = RetrofitClient.getApiService();
-        findEvent(city, category, "", keyword, searchByKeyword);
+        if(seeAll){ // show default 20 events
+            keywordMode(getString(R.string.recommended_events_text));
+            binding.fragmentResultText.setText("");
+            searchAdapter = new SearchAdapter(RecommendedEventManager.getInstance().recommendedEvents, true);
+            binding.recyclerView.setAdapter(searchAdapter);
+
+        }else{ // search events with api
+            findEvent(city, category, "", keyword, searchByKeyword);
+        }
     }
 
     private void updateLoadingText() {
@@ -138,20 +148,22 @@ public class DisplayFragment extends Fragment implements FilterDialogFragment.Fi
     private void findEvent(String city, String category, String date,
                            String keyword, boolean searchByKeyword) {
         updateLoadingText();
+        date = helper.formatDate(date);
 
         if (searchByKeyword) {
             keywordMode(keyword);
             city = ""; // don't save, just for this request
             category = "";
+            shouldCityShow = true;
         } else {
+            shouldCityShow = false; // all events in one city
             selectMode();
         }
 
-        date = helper.formatDate(date);
-        System.out.println(date);
-
         Categories categories = new Categories(requireContext());
         categories.loadCategories();
+
+        TicketmasterApiService apiService = RetrofitClient.getApiService();
 
         apiService.getEvents(TICKETMASTER_API_KEY, city, categories.CATEGORIES.get(category), keyword, date)
                 .enqueue(new Callback<EventResponse>() {
@@ -165,7 +177,7 @@ public class DisplayFragment extends Fragment implements FilterDialogFragment.Fi
                                 }
                                 handler.removeCallbacks(runnable);
                                 binding.fragmentResultText.setText(events.size() + " " + getString(R.string.result_founded_text));
-                                searchAdapter = new SearchAdapter(events);
+                                searchAdapter = new SearchAdapter(events,shouldCityShow);
                                 binding.recyclerView.setAdapter(searchAdapter);
                             }
 

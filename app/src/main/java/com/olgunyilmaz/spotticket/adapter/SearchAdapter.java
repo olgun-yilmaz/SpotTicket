@@ -36,10 +36,12 @@ import java.util.List;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchViewHolder> {
 
-    private List<EventResponse.Event> searchList;
+    private final List<EventResponse.Event> searchList;
+    private final boolean shouldCityShow;
 
-    public SearchAdapter(List<EventResponse.Event> eventList) {
+    public SearchAdapter(List<EventResponse.Event> eventList, boolean shouldCityShow) {
         this.searchList = eventList;
+        this.shouldCityShow = shouldCityShow;
     }
 
     @Override
@@ -54,7 +56,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
         EventResponse.Event event = searchList.get(position);
         holder.binding.eventName.setText(event.getName());
-        holder.binding.eventCity.setText(event.getEmbedded().getVenues().get(0).getCity().getName());
+
+
+        if(shouldCityShow){
+            holder.binding.eventCity.setText(event.getEmbedded().getVenues().get(0).getCity().getName());
+        }else{
+            holder.binding.eventCity.setVisibility(View.GONE);
+        }
+
 
         EventDetailsHelper helper = new EventDetailsHelper(activity);
         String formattedDate = helper.getFormattedDate(event.getDates().getStart().getDateTime(),false);
@@ -78,7 +87,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 args.putString(activity.getString(R.string.event_name_key), event.getName());
                 args.putString(activity.getString(R.string.event_date_key),event.getDates().getStart().getDateTime());
                 args.putString(activity.getString(R.string.from_key), activity.getString(R.string.from_display));
-
 
                 String category = helper.getEventSegmentInfo(event,event.getClassifications());
 

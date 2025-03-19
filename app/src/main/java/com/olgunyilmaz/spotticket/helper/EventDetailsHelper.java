@@ -26,13 +26,23 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
+import android.view.View;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.model.EventResponse;
+import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.model.GeocodingResponse;
 import com.olgunyilmaz.spotticket.service.GeocodingService;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
+import com.olgunyilmaz.spotticket.util.UserFavoritesManager;
+import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.olgunyilmaz.spotticket.view.activities.MapsActivity;
+import com.olgunyilmaz.spotticket.view.fragments.DisplayFragment;
+import com.olgunyilmaz.spotticket.view.fragments.FavoritesFragment;
+import com.olgunyilmaz.spotticket.view.fragments.HomePageFragment;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -48,23 +58,16 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
-
 public class EventDetailsHelper { // simplifies event data management, reducing clutter in the Event Details fragment.
     private double venueLatitude;
     private double venueLongitude;
     private String venueName;
-    private final Context context;
-
-    public Context getContext() {
-        return context;
-    }
-
-    public EventDetailsHelper(Context context) {
-        this.context = context;
-        venueName = context.getString(R.string.default_venue_name);
-        venueLatitude = Double.parseDouble(context.getString(R.string.default_venue_latitude));
-        venueLongitude = Double.parseDouble(context.getString(R.string.default_venue_longitude));
+    private final MainActivity activity;
+    public EventDetailsHelper(MainActivity activity) {
+        this.activity = activity;
+        venueName = activity.getString(R.string.default_venue_name);
+        venueLatitude = Double.parseDouble(activity.getString(R.string.default_venue_latitude));
+        venueLongitude = Double.parseDouble(activity.getString(R.string.default_venue_longitude));
     }
 
     private String getVenueName() {
@@ -91,13 +94,13 @@ public class EventDetailsHelper { // simplifies event data management, reducing 
                     ? "dd/MM/yyyy - HH:mm"
                     : "dd MMMM yyyy";
 
-            String code = new LocalDataManager(context).
-                    getStringData(context.getString(R.string.language_code_key),"tr");
+            String code = new LocalDataManager(activity).
+                    getStringData(activity.getString(R.string.language_code_key),"tr");
 
             DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(format,new Locale(code));
             return localDateTime.format(outputFormatter);
         }
-        return context.getString(R.string.date_not_founded_text);
+        return activity.getString(R.string.date_not_founded_text);
     }
     public String getVenueInfo(EventResponse.Event eventDetails, List venues) {
         if (venues != null) {
@@ -193,15 +196,44 @@ public class EventDetailsHelper { // simplifies event data management, reducing 
     public void buyTicket(String url) {
         Uri uri = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        context.startActivity(intent);
+        activity.startActivity(intent);
     }
 
     public void goToEvent() {
-        Intent intent = new Intent(getContext(), MapsActivity.class);
+        Intent intent = new Intent(activity, MapsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra(context.getString(R.string.venue_latitude_key), getVenueLatitude());
-        intent.putExtra(context.getString(R.string.venue_longitude_key), getVenueLongitude());
-        intent.putExtra(context.getString(R.string.venue_name_key), getVenueName());
-        context.startActivity(intent);
+        intent.putExtra(activity.getString(R.string.venue_latitude_key), getVenueLatitude());
+        intent.putExtra(activity.getString(R.string.venue_longitude_key), getVenueLongitude());
+        intent.putExtra(activity.getString(R.string.venue_name_key), getVenueName());
+        activity.startActivity(intent);
+    }
+
+    public boolean isLiked(String eventId) {
+        for (FavoriteEventModel event : UserFavoritesManager.getInstance().userFavorites) {
+            if (eventId.equals(event.getEventId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void goBack(String fromWhere) {
+        Fragment fragment = null;
+        if (fromWhere.equals(activity.getString(R.string.from_home))) {
+            fragment = new HomePageFragment();
+            activity.binding.homeButton.setChecked(true);
+        } else if (fromWhere.equals(activity.getString(R.string.from_favourite))) {
+            fragment = new FavoritesFragment();
+            activity.binding.myEventsButton.setChecked(true);
+        } else if (fromWhere.equals(activity.getString(R.string.from_display))) {
+            fragment = new DisplayFragment();
+            activity.binding.displayButton.setChecked(true);
+        }
+
+        if(fragment != null){
+            FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
+            activity.binding.fixedBar.setVisibility(View.VISIBLE);
+            fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
+        }
     }
 }

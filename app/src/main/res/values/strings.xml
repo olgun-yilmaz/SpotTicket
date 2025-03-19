@@ -84,6 +84,7 @@
     <string name="please_select_your_city_text">Lütfen şehrinizi seçin . . .</string>
     <string name="please_wait_text">Lütfen Bekleyiniz </string>
 
+    <string name="recommended_events_text">Önerilen Etkinlikler</string>
     <string name="remember_me_text">Beni Hatırla</string>
     <string name="reset_password_text">Şifremi Sıfırla</string>
     <string name="result_founded_text">SONUÇ BULUNDU</string>

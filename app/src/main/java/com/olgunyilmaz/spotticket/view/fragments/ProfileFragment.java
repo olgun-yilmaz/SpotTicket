@@ -60,9 +60,11 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentProfileBinding;
+import com.olgunyilmaz.spotticket.helper.ProfileHelper;
 import com.olgunyilmaz.spotticket.util.UserManager;
 import com.olgunyilmaz.spotticket.util.ImageLoader;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
+import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -82,8 +84,7 @@ public class ProfileFragment extends Fragment {
     private ActivityResultLauncher<String> permissionLauncher;
     private FirebaseStorage storage;
     private FirebaseUser user;
-    private String countryCode;
-    private FragmentManager fragmentManager;
+    private ProfileHelper helper;
 
 
     @Override
@@ -105,19 +106,15 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        helper = new ProfileHelper((MainActivity) requireActivity(),binding);
 
         registerLauncher();
-
-        uploadPp();
-
-        displayMode();
-
-        fragmentManager = requireActivity().getSupportFragmentManager();
+        helper.uploadPp();
 
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         String countryKey = getString(R.string.language_code_key);
-        countryCode = new LocalDataManager(requireActivity()).getStringData(countryKey,"tr");
+        String countryCode = new LocalDataManager(requireActivity()).getStringData(countryKey, "tr");
 
         auth.setLanguageCode(countryCode);
 
@@ -125,59 +122,13 @@ public class ProfileFragment extends Fragment {
 
         binding.emailText.setText(UserManager.getInstance().name + " "+ UserManager.getInstance().surname);
         binding.usernameText.setText(UserManager.getInstance().email);
-        binding.creationDateText.setText(getCreationDate());
+        binding.creationDateText.setText(helper.getCreationDate(countryCode,user));
 
-        binding.deleteMyAccountButton.setOnClickListener(v -> showDeleteAccountDialog());
+        binding.deleteMyAccountButton.setOnClickListener(v -> helper.showDeleteAccountDialog());
 
         binding.editButton.setOnClickListener(v -> editMode());
 
-        binding.profileBackButton.setOnClickListener(v -> goBackToSettings());
-
-    }
-
-    private void goBackToSettings(){
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        SettingsFragment fragment = new SettingsFragment();
-        transaction.replace(R.id.fragmentContainerView,fragment).commit();
-    }
-
-    private void showDeleteAccountDialog() {
-        if (isAdded() && getActivity() != null) {
-            new AlertDialog.Builder(getActivity())
-                    .setTitle(getString(R.string.delete_account_text))
-                    .setMessage(getString(R.string.delete_account_question))
-                    .setNegativeButton(R.string.answer_no, null)
-                    .setPositiveButton(R.string.answer_yes, (dialogInterface, i) -> {
-                        ReAuthenticateDialogFragment dialog = new ReAuthenticateDialogFragment();
-                        dialog.show(getParentFragmentManager(), getString(R.string.re_authenticate_tag));
-                    }).show();
-        }
-    }
-
-    private String getCreationDate() {
-        if (user.getMetadata() != null) {
-            long creationTime = user.getMetadata().getCreationTimestamp();
-            Date creationDate = new Date(creationTime);
-
-            String country = countryCode.toUpperCase();
-
-            SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", new Locale(countryCode, country));
-            return sdf.format(creationDate);
-        }
-        return getString(R.string.date_not_founded_text);
-
-    }
-
-    private void uploadPp() {
-        if (!UserManager.getInstance().ppUrl.isEmpty()) {
-            Picasso.get()
-                    .load(UserManager.getInstance().ppUrl)
-                    .resize(1024,1024)
-                    .onlyScaleDown() // if smaller don't resize
-                    .placeholder(R.drawable.loading)
-                    .error(R.drawable.error)
-                    .into(binding.profileImage);
-        }
+        binding.profileBackButton.setOnClickListener(v -> helper.goBackToSettings());
     }
 
     private void editMode() {
@@ -191,18 +142,11 @@ public class ProfileFragment extends Fragment {
         binding.saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayMode();
+                helper.displayMode();
                 uploadImage2db();
             }
         });
 
-    }
-
-    private void displayMode() {
-        binding.deleteMyAccountButton.setVisibility(View.VISIBLE);
-        binding.editButton.setVisibility(View.VISIBLE);
-        binding.saveButton.setVisibility(View.GONE);
-        binding.profileImage.setEnabled(false);
     }
 
     private void updateProfileImage(String email, String ppUrl) {

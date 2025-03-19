@@ -84,6 +84,7 @@
     <string name="please_select_your_city_text">Please select your city . . .</string>
     <string name="please_wait_text">Please Wait </string>
 
+    <string name="recommended_events_text">Recommended Events</string>
     <string name="remember_me_text">Remember Me</string>
     <string name="reset_password_text">Reset Password</string>
     <string name="result_founded_text">RESULTS FOUND</string>

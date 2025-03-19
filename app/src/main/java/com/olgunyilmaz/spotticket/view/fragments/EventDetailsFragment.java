@@ -66,15 +66,11 @@ public class EventDetailsFragment extends Fragment {
 
     private FragmentEventDetailsBinding binding;
     private FirebaseFirestore db;
-
     private String collectionPath;
     private String eventId;
-
     private String eventName;
     private EventDetailsHelper detailsHelper;
     private LocalDataManager localDataManager;
-    private FragmentManager fragmentManager;
-    private MainActivity activity;
     private String fromWhere;
 
     @Override
@@ -97,15 +93,13 @@ public class EventDetailsFragment extends Fragment {
 
         localDataManager = new LocalDataManager(requireActivity());
 
-        fragmentManager = requireActivity().getSupportFragmentManager();
-
         String languageCode = localDataManager.getStringData(getString(R.string.language_code_key), "tr");
         auth.setLanguageCode(languageCode);
 
-        detailsHelper = new EventDetailsHelper(requireContext());
-
-        activity = (MainActivity) requireActivity();
+        MainActivity activity = (MainActivity) requireActivity();
         activity.binding.fixedBar.setVisibility(View.GONE);
+
+        detailsHelper = new EventDetailsHelper(activity);
 
         String userEmail = auth.getCurrentUser().getEmail().toString();
         collectionPath = userEmail + getString(R.string.my_events_key);
@@ -119,7 +113,7 @@ public class EventDetailsFragment extends Fragment {
             String eventDate = args.getString(getString(R.string.event_date_key));
             Long categoryIconId = args.getLong(getString(R.string.category_icon_key));
 
-            if (isLiked()) {
+            if (detailsHelper.isLiked(eventId)) {
                 binding.favCheckBox.setChecked(true);
                 binding.favCheckBox.setButtonDrawable(R.drawable.fav_filled_icon);
             }
@@ -136,7 +130,7 @@ public class EventDetailsFragment extends Fragment {
                 binding.favCheckBox.setButtonDrawable(imgId);
             });
 
-            binding.detailsBackButton.setOnClickListener(v -> goBack());
+            binding.detailsBackButton.setOnClickListener(v -> detailsHelper.goBack(fromWhere));
 
             binding.detailsLocationIcon.setOnClickListener(v -> detailsHelper.goToEvent());
 
@@ -145,36 +139,7 @@ public class EventDetailsFragment extends Fragment {
         }
     }
 
-    private void goBack() {
-        Fragment fragment = null;
-        if (fromWhere.equals(getString(R.string.from_home))) {
-            fragment = new HomePageFragment();
-            activity.binding.homeButton.setChecked(true);
-        } else if (fromWhere.equals(getString(R.string.from_favourite))) {
-            fragment = new FavoritesFragment();
-            activity.binding.myEventsButton.setChecked(true);
-        } else if (fromWhere.equals(getString(R.string.from_display))) {
-            fragment = new DisplayFragment();
-            activity.binding.displayButton.setChecked(true);
-        }
 
-        if(fragment != null){
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            activity.binding.fixedBar.setVisibility(View.VISIBLE);
-            fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
-        }
-
-
-    }
-
-    private boolean isLiked() {
-        for (FavoriteEventModel event : UserFavoritesManager.getInstance().userFavorites) {
-            if (eventId.equals(event.getEventId())) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     private void addFavorite(String eventId, String eventName, String imageUrl, String eventDate, Long categoryIconId) {
         Map<String, Object> favorite = new HashMap<>();
