@@ -27,10 +27,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/selectLayout"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
 
-        app:layout_constraintHeight_percent="0.1"
-        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_bias="0.03"
 
         app:layout_constraintEnd_toEndOf="@+id/recyclerView"
         app:layout_constraintStart_toStartOf="@+id/recyclerView"
@@ -60,33 +59,26 @@
         <TextView
             android:id="@+id/fragmentCityText"
 
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-
-            app:layout_constraintWidth_percent="0.5"
-            app:layout_constraintHorizontal_bias="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
             android:gravity="center"
             android:textSize="25sp"
             android:textStyle="bold"
             android:textColor="@color/natural_gray"
 
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/fragmentCategoryText"
 
             />
 
         <TextView
             android:id="@+id/fragmentCategoryText"
 
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-
-            app:layout_constraintWidth_percent="0.5"
-
-            app:layout_constraintHorizontal_bias="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
             android:gravity="center"
             android:textSize="25sp"
@@ -94,9 +86,9 @@
             android:textColor="@color/natural_gray"
 
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/fragmentCityText"
 
 
             />
@@ -109,7 +101,8 @@
         android:layout_width="0dp"
         app:layout_constraintWidth_percent="0.9"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.65"
+
+        app:layout_constraintHeight_percent="0.75"
 
         app:layout_constraintVertical_bias="0.1"
 
@@ -121,11 +114,11 @@
     <TextView
         android:id="@+id/fragmentResultText"
 
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.05"
 
-        app:layout_constraintVertical_bias="0.83"
+        app:layout_constraintVertical_bias="0.86"
 
         android:text="@string/searching_text"
         android:textAlignment="textEnd"
@@ -134,7 +127,6 @@
         android:textColor="@color/natural_gray"
 
         app:layout_constraintEnd_toEndOf="@id/selectLayout"
-        app:layout_constraintStart_toStartOf="@id/selectLayout"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"

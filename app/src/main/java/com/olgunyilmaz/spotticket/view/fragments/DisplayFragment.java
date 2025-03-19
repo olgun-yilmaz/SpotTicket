@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Handler;
 import android.util.Log;
@@ -34,7 +35,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.olgunyilmaz.spotticket.R;
-import com.olgunyilmaz.spotticket.adapter.EventAdapter;
+import com.olgunyilmaz.spotticket.adapter.SearchAdapter;
 import com.olgunyilmaz.spotticket.databinding.FragmentDisplayBinding;
 import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.service.RetrofitClient;
@@ -55,7 +56,7 @@ import retrofit2.Response;
 
 public class DisplayFragment extends Fragment implements FilterDialogFragment.FilterDialogListener {
     private FragmentDisplayBinding binding;
-    private EventAdapter eventAdapter;
+    private SearchAdapter searchAdapter;
     private Runnable runnable;
     private Handler handler;
     private DisplayHelper helper;
@@ -80,7 +81,7 @@ public class DisplayFragment extends Fragment implements FilterDialogFragment.Fi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         localDataManager = new LocalDataManager(requireActivity());
 
@@ -165,8 +166,8 @@ public class DisplayFragment extends Fragment implements FilterDialogFragment.Fi
                                 }
                                 handler.removeCallbacks(runnable);
                                 binding.fragmentResultText.setText(events.size() + " " + getString(R.string.result_founded_text));
-                                eventAdapter = new EventAdapter(events);
-                                binding.recyclerView.setAdapter(eventAdapter);
+                                searchAdapter = new SearchAdapter(events);
+                                binding.recyclerView.setAdapter(searchAdapter);
                             }
 
                         } else {
@@ -181,7 +182,7 @@ public class DisplayFragment extends Fragment implements FilterDialogFragment.Fi
                                 e.printStackTrace();
                             }
                         }
-                        eventAdapter.notifyDataSetChanged();
+                        searchAdapter.notifyDataSetChanged();
                     }
 
                     @Override
