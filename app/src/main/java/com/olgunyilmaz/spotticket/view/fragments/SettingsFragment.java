@@ -96,6 +96,9 @@ public class SettingsFragment extends Fragment {
 
         }
 
+        binding.settingsNameText.setText(UserManager.getInstance().name);
+        binding.settingsCityText.setText(UserManager.getInstance().city);
+
         binding.settingsEditButton.setOnClickListener(v -> goToProfile());
         binding.settingsLanguageLayout.setOnClickListener(v -> changeLanguage(helper.getLanguageData(null)));
         binding.settingsLogOutLayout.setOnClickListener(v ->signOut());

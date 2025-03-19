@@ -24,6 +24,7 @@
     <string name="answer_no">Hayır</string>
     <string name="answer_yes">Evet</string>
 
+    <string name="back_to_login_text">Giriş Ekranına Dön</string>
     <string name="buy_text">Satın Al</string>
 
     <string name="creation_date_text">Kayıt Tarihi : </string>
@@ -32,7 +33,7 @@
     <string name="date_not_founded_text">Tarih bulunamadı!</string>
 
     <string name="default_city_name">Amsterdam</string>
-    <string name="default_category_name">Pop</string>
+    <string name="default_category_name">Tüm Kategoriler</string>
     <string name="default_venue_name">Ülker Stadyumu</string>
     <string name="default_venue_latitude">40.98780984859083</string>
 
@@ -45,6 +46,7 @@
     <string name="deleting_data_text">Veriler Siliniyor</string>
 
     <string name="email_text">E-Mail :</string>
+    <string name="email_sent_text">%s e-maili gönderildi.</string>
     <string name="enter_password_for_delete_account">Hesabınızı silmek için şifrenizi girin</string>
     <string name="email_verification_message">Giriş yapabilmek için gönderilen linkten e-posta adresinizi doğrulamanız gerekmektedir.</string>
     <string name="event_description_text">%s etkinliği, %s | %s tarihinde siz değerli etkinlikseverlerle buluşuyor!</string>
@@ -112,6 +114,4 @@
 
     <string name="weak_search_error">En az 3 harf girmelisiniz!</string>
     <string name="welcome_message">Seni tekrar görmek güzel</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

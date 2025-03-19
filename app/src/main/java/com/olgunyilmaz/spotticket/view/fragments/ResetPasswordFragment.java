@@ -72,6 +72,8 @@ public class ResetPasswordFragment extends Fragment {
                 resetPassword(view);
             }
         });
+
+        binding.backButton.setOnClickListener(v -> replaceFragment(new LoginFragment()));
     }
 
     private void resetPassword(View view){
@@ -84,7 +86,7 @@ public class ResetPasswordFragment extends Fragment {
                         String msg;
                         if (task.isSuccessful()) {
                              msg = getString(R.string.send_password_reset_link);
-                            login(view);
+                             replaceFragment(new EmailSentFragment());
                         }else{
                             msg = getString(R.string.error_text);
                         }
@@ -93,9 +95,8 @@ public class ResetPasswordFragment extends Fragment {
                 });
     }
 
-    private void login(View view) {
+    private void replaceFragment(Fragment fragment){
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        LoginFragment loginFragment = new LoginFragment();
-        fragmentTransaction.replace(R.id.loginFragmentContainer, loginFragment).commit();
+        fragmentTransaction.replace(R.id.loginFragmentContainer, fragment).commit();
     }
 }

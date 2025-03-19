@@ -95,7 +95,7 @@ public class SignUpFragment extends Fragment implements SelectCityFragment.CityS
         binding.cityText.setOnClickListener(v -> showCityPicker(cities));
 
         binding.signUpButton.setOnClickListener(v -> signUp());
-        binding.signUpLoginButton.setOnClickListener(v -> login());
+        binding.signUpLoginButton.setOnClickListener(v -> replaceFragment(new LoginFragment()));
 
     }
 
@@ -146,17 +146,14 @@ public class SignUpFragment extends Fragment implements SelectCityFragment.CityS
                                     if (user != null) {
                                         user.sendEmailVerification()
                                                 .addOnCompleteListener(task1 -> {
-                                                    String msg;
                                                     if (task1.isSuccessful()) {
-                                                        msg = getString(R.string.validation_email_send_text);
                                                         saveUserData(email, name, surname, city);
 
                                                     } else {
-                                                        msg = getString(R.string.error_validation_email_send_text);
+                                                        Toast.makeText(requireContext(),
+                                                                getString(R.string.error_validation_email_send_text),
+                                                                Toast.LENGTH_LONG).show();
                                                     }
-                                                    Toast.makeText(requireContext(),
-                                                            msg,
-                                                            Toast.LENGTH_LONG).show();
                                                 });
                                     }
                                 } else {
@@ -183,13 +180,6 @@ public class SignUpFragment extends Fragment implements SelectCityFragment.CityS
             Toast.makeText(requireActivity(),
                     requireActivity().getString(R.string.please_check_your_info_text), Toast.LENGTH_SHORT).show();
         }
-    }
-
-
-    private void login() {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        LoginFragment fragment = new LoginFragment();
-        fragmentTransaction.replace(R.id.loginFragmentContainer, fragment).commit();
     }
 
     @Override
@@ -252,10 +242,21 @@ public class SignUpFragment extends Fragment implements SelectCityFragment.CityS
                             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                 @Override
                                 public void onSuccess(DocumentReference documentReference) {
-                                    login();
-                                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                    if(isAdded()){
+                                        Bundle args = new Bundle();
+                                        args.putBoolean(getString(R.string.from_login_key), true);
+                                        EmailSentFragment fragment = new EmailSentFragment();
+                                        fragment.setArguments(args);
+                                        replaceFragment(fragment);
+                                    }
+
                                 }
                             });
                 });
+    }
+
+    private void replaceFragment(Fragment fragment){
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.loginFragmentContainer, fragment).commit();
     }
 }

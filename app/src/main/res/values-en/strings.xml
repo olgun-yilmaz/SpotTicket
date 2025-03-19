@@ -18,11 +18,13 @@
 <resources>
     <string name="app_name">SpotTicket</string>
 
+    <string name="already_account_text">Already Account?</string>
     <string name="answer_cancel">CANCEL</string>
     <string name="answer_confirm">CONFIRM</string>
     <string name="answer_no">NO</string>
     <string name="answer_yes">YES</string>
 
+    <string name="back_to_login_text">Back to Login</string>
     <string name="buy_text">Purchase</string>
 
     <string name="creation_date_text">Creation Date : </string>
@@ -31,7 +33,7 @@
     <string name="date_not_founded_text">Date Not Founded!</string>
 
     <string name="default_city_name">Amsterdam</string>
-    <string name="default_category_name">Pop</string>
+    <string name="default_category_name">All Categories</string>
     <string name="default_venue_name">Ulker Stadium</string>
     <string name="default_venue_latitude">40.98780984859083</string>
 
@@ -44,6 +46,7 @@
     <string name="deleting_data_text">Data is being deleted</string>
 
     <string name="email_text">E-Mail :</string>
+    <string name="email_sent_text">E-mail sent to %s</string>
     <string name="enter_password_for_delete_account">Enter your password to delete your account.</string>
     <string name="email_verification_message">In order to log in, you must verify your e-mail address from the link sent.</string>
     <string name="event_description_text">%s event meets with you valuable events on %s | %s!</string>
@@ -70,6 +73,7 @@
 
     <string name="my_events_text">My Events</string>
 
+    <string name="name_text">Name : </string>
     <string name="notification_content">Your favorite event is coming up. Last %d days left! Just wanted to remind you :)</string>
     <string name="notification_last_day_content">Today is the day of the %s ! Come on, dont miss the event...</string>
     <string name="notification_permission_text">Should Spot Ticket send you notifications?</string>
@@ -77,6 +81,7 @@
     <string name="password_text">Password :</string>
     <string name="plain_loading_text">Loading </string>
     <string name="please_check_your_info_text">Please check the information you entered!</string>
+    <string name="please_select_your_city_text">Please select your city . . .</string>
     <string name="please_wait_text">Please Wait </string>
 
     <string name="remember_me_text">Remember Me</string>
@@ -90,6 +95,7 @@
     <string name="see_all_text">See all</string>
     <string name="send_password_reset_link">You can reset your password from the link sent.</string>
     <string name="sign_up_text">SIGN UP</string>
+    <string name="surname_text">Surname :</string>
 
     <string name="upcoming_events_text">Upcoming Events</string>
     <string name="username_text">Username : </string>

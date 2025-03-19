@@ -19,7 +19,7 @@
     android:id="@+id/searchEventLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/black"
+    android:background="@color/sign_up_background"
     android:layout_width="match_parent"
     android:layout_height="300dp"
     android:layout_marginBottom="40dp">
@@ -36,6 +36,7 @@
 
         android:scaleType="centerCrop"
 
+        android:background="@color/event_name_gray"
         android:src="@drawable/loading"
 
         app:layout_constraintBottom_toBottomOf="parent"

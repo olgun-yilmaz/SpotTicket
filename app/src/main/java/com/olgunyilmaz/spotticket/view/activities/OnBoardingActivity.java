@@ -119,10 +119,10 @@ public class OnBoardingActivity extends AppCompatActivity {
 
                 if (currentUser != null) {
                     helper.goToActivity(MainActivity.class, eventName);
-                    finish(); // if user in app, won't back by intent
                 } else {
                     helper.goToActivity(EmailPasswordActivity.class,"");
                 }
+                finish();
             }
         });
     }

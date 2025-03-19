@@ -93,7 +93,6 @@
 
             android:fontFamily="@font/roboto"
             android:src="@drawable/sample_profile_image"
-            android:text="Olgun"
             android:textColor="#E0F1FF"
 
             android:textSize="16sp"
@@ -118,7 +117,6 @@
 
             android:fontFamily="@font/roboto"
             android:src="@drawable/sample_profile_image"
-            android:text="Ankara"
             android:textColor="#A8ADBD"
 
             android:textSize="14sp"

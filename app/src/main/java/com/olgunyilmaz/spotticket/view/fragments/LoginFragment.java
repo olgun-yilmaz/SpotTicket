@@ -28,6 +28,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Handler;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +44,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentLoginBinding;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
+import com.olgunyilmaz.spotticket.util.UserManager;
 import com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class LoginFragment extends Fragment {
     private FragmentLoginBinding binding;
@@ -51,11 +57,8 @@ public class LoginFragment extends Fragment {
     private Runnable runnable;
     private Handler handler;
     private LocalDataManager localDataManager;
+    private ArrayList<View> allViews;
     int counter = 0;
-
-    public LoginFragment() {
-    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,20 +80,47 @@ public class LoginFragment extends Fragment {
         localDataManager = new LocalDataManager(requireActivity());
 
         auth = FirebaseAuth.getInstance();
-        String countryCode = localDataManager.getStringData(getString(R.string.language_code_key),"tr");
+        String countryCode = localDataManager.getStringData(getString(R.string.language_code_key), "tr");
 
         auth.setLanguageCode(countryCode);
 
         String lastUserEmail = localDataManager.getStringData(getString(R.string.user_email_key), "");
 
+        getAllViews();
+
         binding.loginEmailText.setText(lastUserEmail);
 
         binding.loginButton.setOnClickListener(v -> login());
 
-        binding.loginSignUpButton.setOnClickListener(v -> signUp());
+        binding.loginSignUpButton.setOnClickListener(v -> replaceFragment(new SignUpFragment()));
 
-        binding.resetPasswordText.setOnClickListener(v -> resetPassword());
+        binding.resetPasswordText.setOnClickListener(v -> replaceFragment(new ResetPasswordFragment()));
+
+        binding.passwordIcon.setOnCheckedChangeListener((button, isChecked) -> {
+            if (isChecked) {
+                binding.loginPasswordText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                binding.passwordIcon.setButtonDrawable(R.drawable.show_password);
+            } else {
+                binding.loginPasswordText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                binding.passwordIcon.setButtonDrawable(R.drawable.hide_password);
+            }
+            binding.loginPasswordText.setSelection(binding.loginPasswordText.getText().length());  // move cursor to end
+        });
+
     }
+
+    private void getAllViews() {
+        allViews = new ArrayList<>(Arrays.asList(
+                binding.loginEmailText,
+                binding.loginSignUpButton,
+                binding.loginButton,
+                binding.loginPasswordText,
+                binding.rememberMeButton,
+                binding.alreadyAccountText,
+                binding.passwordIcon
+        ));
+    }
+
 
     private void updateRememberMe() {
         if (binding.rememberMeButton.isChecked()) {
@@ -105,12 +135,9 @@ public class LoginFragment extends Fragment {
         binding.resetPasswordText.setText(getText(R.string.forgot_password_text));
         binding.resetPasswordText.setEnabled(true);
 
-        binding.loginEmailText.setVisibility(View.VISIBLE);
-        binding.loginSignUpButton.setVisibility(View.VISIBLE);
-        binding.loginButton.setVisibility(View.VISIBLE);
-        binding.loginPasswordText.setVisibility(View.VISIBLE);
-        binding.rememberMeButton.setVisibility(View.VISIBLE);
-        binding.alreadyAccountText.setVisibility(View.INVISIBLE);
+        for (View view : allViews) {
+            view.setVisibility(View.VISIBLE);
+        }
 
         handler.removeCallbacks(runnable);
 
@@ -120,12 +147,9 @@ public class LoginFragment extends Fragment {
         updateLoadingText();
         binding.resetPasswordText.setEnabled(false);
 
-        binding.loginEmailText.setVisibility(View.INVISIBLE);
-        binding.loginSignUpButton.setVisibility(View.INVISIBLE);
-        binding.loginButton.setVisibility(View.INVISIBLE);
-        binding.loginPasswordText.setVisibility(View.INVISIBLE);
-        binding.rememberMeButton.setVisibility(View.INVISIBLE);
-        binding.alreadyAccountText.setVisibility(View.INVISIBLE);
+        for (View view : allViews) {
+            view.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void login() {
@@ -144,8 +168,6 @@ public class LoginFragment extends Fragment {
                                     FirebaseUser currentUser = auth.getCurrentUser();
 
                                     if (currentUser != null) {
-                                        String msg;
-
                                         if (currentUser.isEmailVerified()) {
                                             localDataManager.updateStringData(getString(R.string.user_email_key), email);
                                             updateRememberMe();
@@ -156,15 +178,15 @@ public class LoginFragment extends Fragment {
                                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                             startActivity(intent);
                                             requireActivity().finish();
-                                            msg = getString(R.string.welcome_message) + " " + currentUser.getDisplayName();
-
                                         } else {
                                             normalMode();
-                                            msg = getString(R.string.email_verification_message);
+
+                                            Bundle args = new Bundle();
+                                            args.putBoolean(getString(R.string.from_login_key), true);
+                                            EmailSentFragment fragment = new EmailSentFragment();
+                                            fragment.setArguments(args);
+                                            replaceFragment(fragment);
                                         }
-                                        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show();
-
-
                                     }
                                 }
                             }
@@ -209,17 +231,8 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    private void signUp() {
+    private void replaceFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        SignUpFragment signUpFragment = new SignUpFragment();
-        fragmentTransaction.replace(R.id.loginFragmentContainer, signUpFragment).commit();
-
+        fragmentTransaction.replace(R.id.loginFragmentContainer, fragment).commit();
     }
-
-    private void resetPassword() {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        ResetPasswordFragment resetPasswordFragment = new ResetPasswordFragment();
-        fragmentTransaction.replace(R.id.loginFragmentContainer, resetPasswordFragment).commit();
-    }
-
 }

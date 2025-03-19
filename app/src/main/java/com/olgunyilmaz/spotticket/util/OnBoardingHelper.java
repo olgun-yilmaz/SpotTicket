@@ -58,12 +58,6 @@ public class OnBoardingHelper {
         ArrayList<Language> languageList = new ArrayList<>();
         languageList.add(new Language(R.drawable.icon_tr,"tr","Türkçe"));
         languageList.add(new Language(R.drawable.icon_en,"en","English"));
-        languageList.add(new Language(R.drawable.icon_de,"de","Deutsch"));
-        languageList.add(new Language(R.drawable.icon_fr,"fr","Français"));
-        languageList.add(new Language(R.drawable.icon_it,"it","Italiano"));
-        languageList.add(new Language(R.drawable.icon_ko,"ko","한국인"));
-        languageList.add(new Language(R.drawable.icon_es,"es","Español"));
-        languageList.add(new Language(R.drawable.icon_ru,"ru","Русский"));
 
         if(function != null){
             function.accept(languageList);

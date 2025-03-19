@@ -124,7 +124,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
 
-        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintWidth_percent="0.8"
 
         app:layout_constraintHeight_percent="0.07"
         app:layout_constraintStart_toStartOf="parent"
@@ -148,6 +148,10 @@
 
         android:inputType="textPassword"
 
+        app:layout_constraintHorizontal_bias="0"
+
+        app:layout_constraintWidth_percent="0.8"
+
         android:textColor="@color/white"
         android:textColorHint="@color/hint"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -159,6 +163,23 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5" />
 
+    <CheckBox
+        android:id="@+id/passwordIcon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:button="@drawable/hide_password"
+
+        app:layout_constraintWidth_percent="0.1"
+
+        app:layout_constraintBottom_toBottomOf="@id/loginPasswordText"
+        app:layout_constraintTop_toTopOf="@id/loginPasswordText"
+
+        app:layout_constraintStart_toEndOf="@id/loginPasswordText"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/loginInnerLayout"
         android:layout_width="0dp"
@@ -168,6 +189,8 @@
 
         app:layout_constraintVertical_bias="0.65"
         app:layout_constraintHorizontal_bias="0.9"
+
+        app:layout_constraintWidth_percent="0.85"
 
         app:layout_constraintStart_toStartOf="@id/loginEmailText"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -230,10 +253,10 @@
 
         app:layout_constraintBottom_toBottomOf="parent"
 
-        app:layout_constraintEnd_toEndOf="@id/loginPasswordText"
+        app:layout_constraintEnd_toEndOf="@id/loginInnerLayout"
 
         app:layout_constraintHeight_percent="0.1"
-        app:layout_constraintStart_toStartOf="@id/loginPasswordText"
+        app:layout_constraintStart_toStartOf="@id/loginInnerLayout"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.8" />
@@ -247,10 +270,10 @@
 
         app:layout_constraintBottom_toBottomOf="parent"
 
-        app:layout_constraintEnd_toEndOf="@id/loginPasswordText"
+        app:layout_constraintEnd_toEndOf="@id/loginInnerLayout"
 
         app:layout_constraintHeight_percent="0.1"
-        app:layout_constraintStart_toStartOf="@id/loginPasswordText"
+        app:layout_constraintStart_toStartOf="@id/loginInnerLayout"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.95">
