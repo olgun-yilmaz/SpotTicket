@@ -33,7 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityOnBoardingBinding;
 import com.olgunyilmaz.spotticket.util.Constants;
-import com.olgunyilmaz.spotticket.util.OnBoardingHelper;
+import com.olgunyilmaz.spotticket.helper.OnBoardingHelper;
 import com.olgunyilmaz.spotticket.model.Language;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.util.UserManager;

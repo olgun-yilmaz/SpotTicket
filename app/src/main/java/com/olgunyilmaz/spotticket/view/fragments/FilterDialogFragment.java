@@ -34,7 +34,7 @@ import android.widget.SpinnerAdapter;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentFilterDialogBinding;
 import com.olgunyilmaz.spotticket.util.Categories;
-import com.olgunyilmaz.spotticket.util.HomePageHelper;
+import com.olgunyilmaz.spotticket.helper.HomePageHelper;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.util.UserManager;
 
@@ -135,7 +135,7 @@ public class FilterDialogFragment extends DialogFragment implements SelectCityFr
 
 
     private void setupSpinners() {
-        ArrayList<String> cities = new HomePageHelper(requireActivity()).getCities();
+        ArrayList<String> cities = new HomePageHelper(requireContext(),null).getCities();
         Categories categories = new Categories(requireActivity());
         categories.loadCategories();
 

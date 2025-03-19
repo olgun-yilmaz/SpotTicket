@@ -15,13 +15,15 @@
  * limitations under the License.
  */
 
-package com.olgunyilmaz.spotticket.util;
+package com.olgunyilmaz.spotticket.helper;
 
 import static android.content.ContentValues.TAG;
 import static com.olgunyilmaz.spotticket.util.Constants.MAPS_API_KEY;
 import static com.olgunyilmaz.spotticket.util.Constants.MAPS_BASE_URL;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
@@ -29,6 +31,8 @@ import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.model.GeocodingResponse;
 import com.olgunyilmaz.spotticket.service.GeocodingService;
+import com.olgunyilmaz.spotticket.util.LocalDataManager;
+import com.olgunyilmaz.spotticket.view.activities.MapsActivity;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -63,15 +67,15 @@ public class EventDetailsHelper { // simplifies event data management, reducing 
         venueLongitude = Double.parseDouble(context.getString(R.string.default_venue_longitude));
     }
 
-    public String getVenueName() {
+    private String getVenueName() {
         return venueName;
     }
 
-    public double getVenueLatitude() {
+    private double getVenueLatitude() {
         return venueLatitude;
     }
 
-    public double getVenueLongitude() {
+    private double getVenueLongitude() {
         return venueLongitude;
     }
 
@@ -184,5 +188,20 @@ public class EventDetailsHelper { // simplifies event data management, reducing 
             case "Sports" : id = R.drawable.sports;
         }
         return id;
+    }
+
+    public void buyTicket(String url) {
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        context.startActivity(intent);
+    }
+
+    public void goToEvent() {
+        Intent intent = new Intent(getContext(), MapsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(context.getString(R.string.venue_latitude_key), getVenueLatitude());
+        intent.putExtra(context.getString(R.string.venue_longitude_key), getVenueLongitude());
+        intent.putExtra(context.getString(R.string.venue_name_key), getVenueName());
+        context.startActivity(intent);
     }
 }

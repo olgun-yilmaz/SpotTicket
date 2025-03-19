@@ -49,7 +49,7 @@ import com.olgunyilmaz.spotticket.databinding.FragmentEventDetailsBinding;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.service.RetrofitClient;
 import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
-import com.olgunyilmaz.spotticket.util.EventDetailsHelper;
+import com.olgunyilmaz.spotticket.helper.EventDetailsHelper;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.olgunyilmaz.spotticket.view.activities.MapsActivity;
@@ -75,6 +75,7 @@ public class EventDetailsFragment extends Fragment {
     private LocalDataManager localDataManager;
     private FragmentManager fragmentManager;
     private MainActivity activity;
+    private String fromWhere;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,7 +99,7 @@ public class EventDetailsFragment extends Fragment {
 
         fragmentManager = requireActivity().getSupportFragmentManager();
 
-        String languageCode = localDataManager.getStringData(getString(R.string.language_code_key),"tr");
+        String languageCode = localDataManager.getStringData(getString(R.string.language_code_key), "tr");
         auth.setLanguageCode(languageCode);
 
         detailsHelper = new EventDetailsHelper(requireContext());
@@ -111,6 +112,7 @@ public class EventDetailsFragment extends Fragment {
 
         Bundle args = getArguments();
         if (args != null) {
+            fromWhere = args.getString(getString(R.string.from_key), getString(R.string.from_home));
             eventId = args.getString(getString(R.string.event_id_key));
             String imageUrl = args.getString(getString(R.string.image_url_key));
             eventName = args.getString(getString(R.string.event_name_key));
@@ -136,20 +138,32 @@ public class EventDetailsFragment extends Fragment {
 
             binding.detailsBackButton.setOnClickListener(v -> goBack());
 
-            binding.detailsLocationIcon.setOnClickListener(v -> goToEvent());
+            binding.detailsLocationIcon.setOnClickListener(v -> detailsHelper.goToEvent());
 
             TicketmasterApiService apiService = RetrofitClient.getApiService();
             findEventDetails(apiService, eventId, imageUrl);
         }
     }
 
-    private void goBack(){
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();;
-        HomePageFragment fragment = new HomePageFragment();
+    private void goBack() {
+        Fragment fragment = null;
+        if (fromWhere.equals(getString(R.string.from_home))) {
+            fragment = new HomePageFragment();
+            activity.binding.homeButton.setChecked(true);
+        } else if (fromWhere.equals(getString(R.string.from_favourite))) {
+            fragment = new FavoritesFragment();
+            activity.binding.myEventsButton.setChecked(true);
+        } else if (fromWhere.equals(getString(R.string.from_display))) {
+            fragment = new DisplayFragment();
+            activity.binding.displayButton.setChecked(true);
+        }
 
-        activity.binding.fixedBar.setVisibility(View.VISIBLE);
+        if(fragment != null){
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            activity.binding.fixedBar.setVisibility(View.VISIBLE);
+            fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
+        }
 
-        fragmentTransaction.replace(R.id.fragmentContainerView,fragment).commit();
 
     }
 
@@ -168,7 +182,7 @@ public class EventDetailsFragment extends Fragment {
         favorite.put(getString(R.string.event_name_key), eventName);
         favorite.put(getString(R.string.image_url_key), imageUrl);
         favorite.put(getString(R.string.event_date_key), eventDate);
-        favorite.put(getString(R.string.category_icon_key),categoryIconId);
+        favorite.put(getString(R.string.category_icon_key), categoryIconId);
 
         db.collection(collectionPath)
                 .add(favorite)
@@ -217,26 +231,26 @@ public class EventDetailsFragment extends Fragment {
                             eventName = event.getName();
                             String eventLocation = detailsHelper.getVenueInfo(event, event.getEmbedded().getVenues());
 
-                            String full_date = detailsHelper.getFormattedDate(eventDate,true);
+                            String full_date = detailsHelper.getFormattedDate(eventDate, true);
 
                             binding.detailsNameText.setText(eventName);
 
                             binding.detailsLocationText.setText(event.getEmbedded().getVenues().get(0).getCity().getName());
 
                             binding.detailsDescriptionText.setText(
-                                    getString(R.string.event_description_text,eventName,eventLocation,full_date));
+                                    getString(R.string.event_description_text, eventName, eventLocation, full_date));
 
-                            binding.detailsDateText.setText(detailsHelper.getFormattedDate(eventDate,false));
+                            binding.detailsDateText.setText(detailsHelper.getFormattedDate(eventDate, false));
 
                             Picasso.get().
                                     load(imageUrl)
-                                    .resize(1024,1024)
+                                    .resize(1024, 1024)
                                     .onlyScaleDown() // if smaller don't resize
                                     .placeholder(R.drawable.loading)
                                     .error(R.drawable.error)
                                     .into(binding.detailsImage);
 
-                            binding.buyTicketButton.setOnClickListener(v -> buyTicket(event.getUrl()));
+                            binding.buyTicketButton.setOnClickListener(v -> detailsHelper.buyTicket(event.getUrl()));
                         }
 
                     }
@@ -247,20 +261,5 @@ public class EventDetailsFragment extends Fragment {
 
                     }
                 });
-    }
-
-    public void goToEvent() {
-        Intent intent = new Intent(getContext(), MapsActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra(getString(R.string.venue_latitude_key), detailsHelper.getVenueLatitude());
-        intent.putExtra(getString(R.string.venue_longitude_key), detailsHelper.getVenueLongitude());
-        intent.putExtra(getString(R.string.venue_name_key), detailsHelper.getVenueName());
-        startActivity(intent);
-    }
-
-    private void buyTicket(String url) {
-        Uri uri = Uri.parse(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
     }
 }

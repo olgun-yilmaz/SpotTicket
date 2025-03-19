@@ -17,9 +17,6 @@
 
 package com.olgunyilmaz.spotticket.adapter;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +25,7 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.olgunyilmaz.spotticket.databinding.EventRowBinding;
-import com.olgunyilmaz.spotticket.util.EventDetailsHelper;
+import com.olgunyilmaz.spotticket.helper.EventDetailsHelper;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.olgunyilmaz.spotticket.view.fragments.EventDetailsFragment;
 import com.olgunyilmaz.spotticket.R;
@@ -59,7 +56,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.binding.rowEventName.setText(event.getName());
 
         EventDetailsHelper helper = new EventDetailsHelper(activity);
-        String formattedDate = helper.getFormattedDate(event.getDates().getStart().getDateTime(),false);
 
         Picasso.get().load(event.getHighQualityImage())
                 .resize(1024,1024)
@@ -78,6 +74,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 args.putString(activity.getString(R.string.image_url_key), event.getHighQualityImage());
                 args.putString(activity.getString(R.string.event_name_key), event.getName());
                 args.putString(activity.getString(R.string.event_date_key), event.getDates().getStart().getDateTime());
+                args.putString(activity.getString(R.string.from_key), activity.getString(R.string.from_home));
 
                 String category = helper.getEventSegmentInfo(event, event.getClassifications());
 

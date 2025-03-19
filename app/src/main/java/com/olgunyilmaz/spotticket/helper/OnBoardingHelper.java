@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.olgunyilmaz.spotticket.util;
+package com.olgunyilmaz.spotticket.helper;
 
 import static android.content.ContentValues.TAG;
 
@@ -39,6 +39,10 @@ import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.model.Language;
 import com.olgunyilmaz.spotticket.service.RetrofitClient;
 import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
+import com.olgunyilmaz.spotticket.util.LocalDataManager;
+import com.olgunyilmaz.spotticket.util.RecommendedEventManager;
+import com.olgunyilmaz.spotticket.util.UserFavoritesManager;
+import com.olgunyilmaz.spotticket.util.UserManager;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;

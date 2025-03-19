@@ -163,13 +163,14 @@
         <ImageView
             android:id="@+id/detailsLocationIcon"
 
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:padding="10dp"
 
             android:src="@drawable/placeholder"
 
-            app:layout_constraintWidth_percent="0.1"
-            app:layout_constraintHorizontal_bias="0.12"
+            app:layout_constraintHorizontal_bias="0.07"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -180,10 +181,7 @@
             android:id="@+id/detailsLocationText"
 
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-
-            app:layout_constraintWidth_percent="0.3"
-            app:layout_constraintHorizontal_bias="0.29"
+            android:layout_height="wrap_content"
 
             android:gravity="center"
 
@@ -193,34 +191,33 @@
             android:fontFamily="@font/lexend_light"
 
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/detailsLocationIcon"
             app:layout_constraintTop_toTopOf="parent"/>
 
 
         <ImageView
             android:id="@+id/detailsDateIcon"
 
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
             android:src="@drawable/calendar"
 
-            app:layout_constraintWidth_percent="0.1"
-            app:layout_constraintHorizontal_bias="0.6"
+            android:padding="10dp"
+
+            app:layout_constraintHorizontal_bias="0.2"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/detailsLocationText"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/detailsDateText"
 
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
 
-            app:layout_constraintHorizontal_bias="0.88"
 
             android:gravity="center"
 
@@ -230,8 +227,7 @@
             android:fontFamily="@font/lexend_light"
 
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/detailsDateIcon"
             app:layout_constraintTop_toTopOf="parent"/>
 
 

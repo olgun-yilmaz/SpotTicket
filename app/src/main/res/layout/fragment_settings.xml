@@ -90,10 +90,11 @@
 
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="Name"
 
             android:fontFamily="@font/roboto"
             android:src="@drawable/sample_profile_image"
-            android:textColor="#E0F1FF"
+            android:textColor="@color/settings_name_color"
 
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -117,7 +118,8 @@
 
             android:fontFamily="@font/roboto"
             android:src="@drawable/sample_profile_image"
-            android:textColor="#A8ADBD"
+            android:textColor="@color/settings_city_color"
+            android:text="City"
 
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -145,7 +147,7 @@
             android:fontFamily="@font/roboto_medium"
             android:src="@drawable/sample_profile_image"
             android:text="@string/title_edit"
-            android:textColor="#D7E2FF"
+            android:textColor="@color/settings_edit_color"
 
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -42,7 +42,7 @@ import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentSettingsBinding;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.util.MainHelper;
-import com.olgunyilmaz.spotticket.util.OnBoardingHelper;
+import com.olgunyilmaz.spotticket.helper.OnBoardingHelper;
 import com.olgunyilmaz.spotticket.util.UserManager;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.squareup.picasso.Picasso;

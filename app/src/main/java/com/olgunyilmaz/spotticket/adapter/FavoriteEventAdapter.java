@@ -79,6 +79,7 @@ public class FavoriteEventAdapter extends RecyclerView.Adapter<FavoriteEventAdap
                 args.putString(activity.getString(R.string.event_name_key), favoriteEvent.getEventName());
                 args.putString(activity.getString(R.string.event_date_key), favoriteEvent.getDate());
                 args.putLong(activity.getString(R.string.category_icon_key),favoriteEvent.getCategoryIcon());
+                args.putString(activity.getString(R.string.from_key), activity.getString(R.string.from_favourite));
 
                 fragment.setArguments(args);
 

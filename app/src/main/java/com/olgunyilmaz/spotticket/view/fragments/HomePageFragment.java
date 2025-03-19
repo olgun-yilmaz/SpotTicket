@@ -22,8 +22,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.os.Handler;
@@ -37,8 +35,8 @@ import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.adapter.EventAdapter;
 import com.olgunyilmaz.spotticket.databinding.FragmentHomePageBinding;
 import com.olgunyilmaz.spotticket.model.EventResponse;
-import com.olgunyilmaz.spotticket.util.EventDetailsHelper;
-import com.olgunyilmaz.spotticket.util.HomePageHelper;
+import com.olgunyilmaz.spotticket.helper.EventDetailsHelper;
+import com.olgunyilmaz.spotticket.helper.HomePageHelper;
 import com.olgunyilmaz.spotticket.util.RecommendedEventManager;
 import com.olgunyilmaz.spotticket.util.UserManager;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
@@ -48,12 +46,12 @@ import java.util.Random;
 
 
 public class HomePageFragment extends Fragment {
-    private FragmentHomePageBinding binding;
-    private FragmentManager fragmentManager;
+    public FragmentHomePageBinding binding;
     private Runnable runnable;
     private Handler handler;
     private HomePageHelper helper;
     private EventDetailsHelper detailsHelper;
+    private MainActivity activity;
 
 
     @Override
@@ -72,11 +70,11 @@ public class HomePageFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        helper = new HomePageHelper(requireActivity());
+        activity = (MainActivity) requireActivity();
 
-        fragmentManager = requireActivity().getSupportFragmentManager();
+        helper = new HomePageHelper(activity,binding);
 
-        detailsHelper = new EventDetailsHelper(requireActivity());
+        detailsHelper = new EventDetailsHelper(activity);
 
         if(UserManager.getInstance().ppUrl.isEmpty()){
             binding.homeProfileImage.setImageResource(R.drawable.sample_profile_image);
@@ -95,7 +93,7 @@ public class HomePageFragment extends Fragment {
 
         binding.seeAllText.setOnClickListener(v -> seeAll());
 
-        binding.homeProfileImage.setOnClickListener(v -> goToSettings());
+        binding.homeProfileImage.setOnClickListener(v -> goToProfile());
 
 
         if (RecommendedEventManager.getInstance().recommendedEvents != null) {
@@ -105,15 +103,12 @@ public class HomePageFragment extends Fragment {
 
         }
 
-        binding.homeSearchIcon.setOnClickListener(v -> searchEventByKeyword());
-        binding.homeSearchEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean onWriting) {
-                if (onWriting) {
-                    writingMode();
-                } else {
-                    normalMode();
-                }
+        binding.homeSearchIcon.setOnClickListener(v -> helper.searchEventByKeyword());
+        binding.homeSearchEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                writingMode();
+            } else {
+                normalMode();
             }
         });
 
@@ -123,13 +118,9 @@ public class HomePageFragment extends Fragment {
 
     }
 
-    private void goToSettings(){
-        MainActivity activity = (MainActivity) requireActivity();
+    private void goToProfile(){
         activity.binding.profileButton.setChecked(true);
-
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        ProfileFragment fragment = new ProfileFragment();
-        fragmentTransaction.replace(R.id.fragmentContainerView,fragment).commit();
+        helper.replaceFragment(new ProfileFragment());
     }
 
     private void displayUpcomingEvents(){
@@ -139,33 +130,14 @@ public class HomePageFragment extends Fragment {
     }
 
     private void seeAll(){
-        MainActivity activity = (MainActivity) requireActivity();
         activity.binding.displayButton.setChecked(true);
 
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Bundle args = new Bundle();
+        args.putBoolean(getString(R.string.see_all_key),true);
+
         DisplayFragment fragment = new DisplayFragment();
-        fragmentTransaction.replace(R.id.fragmentContainerView,fragment).commit();
-    }
-
-    private void searchEventByKeyword() {
-        String keyword = binding.homeSearchEditText.getText().toString();
-
-        if (keyword.length() >= 3) {
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            DisplayFragment fragment = new DisplayFragment();
-
-            helper.setEnableHomeButton();
-
-            Bundle args = new Bundle();
-            args.putBoolean(getString(R.string.search_by_keyword_key), true);
-            args.putString(getString(R.string.keyword_key), keyword);
-            fragment.setArguments(args);
-
-            fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
-        } else {
-            Toast.makeText(requireActivity(), getString(R.string.weak_search_error), Toast.LENGTH_SHORT).show();
-        }
-
+        fragment.setArguments(args);
+        helper.replaceFragment(fragment);
     }
 
     private void updateEvent(int frequency) {
@@ -205,8 +177,6 @@ public class HomePageFragment extends Fragment {
     }
 
     private void seeEventDetails(String eventID, String imageUrl, String eventDate) {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
         EventDetailsFragment fragment = new EventDetailsFragment();
 
         Bundle args = new Bundle();
@@ -215,27 +185,21 @@ public class HomePageFragment extends Fragment {
         args.putString(getString(R.string.event_date_key), eventDate);
         fragment.setArguments(args);
 
-        fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
+        helper.replaceFragment(fragment);
     }
 
 
     private void writingMode() {
         helper.setEnableHomeButton();
 
-        binding.profileLayout.setVisibility(View.INVISIBLE);
-        binding.upcomingEventsLayout.setVisibility(View.INVISIBLE);
-        binding.dateLayout.setVisibility(View.INVISIBLE);
-        binding.upcomingEventsLayout.setVisibility(View.INVISIBLE);
-        binding.recommendedEventLayout.setVisibility(View.INVISIBLE);
-        binding.upcomingEventsRecyclerView.setVisibility(View.INVISIBLE);
+        for(View view : helper.getHomeViews()){
+            view.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void normalMode() {
-        binding.profileLayout.setVisibility(View.VISIBLE);
-        binding.upcomingEventsLayout.setVisibility(View.VISIBLE);
-        binding.dateLayout.setVisibility(View.VISIBLE);
-        binding.upcomingEventsLayout.setVisibility(View.VISIBLE);
-        binding.recommendedEventLayout.setVisibility(View.VISIBLE);
-        binding.upcomingEventsRecyclerView.setVisibility(View.VISIBLE);
+        for(View view : helper.getHomeViews()){
+            view.setVisibility(View.VISIBLE);
+        }
     }
 }

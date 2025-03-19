@@ -40,7 +40,7 @@ import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.service.RetrofitClient;
 import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
 import com.olgunyilmaz.spotticket.util.Categories;
-import com.olgunyilmaz.spotticket.util.DisplayHelper;
+import com.olgunyilmaz.spotticket.helper.DisplayHelper;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.util.UserManager;
 

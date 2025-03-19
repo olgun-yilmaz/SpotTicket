@@ -25,7 +25,7 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.olgunyilmaz.spotticket.databinding.SearchRowBinding;
-import com.olgunyilmaz.spotticket.util.EventDetailsHelper;
+import com.olgunyilmaz.spotticket.helper.EventDetailsHelper;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.olgunyilmaz.spotticket.view.fragments.EventDetailsFragment;
 import com.olgunyilmaz.spotticket.R;
@@ -77,6 +77,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 args.putString(activity.getString(R.string.image_url_key), event.getHighQualityImage());
                 args.putString(activity.getString(R.string.event_name_key), event.getName());
                 args.putString(activity.getString(R.string.event_date_key),event.getDates().getStart().getDateTime());
+                args.putString(activity.getString(R.string.from_key), activity.getString(R.string.from_display));
+
 
                 String category = helper.getEventSegmentInfo(event,event.getClassifications());
 

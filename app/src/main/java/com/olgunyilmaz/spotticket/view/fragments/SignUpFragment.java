@@ -41,19 +41,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentSignUpBinding;
-import com.olgunyilmaz.spotticket.util.HomePageHelper;
+import com.olgunyilmaz.spotticket.helper.HomePageHelper;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.PrimitiveIterator;
 
 
 public class SignUpFragment extends Fragment implements SelectCityFragment.CitySelectListener {
@@ -89,7 +86,7 @@ public class SignUpFragment extends Fragment implements SelectCityFragment.CityS
 
         db = FirebaseFirestore.getInstance();
 
-        HomePageHelper helper = new HomePageHelper(requireActivity());
+        HomePageHelper helper = new HomePageHelper(requireContext(),null);
 
         ArrayList<String> cities = helper.getCities();
         binding.cityText.setOnClickListener(v -> showCityPicker(cities));

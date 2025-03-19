@@ -29,5 +29,8 @@
     <color name="description_text_color">#F8FAFC</color>
     <color name="sign_up_background">#010827</color>
     <color name="hint">#928787</color>
+    <color name="settings_name_color">#E0F1FF</color>
+    <color name="settings_edit_color">#D7E2FF</color>
+    <color name="settings_city_color">#A8ADBD</color>
 
 </resources>
