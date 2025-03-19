@@ -29,9 +29,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:background="@color/natural_gray"
+        android:background="@color/sign_up_background"
         app:iconifiedByDefault="false"
         app:queryHint="@string/search_city_text"
+        android:backgroundTint="@color/event_name_gray"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

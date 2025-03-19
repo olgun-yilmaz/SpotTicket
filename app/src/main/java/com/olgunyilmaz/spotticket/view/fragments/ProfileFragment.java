@@ -21,7 +21,6 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -37,8 +36,6 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.MediaStore;
 import android.util.Log;
@@ -65,12 +62,8 @@ import com.olgunyilmaz.spotticket.util.UserManager;
 import com.olgunyilmaz.spotticket.util.ImageLoader;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
-import com.squareup.picasso.Picasso;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 public class ProfileFragment extends Fragment {
@@ -78,14 +71,11 @@ public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;
     private Uri imgUri;
     private FirebaseFirestore db;
-    private FirebaseAuth auth;
 
     private ActivityResultLauncher<Intent> activityResultLauncher;
     private ActivityResultLauncher<String> permissionLauncher;
     private FirebaseStorage storage;
-    private FirebaseUser user;
     private ProfileHelper helper;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,23 +96,26 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        helper = new ProfileHelper((MainActivity) requireActivity(),binding);
+        helper = new ProfileHelper((MainActivity) requireActivity(), binding,this);
 
         registerLauncher();
         helper.uploadPp();
 
         db = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
         String countryKey = getString(R.string.language_code_key);
         String countryCode = new LocalDataManager(requireActivity()).getStringData(countryKey, "tr");
 
         auth.setLanguageCode(countryCode);
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        binding.emailText.setText(UserManager.getInstance().name + " "+ UserManager.getInstance().surname);
-        binding.usernameText.setText(UserManager.getInstance().email);
-        binding.creationDateText.setText(helper.getCreationDate(countryCode,user));
+        binding.emailText.setText(UserManager.getInstance().email);
+        binding.usernameText.setText(UserManager.getInstance().name + " " + UserManager.getInstance().surname);
+        binding.cityButton.setText(UserManager.getInstance().city);
+        binding.creationDateText.setText(helper.getCreationDate(countryCode, user));
 
         binding.deleteMyAccountButton.setOnClickListener(v -> helper.showDeleteAccountDialog());
 
@@ -136,15 +129,20 @@ public class ProfileFragment extends Fragment {
         binding.deleteMyAccountButton.setVisibility(View.GONE);
         binding.saveButton.setVisibility(View.VISIBLE);
         binding.profileImage.setEnabled(true);
+        binding.cityButton.setEnabled(true);
 
         binding.profileImage.setOnClickListener(this::changeProfileImage);
 
-        binding.saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                helper.displayMode();
-                uploadImage2db();
+        binding.saveButton.setOnClickListener(v -> {
+            helper.displayMode();
+
+            String city = binding.cityButton.getText().toString();
+
+            if(!city.equals(UserManager.getInstance().city)){
+                helper.updateCityData(db,city);
             }
+
+            uploadImage2db();
         });
 
     }
@@ -170,11 +168,11 @@ public class ProfileFragment extends Fragment {
 
                         db.collection(getString(R.string.users_collection_key)).add(user)
                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                            }
-                        });
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                    }
+                                });
                     }
                 });
     }
@@ -185,7 +183,7 @@ public class ProfileFragment extends Fragment {
             binding.profileImage.setImageResource(R.drawable.loading);
             String dir_name = "pp";
             StorageReference storageRef = storage.getReference();
-            StorageReference imageRef = storageRef.child("images").child(dir_name).child(user.getEmail() + ".jpg");
+            StorageReference imageRef = storageRef.child("images").child(dir_name).child(UserManager.getInstance().email + ".jpg");
 
             ImageLoader imageLoader = new ImageLoader(requireActivity(), imgUri, 500);
             imgUri = imageLoader.getResizedImageUri();
@@ -199,7 +197,7 @@ public class ProfileFragment extends Fragment {
                     imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            updateProfileImage(auth.getCurrentUser().getEmail().toString(), uri.toString());
+                            updateProfileImage(UserManager.getInstance().email, uri.toString());
                             UserManager.getInstance().ppUrl = imgUri.toString();
                             binding.profileImage.setImageURI(imgUri);
                             imgUri = null; // reset uri for next
@@ -211,7 +209,6 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                    System.out.println(e.getMessage());
                 }
             });
         }
@@ -229,13 +226,9 @@ public class ProfileFragment extends Fragment {
         if (ContextCompat.checkSelfPermission(requireContext(), permission) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), permission)) {
                 Snackbar.make(view, getString(R.string.gallery_permission_text),
-                        Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.give_permission_text),
-                        new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        permissionLauncher.launch(permission);
-                    }
-                }).show();
+                        Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.give_permission_text),v ->{
+                    permissionLauncher.launch(permission);
+                        }).show();
             } else {
                 permissionLauncher.launch(permission);
             }

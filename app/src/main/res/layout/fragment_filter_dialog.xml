@@ -61,7 +61,7 @@
             android:id="@+id/btnApplyFilters"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Filtrele"
+            android:text="@string/filter_text"
             android:layout_marginStart="8dp"/>
     </LinearLayout>
 

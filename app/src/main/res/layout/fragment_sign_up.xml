@@ -74,7 +74,7 @@
             android:fontFamily="@font/roboto_light"
             android:gravity="center"
 
-            android:text="Etkinliğin adresi değiliz ama etkinliğin adresini size verebiliriz :)"
+            android:text="@string/app_motto"
             android:textColor="@color/white"
 
             app:layout_constraintHeight_percent="0.3"
@@ -193,8 +193,6 @@
         android:textSize="18sp"
 
         android:hint="@string/please_select_your_city_text"
-
-        android:inputType="textEmailAddress"
 
         android:padding="10dp"
         android:background="@drawable/rounded_corners"

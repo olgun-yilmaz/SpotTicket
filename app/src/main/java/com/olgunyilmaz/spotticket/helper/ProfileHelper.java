@@ -18,37 +18,54 @@
 package com.olgunyilmaz.spotticket.helper;
 
 import android.app.AlertDialog;
+import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentProfileBinding;
 import com.olgunyilmaz.spotticket.util.UserManager;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.olgunyilmaz.spotticket.view.fragments.ReAuthenticateDialogFragment;
+import com.olgunyilmaz.spotticket.view.fragments.SelectCityFragment;
 import com.olgunyilmaz.spotticket.view.fragments.SettingsFragment;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class ProfileHelper {
+public class ProfileHelper implements SelectCityFragment.CitySelectListener {
     private final MainActivity activity;
     private final FragmentProfileBinding binding;
+    private final Fragment fragment;
+    private Runnable runnable;
+    private Handler handler;
+    int counter = 0;
 
-    public ProfileHelper(MainActivity activity, FragmentProfileBinding binding) {
+
+    public ProfileHelper(MainActivity activity, FragmentProfileBinding binding, Fragment fragment) {
         this.activity = activity;
         this.binding = binding;
+        this.fragment = fragment;
+        ArrayList<String> cities = new HomePageHelper(activity, null).getCities();
+        binding.cityButton.setOnClickListener(v -> showCityPicker(cities));
     }
 
-    public void goBackToSettings(){
+    public void goBackToSettings() {
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
         SettingsFragment fragment = new SettingsFragment();
-        transaction.replace(R.id.fragmentContainerView,fragment).commit();
+        transaction.replace(R.id.fragmentContainerView, fragment).commit();
     }
 
     public void showDeleteAccountDialog() {
@@ -83,18 +100,78 @@ public class ProfileHelper {
         binding.editButton.setVisibility(View.VISIBLE);
         binding.saveButton.setVisibility(View.GONE);
         binding.profileImage.setEnabled(false);
+        binding.cityButton.setEnabled(false);
     }
 
     public void uploadPp() {
         if (!UserManager.getInstance().ppUrl.isEmpty()) {
             Picasso.get()
                     .load(UserManager.getInstance().ppUrl)
-                    .resize(1024,1024)
+                    .resize(1024, 1024)
                     .onlyScaleDown() // if smaller don't resize
                     .placeholder(R.drawable.loading)
                     .error(R.drawable.error)
                     .into(binding.profileImage);
         }
         displayMode();
+    }
+
+    private void showCityPicker(ArrayList<String> cities) {
+        SelectCityFragment fragment = new SelectCityFragment();
+
+        Bundle args = new Bundle();
+        args.putStringArrayList(activity.getString(R.string.cities_key), cities);
+
+        fragment.setArguments(args);
+        fragment.setListener(this);
+
+        fragment.show(activity.getSupportFragmentManager(), activity.getString(R.string.city_picker_tag));
+    }
+
+    @Override
+    public void onCitySelected(String city) {
+        binding.cityButton.setText(city);
+    }
+
+    private void updateLoadingText() {
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (fragment.isAdded()){
+                    counter++;
+                    int numPoint = counter % 4;
+                    String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
+                    binding.cityButton.setText(activity.getString(R.string.please_wait_text) + numPointText);
+                    handler.postDelayed(runnable, 1000);
+                }
+            }
+        };
+        handler.post(runnable);
+    }
+
+    public void updateCityData(FirebaseFirestore db, String city) {
+        updateLoadingText();
+        db.collection(activity.getString(R.string.users_collection_key))
+                .whereEqualTo(activity.getString(R.string.email_key), UserManager.getInstance().email)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                    String documentId = documentSnapshot.getId();
+
+                    db.collection(activity.getString(R.string.users_collection_key)).document(documentId)
+                            .update(activity.getString(R.string.city_key), city)
+                            .addOnSuccessListener(aVoid -> {
+                                UserManager.getInstance().city = city;
+                                handler.removeCallbacks(runnable);
+                                binding.cityButton.setText(city);
+                                Toast.makeText(activity, activity.getString(R.string.successfully_city_updated_text), Toast.LENGTH_SHORT).show();
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(activity, activity.getString(R.string.error_text), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                });
     }
 }
