@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.OnBackPressedDispatcher;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -96,14 +95,14 @@ public class MainActivity extends AppCompatActivity {
 
         helper.directToEventDetails(eventName, fragmentManager);
 
-        binding.displayButton.setOnClickListener(v -> helper.replaceFragment(new DisplayFragment(), v, fragmentManager));
+        binding.displayButton.setOnClickListener(v -> helper.replaceFragment(new DisplayFragment(), fragmentManager));
 
-        binding.homeButton.setOnClickListener(v -> helper.replaceFragment(new HomePageFragment(), v, fragmentManager));
+        binding.homeButton.setOnClickListener(v -> helper.replaceFragment(new HomePageFragment(), fragmentManager));
 
-        binding.myEventsButton.setOnClickListener(v -> helper.replaceFragment(new FavoritesFragment(), v, fragmentManager));
+        binding.myEventsButton.setOnClickListener(v -> helper.replaceFragment(new FavoritesFragment(), fragmentManager));
     }
-    public void goToSettingsScreen(View view) {
-        helper.replaceFragment(new SettingsFragment(), view, fragmentManager);
+    public void goToSettingsScreen(View v) {
+        helper.replaceFragment(new SettingsFragment(), fragmentManager);
     }
 
     private void setNotificationAlert() {
@@ -136,12 +135,8 @@ public class MainActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(MainActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, permission)) {
                     Snackbar.make(view, getString(R.string.notification_permission_text),
-                            Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.give_permission_text),
-                            new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    permissionLauncher.launch(permission); // ask permission
-                                }
+                            Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.give_permission_text), v -> {
+                                permissionLauncher.launch(permission); // ask permission
                             }).show();
                 }else{
                     permissionLauncher.launch(permission); // ask permission
@@ -156,14 +151,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void registerLauncher() {
-        permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
-            @Override
-            public void onActivityResult(Boolean result) {
-                if (result) {
-                    sendAllNotifications();
-                } else {
-                    Toast.makeText(MainActivity.this, getString(R.string.notification_permission_text), Toast.LENGTH_LONG).show();
-                }
+        permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), result -> {
+            if (result) {
+                sendAllNotifications();
+            } else {
+                Toast.makeText(MainActivity.this, getString(R.string.notification_permission_text), Toast.LENGTH_LONG).show();
             }
         });
     }

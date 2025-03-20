@@ -35,16 +35,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentLoginBinding;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
-import com.olgunyilmaz.spotticket.util.UserManager;
 import com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity;
 
 import java.util.ArrayList;
@@ -66,7 +61,7 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentLoginBinding.inflate(getLayoutInflater(), container, false);
         return binding.getRoot();
@@ -120,17 +115,6 @@ public class LoginFragment extends Fragment {
                 binding.passwordIcon
         ));
     }
-
-
-    private void updateRememberMe() {
-        if (binding.rememberMeButton.isChecked()) {
-            localDataManager.updateBooleanData(getString(R.string.remember_me_key), true);
-        } else {
-            localDataManager.updateBooleanData(getString(R.string.remember_me_key), false);
-        }
-
-    }
-
     private void normalMode() {
         binding.resetPasswordText.setText(getText(R.string.forgot_password_text));
         binding.resetPasswordText.setEnabled(true);
@@ -160,44 +144,38 @@ public class LoginFragment extends Fragment {
             loadingMode();
 
             auth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (isAdded()) {
-                                if (task.isSuccessful()) {
-                                    FirebaseUser currentUser = auth.getCurrentUser();
+                    .addOnCompleteListener(requireActivity(), task -> {
+                        if (isAdded()) {
+                            if (task.isSuccessful()) {
+                                FirebaseUser currentUser = auth.getCurrentUser();
 
-                                    if (currentUser != null) {
-                                        if (currentUser.isEmailVerified()) {
-                                            localDataManager.updateStringData(getString(R.string.user_email_key), email);
-                                            updateRememberMe();
+                                if (currentUser != null) {
+                                    if (currentUser.isEmailVerified()) {
+                                        localDataManager.updateStringData(getString(R.string.user_email_key), email);
+                                        localDataManager.updateBooleanData(getString(R.string.remember_me_key), binding.rememberMeButton.isChecked());
 
-                                            Intent intent = new Intent(requireActivity(), OnBoardingActivity.class); // for download the user data
-                                            intent.putExtra(getString(R.string.from_login_key), true);
-                                            intent.putExtra(getString(R.string.user_email_key), email);
-                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                            startActivity(intent);
-                                            requireActivity().finish();
-                                        } else {
-                                            normalMode();
+                                        Intent intent = new Intent(requireActivity(), OnBoardingActivity.class); // for download the user data
+                                        intent.putExtra(getString(R.string.from_login_key), true);
+                                        intent.putExtra(getString(R.string.user_email_key), email);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+                                        requireActivity().finish();
+                                    } else {
+                                        normalMode();
 
-                                            Bundle args = new Bundle();
-                                            args.putBoolean(getString(R.string.from_login_key), true);
-                                            EmailSentFragment fragment = new EmailSentFragment();
-                                            fragment.setArguments(args);
-                                            replaceFragment(fragment);
-                                        }
+                                        Bundle args = new Bundle();
+                                        args.putBoolean(getString(R.string.from_login_key), true);
+                                        EmailSentFragment fragment = new EmailSentFragment();
+                                        fragment.setArguments(args);
+                                        replaceFragment(fragment);
                                     }
                                 }
                             }
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            if (isAdded()) {
-                                normalMode();
-                                Toast.makeText(requireContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                            }
+                    }).addOnFailureListener(e -> {
+                        if (isAdded()) {
+                            normalMode();
+                            Toast.makeText(requireContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
 
@@ -208,16 +186,13 @@ public class LoginFragment extends Fragment {
 
     private void updateLoadingText() {
         handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (isAdded()) {
-                    counter++;
-                    int numPoint = counter % 4;
-                    String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
-                    binding.resetPasswordText.setText(getString(R.string.please_wait_text) + numPointText);
-                    handler.postDelayed(runnable, 1000);
-                }
+        runnable = () -> {
+            if (isAdded()) {
+                counter++;
+                int numPoint = counter % 4;
+                String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
+                binding.resetPasswordText.setText(String.format("%s%s", getString(R.string.please_wait_text), numPointText));
+                handler.postDelayed(runnable, 1000);
             }
         };
         handler.post(runnable);

@@ -29,6 +29,7 @@ import androidx.annotation.NonNull;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 public class ImageLoader { // makes image saving operations
     private final int maxSize;
@@ -64,13 +65,13 @@ public class ImageLoader { // makes image saving operations
             return Bitmap.createScaledBitmap(rotatedBitmap, width, height, true);
 
         } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            System.out.println(e.getMessage());
         }
+        return null;
     }
 
     private Matrix getImageMatrix(Uri imageUri) throws IOException { // matrix operations
-        ExifInterface exif = new ExifInterface(context.getContentResolver().openInputStream(imageUri));
+        ExifInterface exif = new ExifInterface(Objects.requireNonNull(context.getContentResolver().openInputStream(imageUri)));
         int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
 
         Matrix matrix = new Matrix();
@@ -97,11 +98,12 @@ public class ImageLoader { // makes image saving operations
         File file = new File(context.getCacheDir(), "small_image.jpg");
         try {
             FileOutputStream out = new FileOutputStream(file);
+            assert bitmap != null;
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.flush();
             out.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return Uri.fromFile(file);
     }

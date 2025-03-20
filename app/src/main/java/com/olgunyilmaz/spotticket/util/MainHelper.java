@@ -20,10 +20,7 @@ package com.olgunyilmaz.spotticket.util;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -34,8 +31,6 @@ import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.view.activities.EmailPasswordActivity;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.olgunyilmaz.spotticket.view.fragments.EventDetailsFragment;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,22 +47,19 @@ public class MainHelper {
         getMenuButtons();
         getMenuHashmap();
 
-        activity.binding.fixedBar.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                RadioButton selectedButton = radioGroup.findViewById(i);
-                for(RadioButton radioButton : menuButtons){
-                    String key = radioButton.getText().toString();
-                    boolean state = true;
-                    if (radioButton == selectedButton){
-                        key += selectedText;
-                        state = false; // make it disable
-                    }
-                    radioButton.setBackgroundResource(menuHashmap.get(key));
-                    radioButton.setEnabled(state);
+        activity.binding.fixedBar.setOnCheckedChangeListener((radioGroup, i) -> {
+            RadioButton selectedButton = radioGroup.findViewById(i);
+            for(RadioButton radioButton : menuButtons){
+                String key = radioButton.getText().toString();
+                boolean state = true;
+                if (radioButton == selectedButton){
+                    key += selectedText;
+                    state = false; // make it disable
                 }
-
+                radioButton.setBackgroundResource(menuHashmap.get(key));
+                radioButton.setEnabled(state);
             }
+
         });
     }
 
@@ -102,7 +94,7 @@ public class MainHelper {
         activity.finish();
     }
 
-    public void replaceFragment(Fragment fragment, View sender, FragmentManager fragmentManager) {
+    public void replaceFragment(Fragment fragment, FragmentManager fragmentManager) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
     }

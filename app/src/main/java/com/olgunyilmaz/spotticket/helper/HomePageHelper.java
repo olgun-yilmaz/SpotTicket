@@ -29,7 +29,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.gson.Gson;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentHomePageBinding;
-import com.olgunyilmaz.spotticket.model.CategoryResponse;
 import com.olgunyilmaz.spotticket.model.CitiesResponse;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.olgunyilmaz.spotticket.view.fragments.DisplayFragment;
@@ -53,22 +52,6 @@ public class HomePageHelper {
         MainActivity activity = (MainActivity) context;
         activity.binding.displayButton.setEnabled(false);
         activity.binding.homeButton.setEnabled(true);
-    }
-
-    public ArrayList<CategoryResponse> getCategories() {
-        ArrayList<CategoryResponse> categories = new ArrayList<>();
-
-
-        categories.add(new CategoryResponse(R.drawable.movie, context.getString(R.string.movie)));
-        categories.add(new CategoryResponse(R.drawable.electro, context.getString(R.string.electro)));
-        categories.add(new CategoryResponse(R.drawable.mma, context.getString(R.string.mma)));
-        categories.add(new CategoryResponse(R.drawable.music, context.getString(R.string.music)));
-
-        categories.add(new CategoryResponse(R.drawable.sports, context.getString(R.string.sports)));
-        categories.add(new CategoryResponse(R.drawable.theater, context.getString(R.string.theater)));
-
-        return categories;
-
     }
 
     public ArrayList<View> getHomeViews(){
@@ -98,7 +81,7 @@ public class HomePageHelper {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getLocalizedMessage());
         }
         return null;
     }

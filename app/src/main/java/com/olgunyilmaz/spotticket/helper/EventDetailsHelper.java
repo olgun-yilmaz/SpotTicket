@@ -21,13 +21,13 @@ import static android.content.ContentValues.TAG;
 import static com.olgunyilmaz.spotticket.util.Constants.MAPS_API_KEY;
 import static com.olgunyilmaz.spotticket.util.Constants.MAPS_BASE_URL;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -36,6 +36,7 @@ import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.model.GeocodingResponse;
 import com.olgunyilmaz.spotticket.service.GeocodingService;
+import com.olgunyilmaz.spotticket.util.LastSearchManager;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.util.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
@@ -143,9 +144,9 @@ public class EventDetailsHelper { // simplifies event data management, reducing 
         GeocodingService service = retrofit.create(GeocodingService.class);
         Call<GeocodingResponse> call = service.getLatLng(address, MAPS_API_KEY);
 
-        call.enqueue(new Callback<GeocodingResponse>() {
+        call.enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<GeocodingResponse> call, Response<GeocodingResponse> response) {
+            public void onResponse(@NonNull Call<GeocodingResponse> call, @NonNull Response<GeocodingResponse> response) {
                 if (response.isSuccessful()) {
                     GeocodingResponse geocodingResponse = response.body();
                     if (geocodingResponse != null && !geocodingResponse.getResults().isEmpty()) {
@@ -161,7 +162,7 @@ public class EventDetailsHelper { // simplifies event data management, reducing 
             }
 
             @Override
-            public void onFailure(Call<GeocodingResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<GeocodingResponse> call, @NonNull Throwable t) {
                 Log.e(TAG, "Failed to get LatLng: " + t.getMessage());
             }
         });
@@ -226,7 +227,7 @@ public class EventDetailsHelper { // simplifies event data management, reducing 
             fragment = new FavoritesFragment();
             activity.binding.myEventsButton.setChecked(true);
         } else if (fromWhere.equals(activity.getString(R.string.from_display))) {
-            fragment = new DisplayFragment();
+            fragment = new DisplayFragment(LastSearchManager.getInstance().sender);
             activity.binding.displayButton.setChecked(true);
         }
 

@@ -24,6 +24,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
+import java.util.Objects;
+
 public class CircleTransform implements Transformation {
     @Override
     public Bitmap transform(Bitmap source) {
@@ -38,7 +40,7 @@ public class CircleTransform implements Transformation {
         }
 
         // Create a circular bitmap
-        Bitmap bitmap = Bitmap.createBitmap(size, size, source.getConfig());
+        Bitmap bitmap = Bitmap.createBitmap(size, size, Objects.requireNonNull(source.getConfig()));
         Canvas canvas = new Canvas(bitmap);
 
         // Create a circle shape to cut from the image

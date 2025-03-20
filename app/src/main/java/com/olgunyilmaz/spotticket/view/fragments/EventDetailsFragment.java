@@ -21,15 +21,11 @@ import static android.content.ContentValues.TAG;
 import static com.olgunyilmaz.spotticket.util.Constants.TICKETMASTER_API_KEY;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,11 +33,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.model.EventResponse;
 import com.olgunyilmaz.spotticket.util.UserFavoritesManager;
@@ -51,8 +45,8 @@ import com.olgunyilmaz.spotticket.service.RetrofitClient;
 import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
 import com.olgunyilmaz.spotticket.helper.EventDetailsHelper;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
+import com.olgunyilmaz.spotticket.util.UserManager;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
-import com.olgunyilmaz.spotticket.view.activities.MapsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -79,7 +73,7 @@ public class EventDetailsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentEventDetailsBinding.inflate(getLayoutInflater(), container, false);
         return binding.getRoot();
@@ -101,8 +95,7 @@ public class EventDetailsFragment extends Fragment {
 
         detailsHelper = new EventDetailsHelper(activity);
 
-        String userEmail = auth.getCurrentUser().getEmail().toString();
-        collectionPath = userEmail + getString(R.string.my_events_key);
+        collectionPath = UserManager.getInstance().email + getString(R.string.my_events_key);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -163,20 +156,14 @@ public class EventDetailsFragment extends Fragment {
         db.collection(collectionPath)
                 .whereEqualTo(getString(R.string.event_id_key), eventId)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                document.getReference().delete()
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                UserFavoritesManager.getInstance().removeFavorite(eventId);
-                                                localDataManager.deleteData(eventId);
-                                            }
-                                        });
-                            }
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            document.getReference().delete()
+                                    .addOnSuccessListener(aVoid -> {
+                                        UserFavoritesManager.getInstance().removeFavorite(eventId);
+                                        localDataManager.deleteData(eventId);
+                                    });
                         }
                     }
                 });
@@ -184,13 +171,14 @@ public class EventDetailsFragment extends Fragment {
 
     private void findEventDetails(TicketmasterApiService apiService, String eventId, String imageUrl) {
         apiService.getEventDetails(eventId, TICKETMASTER_API_KEY)
-                .enqueue(new Callback<EventResponse.Event>() {
+                .enqueue(new Callback<>() {
                     @SuppressLint("SetTextI18n")
                     @Override
-                    public void onResponse(Call<EventResponse.Event> call, Response<EventResponse.Event> response) {
+                    public void onResponse(@NonNull Call<EventResponse.Event> call, @NonNull Response<EventResponse.Event> response) {
                         if (response.isSuccessful()) {
                             EventResponse.Event event = response.body();
 
+                            assert event != null;
                             String eventDate = event.getDates().getStart().getDateTime();
 
                             eventName = event.getName();
@@ -221,7 +209,7 @@ public class EventDetailsFragment extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<EventResponse.Event> call, Throwable t) {
+                    public void onFailure(@NonNull Call<EventResponse.Event> call, @NonNull Throwable t) {
                         Toast.makeText(requireContext(), t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 
                     }

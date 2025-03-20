@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Categories {
-    private Context context;
+    private final Context context;
 
     public Categories(Context context) {
         this.context = context;

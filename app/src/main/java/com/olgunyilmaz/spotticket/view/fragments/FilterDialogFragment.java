@@ -122,10 +122,10 @@ public class FilterDialogFragment extends DialogFragment implements SelectCityFr
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(),
                 (view, selectedYear, selectedMonth, selectedDay) -> {
                     String selectedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
-                    binding.btnDate.setText(getString(R.string.date_text) + " " + selectedDate);
+                    binding.btnDate.setText(String.format("%s %s", getString(R.string.date_text), selectedDate));
                 }, year, month, day);
 
         datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
@@ -157,7 +157,7 @@ public class FilterDialogFragment extends DialogFragment implements SelectCityFr
         fragment.setArguments(args);
         fragment.setListener(this);
 
-        fragment.show(getActivity().getSupportFragmentManager(), getString(R.string.city_picker_tag));
+        fragment.show(requireActivity().getSupportFragmentManager(), getString(R.string.city_picker_tag));
     }
 
     @Override

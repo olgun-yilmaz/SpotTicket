@@ -19,9 +19,9 @@ package com.olgunyilmaz.spotticket.adapter;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.olgunyilmaz.spotticket.databinding.EventRowBinding;
@@ -36,14 +36,15 @@ import java.util.List;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
 
-    private List<EventResponse.Event> eventList;
+    private final List<EventResponse.Event> eventList;
 
     public EventAdapter(List<EventResponse.Event> eventList) {
         this.eventList = eventList;
     }
 
+    @NonNull
     @Override
-    public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         EventRowBinding binding = EventRowBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new EventViewHolder(binding);
     }
@@ -65,28 +66,26 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 .into(holder.binding.eventBackgroundImage);
 
 
-        holder.binding.eventRowInnerLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EventDetailsFragment fragment = new EventDetailsFragment();
-                Bundle args = new Bundle();
-                args.putString(activity.getString(R.string.event_id_key), event.getId());
-                args.putString(activity.getString(R.string.image_url_key), event.getHighQualityImage());
-                args.putString(activity.getString(R.string.event_name_key), event.getName());
-                args.putString(activity.getString(R.string.event_date_key), event.getDates().getStart().getDateTime());
-                args.putString(activity.getString(R.string.from_key), activity.getString(R.string.from_home));
+        holder.binding.eventRowInnerLayout.setOnClickListener(view -> {
 
-                String category = helper.getEventSegmentInfo(event, event.getClassifications());
+            EventDetailsFragment fragment = new EventDetailsFragment();
+            Bundle args = new Bundle();
+            args.putString(activity.getString(R.string.event_id_key), event.getId());
+            args.putString(activity.getString(R.string.image_url_key), event.getHighQualityImage());
+            args.putString(activity.getString(R.string.event_name_key), event.getName());
+            args.putString(activity.getString(R.string.event_date_key), event.getDates().getStart().getDateTime());
+            args.putString(activity.getString(R.string.from_key), activity.getString(R.string.from_home));
 
-                args.putLong(activity.getString(R.string.category_icon_key), helper.getCategoryIconId(category));
-                fragment.setArguments(args);
+            String category = helper.getEventSegmentInfo(event, event.getClassifications());
 
-                activity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainerView, fragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
+            args.putLong(activity.getString(R.string.category_icon_key), helper.getCategoryIconId(category));
+            fragment.setArguments(args);
+
+            activity.getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainerView, fragment)
+                    .addToBackStack(null)
+                    .commit();
         });
     }
 
@@ -95,7 +94,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         return eventList.size();
     }
 
-    public class EventViewHolder extends RecyclerView.ViewHolder {
+    public static class EventViewHolder extends RecyclerView.ViewHolder {
         private final EventRowBinding binding;
 
         public EventViewHolder(EventRowBinding binding) {

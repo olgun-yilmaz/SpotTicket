@@ -30,7 +30,7 @@ public class EventResponse { // model for event details from api
         return _embedded;
     }
 
-    public class Embedded {
+    public static class Embedded {
         @SerializedName("events")
         private List<Event> events;
 
@@ -39,7 +39,7 @@ public class EventResponse { // model for event details from api
         }
     }
 
-    public class Event {
+    public static class Event {
 
         public String getHighQualityImage(){
             if (getImages() != null && !getImages().isEmpty()) {
@@ -66,7 +66,7 @@ public class EventResponse { // model for event details from api
             return embedded;
         }
 
-        public class Embedded {
+        public static class Embedded {
             @SerializedName("venues")
             private List<Venue> venues;
 
@@ -120,7 +120,7 @@ public class EventResponse { // model for event details from api
         }
     }
 
-    public class Image {
+    public static class Image {
         private int width;
         private int height;
 
@@ -132,7 +132,7 @@ public class EventResponse { // model for event details from api
         }
     }
 
-    public class Dates {
+    public static class Dates {
         @SerializedName("start")
         private Start start;
 
@@ -140,7 +140,7 @@ public class EventResponse { // model for event details from api
             return start;
         }
 
-        public class Start {
+        public static class Start {
             @SerializedName("dateTime")
             private String dateTime; // Başlangıç zamanı
 
@@ -150,7 +150,7 @@ public class EventResponse { // model for event details from api
         }
     }
 
-    public class Classification {
+    public static class Classification {
         @SerializedName("segment")
         private Segment segment;
 
@@ -158,7 +158,7 @@ public class EventResponse { // model for event details from api
             return segment;
         }
 
-        public class Segment {
+        public static class Segment {
             @SerializedName("name")
             private String name;
 
@@ -168,7 +168,7 @@ public class EventResponse { // model for event details from api
         }
     }
 
-    public class Venue {
+    public static class Venue {
         @SerializedName("name")
         private String name;
 
@@ -183,7 +183,7 @@ public class EventResponse { // model for event details from api
             return city;
         }
 
-        public class City {
+        public static class City {
             @SerializedName("name")
             private String name;
 

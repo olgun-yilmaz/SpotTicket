@@ -27,8 +27,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -44,17 +42,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentProfileBinding;
 import com.olgunyilmaz.spotticket.helper.ProfileHelper;
@@ -83,7 +77,7 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(getLayoutInflater(), container, false);
         View view = binding.getRoot();
@@ -113,7 +107,7 @@ public class ProfileFragment extends Fragment {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         binding.emailText.setText(UserManager.getInstance().email);
-        binding.usernameText.setText(UserManager.getInstance().name + " " + UserManager.getInstance().surname);
+        binding.usernameText.setText(String.format("%s %s", UserManager.getInstance().name, UserManager.getInstance().surname));
         binding.cityButton.setText(UserManager.getInstance().city);
         binding.creationDateText.setText(helper.getCreationDate(countryCode, user));
 
@@ -158,21 +152,16 @@ public class ProfileFragment extends Fragment {
 
                         db.collection(getString(R.string.users_collection_key)).document(documentId)
                                 .update(getString(R.string.profile_image_url_key), ppUrl)
-                                .addOnSuccessListener(aVoid -> {
-                                    Log.d(TAG, "Profile image updated successfully.");
-                                });
+                                .addOnSuccessListener(aVoid ->
+                                        Log.d(TAG, "Profile image updated successfully."));
                     } else { // add new
                         Map<String, Object> user = new HashMap<>();
                         user.put(getString(R.string.email_key), email);
                         user.put(getString(R.string.profile_image_url_key), ppUrl);
 
                         db.collection(getString(R.string.users_collection_key)).add(user)
-                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                    }
-                                });
+                                .addOnSuccessListener(documentReference ->
+                                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId()));
                     }
                 });
     }
@@ -188,29 +177,19 @@ public class ProfileFragment extends Fragment {
             ImageLoader imageLoader = new ImageLoader(requireActivity(), imgUri, 500);
             imgUri = imageLoader.getResizedImageUri();
 
-            imageRef.putFile(imgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(getContext(), getString(R.string.successfully_image_change_text),
-                            Toast.LENGTH_LONG).show();
+            imageRef.putFile(imgUri).addOnSuccessListener(taskSnapshot -> {
+                Toast.makeText(getContext(), getString(R.string.successfully_image_change_text),
+                        Toast.LENGTH_LONG).show();
 
-                    imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            updateProfileImage(UserManager.getInstance().email, uri.toString());
-                            UserManager.getInstance().ppUrl = imgUri.toString();
-                            binding.profileImage.setImageURI(imgUri);
-                            imgUri = null; // reset uri for next
-                        }
-                    });
+                imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                    updateProfileImage(UserManager.getInstance().email, uri.toString());
+                    UserManager.getInstance().ppUrl = imgUri.toString();
+                    binding.profileImage.setImageURI(imgUri);
+                    imgUri = null; // reset uri for next
+                });
 
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                }
-            });
+            }).addOnFailureListener(e ->
+                    Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
         }
     }
 
@@ -226,9 +205,8 @@ public class ProfileFragment extends Fragment {
         if (ContextCompat.checkSelfPermission(requireContext(), permission) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), permission)) {
                 Snackbar.make(view, getString(R.string.gallery_permission_text),
-                        Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.give_permission_text),v ->{
-                    permissionLauncher.launch(permission);
-                        }).show();
+                        Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.give_permission_text),
+                        v -> permissionLauncher.launch(permission)).show();
             } else {
                 permissionLauncher.launch(permission);
             }
@@ -241,32 +219,25 @@ public class ProfileFragment extends Fragment {
     private void registerLauncher() {
 
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.
-                StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-                if (result.getResultCode() == RESULT_OK) {
-                    Intent intentFromResult = result.getData();
-                    if (intentFromResult != null) {
-                        imgUri = intentFromResult.getData();
-                        binding.profileImage.setImageURI(imgUri);
+                StartActivityForResult(), result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent intentFromResult = result.getData();
+                        if (intentFromResult != null) {
+                            imgUri = intentFromResult.getData();
+                            binding.profileImage.setImageURI(imgUri);
+                        }
+
                     }
+                });
 
-                }
-            }
-        });
-
-        permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
-
-            @Override
-            public void onActivityResult(Boolean result) {
-                if (result) {
-                    //permission granted
-                    Intent intentToGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    activityResultLauncher.launch(intentToGallery);
-                } else {
-                    //permission denied
-                    Toast.makeText(getActivity(), getString(R.string.gallery_permission_text), Toast.LENGTH_LONG).show();
-                }
+        permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), result -> {
+            if (result) {
+                //permission granted
+                Intent intentToGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                activityResultLauncher.launch(intentToGallery);
+            } else {
+                //permission denied
+                Toast.makeText(getActivity(), getString(R.string.gallery_permission_text), Toast.LENGTH_LONG).show();
             }
         });
     }

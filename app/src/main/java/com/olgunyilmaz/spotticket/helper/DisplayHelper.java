@@ -19,12 +19,7 @@ package com.olgunyilmaz.spotticket.helper;
 
 import android.content.Context;
 
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.olgunyilmaz.spotticket.R;
-import com.olgunyilmaz.spotticket.view.activities.MainActivity;
-import com.olgunyilmaz.spotticket.view.fragments.HomePageFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,17 +32,6 @@ public class DisplayHelper {
 
     public DisplayHelper(Context context) {
         this.context = context;
-    }
-
-    public void goToHomePage() {
-        MainActivity activity = (MainActivity) context;
-
-        activity.binding.homeButton.setChecked(true);
-
-        FragmentManager fragmentManager = activity.getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        HomePageFragment fragment = new HomePageFragment();
-        fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
     }
 
     public String capitalizeWords(String str) {
@@ -78,13 +62,14 @@ public class DisplayHelper {
 
         try {
             Date date = inputFormat.parse(inputDate);
-            String formattedDate = outputFormat.format(date);
 
-            return formattedDate;
+            if(date != null){
+                return outputFormat.format(date);
+            }
         } catch (ParseException e) {
-            e.printStackTrace();
-            return "";
+            System.out.println(e.getLocalizedMessage());
         }
+        return "";
     }
 
 }

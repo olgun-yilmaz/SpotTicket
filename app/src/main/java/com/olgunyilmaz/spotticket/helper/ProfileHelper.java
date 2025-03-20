@@ -23,11 +23,9 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -135,16 +133,13 @@ public class ProfileHelper implements SelectCityFragment.CitySelectListener {
 
     private void updateLoadingText() {
         handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (fragment.isAdded()){
-                    counter++;
-                    int numPoint = counter % 4;
-                    String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
-                    binding.cityButton.setText(activity.getString(R.string.please_wait_text) + numPointText);
-                    handler.postDelayed(runnable, 1000);
-                }
+        runnable = () -> {
+            if (fragment.isAdded()){
+                counter++;
+                int numPoint = counter % 4;
+                String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
+                binding.cityButton.setText(String.format("%s%s", activity.getString(R.string.please_wait_text), numPointText));
+                handler.postDelayed(runnable, 1000);
             }
         };
         handler.post(runnable);
@@ -166,12 +161,8 @@ public class ProfileHelper implements SelectCityFragment.CitySelectListener {
                                 handler.removeCallbacks(runnable);
                                 binding.cityButton.setText(city);
                                 Toast.makeText(activity, activity.getString(R.string.successfully_city_updated_text), Toast.LENGTH_SHORT).show();
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(activity, activity.getString(R.string.error_text), Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                            }).addOnFailureListener(e ->
+                                    Toast.makeText(activity, activity.getString(R.string.error_text), Toast.LENGTH_SHORT).show());
                 });
     }
 }

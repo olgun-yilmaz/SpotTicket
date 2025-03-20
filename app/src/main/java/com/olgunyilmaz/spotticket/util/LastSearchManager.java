@@ -15,24 +15,27 @@
  * limitations under the License.
  */
 
-package com.olgunyilmaz.spotticket.model;
+package com.olgunyilmaz.spotticket.util;
 
-public class CategoryResponse { // category model class -> id & name
-    private final int imageID;
+import com.olgunyilmaz.spotticket.model.EventResponse;
 
-    public CategoryResponse(int imageID, String categoryName) {
-        this.imageID = imageID;
-        this.categoryName = categoryName;
+import java.util.ArrayList;
+import java.util.List;
+
+public class LastSearchManager {
+    private static LastSearchManager instance;
+    public List<EventResponse.Event> lastEvents;
+    public String sender;
+
+    private LastSearchManager() {
+        lastEvents = new ArrayList<>();
+        sender = "";
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public static LastSearchManager getInstance() {
+        if (instance == null) {
+            instance = new LastSearchManager();
+        }
+        return instance;
     }
-
-
-    public int getImageID() {
-        return imageID;
-    }
-
-    private final String categoryName;
 }

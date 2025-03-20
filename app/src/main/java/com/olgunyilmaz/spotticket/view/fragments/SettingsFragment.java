@@ -65,7 +65,7 @@ public class SettingsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(getLayoutInflater(), container, false);
         return binding.getRoot();
@@ -131,7 +131,8 @@ public class SettingsFragment extends Fragment {
         }
 
         binding.languageIcon.setImageResource(selectedLanguage.getImageID());
-        binding.languageText.setText(activity.getString(R.string.title_language) + " " + selectedLanguage.getLanguageText());
+        binding.languageText.setText(
+                String.format("%s %s", activity.getString(R.string.title_language), selectedLanguage.getLanguageText()));
 
     }
 

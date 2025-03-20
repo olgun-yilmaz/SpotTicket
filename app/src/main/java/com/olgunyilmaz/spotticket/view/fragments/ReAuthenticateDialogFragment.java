@@ -31,9 +31,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,7 +38,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
@@ -62,7 +58,7 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
         db = FirebaseFirestore.getInstance();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_reauthenticate_dialog, null);
 
         reAutheditTextPassword = view.findViewById(R.id.reAuthEditTextPassword);
@@ -75,17 +71,15 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
                 .setNegativeButton(getString(R.string.answer_cancel), null)
                 .create();
 
-        dialog.setOnShowListener(dialogInterface -> {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
-                String password = reAutheditTextPassword.getText().toString().trim();
-                if (!password.isEmpty()) {
-                    reauthenticateAndDelete(password, dialog);
-                } else {
-                    Toast.makeText(getContext(),
-                            getString(R.string.enter_password_for_delete_account), Toast.LENGTH_SHORT).show();
-                }
-            });
-        });
+        dialog.setOnShowListener(dialogInterface -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            String password = reAutheditTextPassword.getText().toString().trim();
+            if (!password.isEmpty()) {
+                reauthenticateAndDelete(password, dialog);
+            } else {
+                Toast.makeText(getContext(),
+                        getString(R.string.enter_password_for_delete_account), Toast.LENGTH_SHORT).show();
+            }
+        }));
 
         return dialog;
     }
@@ -96,28 +90,22 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
         StorageReference storageRef = storage.getReference();
         StorageReference imageRef = storageRef.child("images").child(dir_name).child(email + ".jpg");
 
-        imageRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                deleteAccount(dialog); // success -> optional
-            }
+        imageRef.delete().addOnCompleteListener(task -> {
+            deleteAccount(dialog); // success -> optional
         });
     }
 
     private void deleteFavoriteEvents(String email, AlertDialog dialog) {
         String collection = email + getString(R.string.my_events_key);
-        db.collection(collection).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        db.collection(collection).document(document.getId())
-                                .delete();
-                    }
-                    deleteUserData(email, dialog);
-                } else {
-                    deleteAccount(dialog); // anyway delete account
+        db.collection(collection).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    db.collection(collection).document(document.getId())
+                            .delete();
                 }
+                deleteUserData(email, dialog);
+            } else {
+                deleteAccount(dialog); // anyway delete account
             }
         });
     }
@@ -133,15 +121,10 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
 
                         db.collection(getString(R.string.users_collection_key)).document(documentId)
                                 .delete()
-                                .addOnSuccessListener(aVoid -> {
-                                    deleteProfileImage(email, dialog);
-                                });
+                                .addOnSuccessListener(aVoid -> deleteProfileImage(email, dialog));
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        deleteAccount(dialog); //anyway delete account
-                    }
+                }).addOnFailureListener(e -> {
+                    deleteAccount(dialog); //anyway delete account
                 });
     }
 
@@ -163,11 +146,9 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
                         updateLoadingText(dialog);
                         deleteFavoriteEvents(user.getEmail(), dialog);
                     })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(getActivity(),
-                                getString(R.string.validation_error_text),
-                                Toast.LENGTH_LONG).show();
-                    });
+                    .addOnFailureListener(e -> Toast.makeText(requireActivity(),
+                            getString(R.string.validation_error_text),
+                            Toast.LENGTH_LONG).show());
         }
     }
 
@@ -181,25 +162,20 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
                     dialog.dismiss();
                     goBackToOnBoarding();
                 })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(getActivity(),
-                            getString(R.string.delete_account_error_text),
-                            Toast.LENGTH_LONG).show();
-                });
+                .addOnFailureListener(e -> Toast.makeText(requireContext(),
+                        getString(R.string.delete_account_error_text),
+                        Toast.LENGTH_LONG).show());
     }
 
     private void updateLoadingText(AlertDialog dialog) {
         handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (isAdded()) {
-                    counter++;
-                    int numPoint = counter % 4;
-                    String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
-                    dialog.setMessage(getString(R.string.deleting_text) + numPointText);
-                    handler.postDelayed(runnable, 1000);
-                }
+        runnable = () -> {
+            if (isAdded()) {
+                counter++;
+                int numPoint = counter % 4;
+                String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
+                dialog.setMessage(getString(R.string.deleting_text) + numPointText);
+                handler.postDelayed(runnable, 1000);
             }
         };
         handler.post(runnable);

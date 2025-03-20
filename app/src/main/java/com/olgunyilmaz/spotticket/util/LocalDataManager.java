@@ -24,14 +24,11 @@ import com.olgunyilmaz.spotticket.R;
 
 public class LocalDataManager {
     private SharedPreferences sharedPreferences;
-    private static String PREF_NAME;
-    private Context context;
 
     public LocalDataManager(Context context) { // specify SharedPreferences class
-        this.context = context;
 
         if (context != null){
-            PREF_NAME = context.getString(R.string.pref_name);
+            String PREF_NAME = context.getString(R.string.pref_name);
             sharedPreferences = context.getSharedPreferences(PREF_NAME,Context.MODE_PRIVATE);
         }
 

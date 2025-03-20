@@ -50,7 +50,7 @@ public class SelectCityFragment extends DialogFragment {
         this.listener = listener;
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentSelectCityBinding.inflate(getLayoutInflater(), container, false);
         return binding.getRoot();
@@ -65,14 +65,11 @@ public class SelectCityFragment extends DialogFragment {
         Bundle args = getArguments();
         if (args != null) {
             ArrayList<String> cities = args.getStringArrayList(getString(R.string.cities_key));
-            adapter = new CityAdapter(cities, new CityAdapter.OnCityClickListener() {
-                @Override
-                public void onCityClick(String city) {
-                    if (listener != null) {
-                        listener.onCitySelected(city);
-                    }
-                    dismiss();
+            adapter = new CityAdapter(cities, city -> {
+                if (listener != null) {
+                    listener.onCitySelected(city);
                 }
+                dismiss();
             });
             binding.citiesRecyclerView.setAdapter(adapter);
 

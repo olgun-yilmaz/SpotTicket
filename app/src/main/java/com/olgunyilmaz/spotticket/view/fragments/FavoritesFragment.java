@@ -17,13 +17,13 @@
 
 package com.olgunyilmaz.spotticket.view.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +46,7 @@ public class FavoritesFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentFavoritesBinding.inflate(getLayoutInflater(), container, false);
         return binding.getRoot();
@@ -59,6 +59,7 @@ public class FavoritesFragment extends Fragment {
         displayEvents();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void displayEvents() {
         ArrayList<FavoriteEventModel> favorites = UserFavoritesManager.getInstance().userFavorites;
 

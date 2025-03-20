@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.olgunyilmaz.spotticket.databinding.SearchRowBinding;
@@ -44,8 +45,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         this.shouldCityShow = shouldCityShow;
     }
 
+    @NonNull
     @Override
-    public SearchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SearchViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         SearchRowBinding binding = SearchRowBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new SearchViewHolder(binding);
     }
@@ -77,28 +79,25 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                     .into(holder.binding.eventImage);
         }
 
-        holder.binding.searchEventLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EventDetailsFragment fragment = new EventDetailsFragment();
-                Bundle args = new Bundle();
-                args.putString(activity.getString(R.string.event_id_key), event.getId());
-                args.putString(activity.getString(R.string.image_url_key), event.getHighQualityImage());
-                args.putString(activity.getString(R.string.event_name_key), event.getName());
-                args.putString(activity.getString(R.string.event_date_key),event.getDates().getStart().getDateTime());
-                args.putString(activity.getString(R.string.from_key), activity.getString(R.string.from_display));
+        holder.binding.searchEventLayout.setOnClickListener(view -> {
+            EventDetailsFragment fragment = new EventDetailsFragment();
+            Bundle args = new Bundle();
+            args.putString(activity.getString(R.string.event_id_key), event.getId());
+            args.putString(activity.getString(R.string.image_url_key), event.getHighQualityImage());
+            args.putString(activity.getString(R.string.event_name_key), event.getName());
+            args.putString(activity.getString(R.string.event_date_key),event.getDates().getStart().getDateTime());
+            args.putString(activity.getString(R.string.from_key), activity.getString(R.string.from_display));
 
-                String category = helper.getEventSegmentInfo(event,event.getClassifications());
+            String category = helper.getEventSegmentInfo(event,event.getClassifications());
 
-                args.putLong(activity.getString(R.string.category_icon_key),helper.getCategoryIconId(category));
-                fragment.setArguments(args);
+            args.putLong(activity.getString(R.string.category_icon_key),helper.getCategoryIconId(category));
+            fragment.setArguments(args);
 
-                activity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainerView, fragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
+            activity.getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainerView, fragment)
+                    .addToBackStack(null)
+                    .commit();
         });
     }
 
@@ -107,7 +106,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         return searchList.size();
     }
 
-    public class SearchViewHolder extends RecyclerView.ViewHolder {
+    public static class SearchViewHolder extends RecyclerView.ViewHolder {
         private final SearchRowBinding binding;
 
         public SearchViewHolder(SearchRowBinding binding) {

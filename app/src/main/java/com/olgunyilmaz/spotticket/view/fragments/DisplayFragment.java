@@ -19,6 +19,7 @@ package com.olgunyilmaz.spotticket.view.fragments;
 
 import static com.olgunyilmaz.spotticket.util.Constants.TICKETMASTER_API_KEY;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -41,6 +42,7 @@ import com.olgunyilmaz.spotticket.service.RetrofitClient;
 import com.olgunyilmaz.spotticket.service.TicketmasterApiService;
 import com.olgunyilmaz.spotticket.util.Categories;
 import com.olgunyilmaz.spotticket.helper.DisplayHelper;
+import com.olgunyilmaz.spotticket.util.LastSearchManager;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.util.RecommendedEventManager;
 import com.olgunyilmaz.spotticket.util.UserManager;
@@ -63,6 +65,15 @@ public class DisplayFragment extends Fragment implements FilterDialogFragment.Fi
     private LocalDataManager localDataManager;
     private int counter = 0;
     private boolean shouldCityShow;
+    private final String fromWhere;
+
+    public DisplayFragment(){
+        this.fromWhere = "";
+    }
+
+    public DisplayFragment(String fromWhere) {
+        this.fromWhere = fromWhere;
+    }
 
 
     @Override
@@ -71,7 +82,7 @@ public class DisplayFragment extends Fragment implements FilterDialogFragment.Fi
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentDisplayBinding.inflate(getLayoutInflater(), container, false);
         return binding.getRoot();
@@ -117,29 +128,47 @@ public class DisplayFragment extends Fragment implements FilterDialogFragment.Fi
             }
         }
 
-        if(seeAll){ // show default 20 events
-            keywordMode(getString(R.string.recommended_events_text));
-            binding.fragmentResultText.setText("");
-            searchAdapter = new SearchAdapter(RecommendedEventManager.getInstance().recommendedEvents, true);
-            binding.recyclerView.setAdapter(searchAdapter);
+        if(fromWhere.isEmpty()){
+            if(seeAll){ // show default 20 events
+                keywordMode(getString(R.string.recommended_events_text));
+                binding.fragmentResultText.setText("");
+                LastSearchManager.getInstance().lastEvents = RecommendedEventManager.getInstance().recommendedEvents;
+                searchAdapter = new SearchAdapter(RecommendedEventManager.getInstance().recommendedEvents, true);
+                binding.recyclerView.setAdapter(searchAdapter);
+                LastSearchManager.getInstance().sender = getString(R.string.from_recommended);
 
-        }else{ // search events with api
-            findEvent(city, category, "", keyword, searchByKeyword);
+            }else{ // search events with api
+                findEvent(city, category, "", keyword, searchByKeyword);
+            }
+            
+        }else{ // back from details
+            if(fromWhere.equals(getString(R.string.from_keyword))){
+                shouldCityShow = true;
+                keywordMode(localDataManager.getStringData(getString(R.string.keyword_key),""));
+
+            } else if (fromWhere.equals(getString(R.string.from_api))) {
+                selectMode();
+                shouldCityShow = false;
+
+            } else if (fromWhere.equals(getString(R.string.from_recommended))) {
+                shouldCityShow = true;
+                keywordMode(getString(R.string.recommended_events_text));
+            }
+            binding.fragmentResultText.setText("");
+            searchAdapter = new SearchAdapter(LastSearchManager.getInstance().lastEvents, shouldCityShow);
+            binding.recyclerView.setAdapter(searchAdapter);
         }
     }
 
     private void updateLoadingText() {
         handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (isAdded()) {
-                    counter++;
-                    int numPoint = counter % 4;
-                    String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
-                    binding.fragmentResultText.setText(getString(R.string.plain_loading_text) + numPointText);
-                    handler.postDelayed(runnable, 1000);
-                }
+        runnable = () -> {
+            if (isAdded()) {
+                counter++;
+                int numPoint = counter % 4;
+                String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
+                binding.fragmentResultText.setText(String.format("%s%s", getString(R.string.plain_loading_text), numPointText));
+                handler.postDelayed(runnable, 1000);
             }
         };
         handler.post(runnable);
@@ -155,9 +184,11 @@ public class DisplayFragment extends Fragment implements FilterDialogFragment.Fi
             city = ""; // don't save, just for this request
             category = "";
             shouldCityShow = true;
+            LastSearchManager.getInstance().sender = getString(R.string.from_keyword);
         } else {
             shouldCityShow = false; // all events in one city
             selectMode();
+            LastSearchManager.getInstance().sender = getString(R.string.from_api);
         }
 
         Categories categories = new Categories(requireContext());
@@ -166,18 +197,20 @@ public class DisplayFragment extends Fragment implements FilterDialogFragment.Fi
         TicketmasterApiService apiService = RetrofitClient.getApiService();
 
         apiService.getEvents(TICKETMASTER_API_KEY, city, categories.CATEGORIES.get(category), keyword, date)
-                .enqueue(new Callback<EventResponse>() {
+                .enqueue(new Callback<>() {
+                    @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
                     @Override
-                    public void onResponse(Call<EventResponse> call, Response<EventResponse> response) {
+                    public void onResponse(@NonNull Call<EventResponse> call, @NonNull Response<EventResponse> response) {
                         if (response.isSuccessful()) {
                             if (response.body() != null) {
                                 List<EventResponse.Event> events = new ArrayList<>();
                                 if (response.body().getEmbedded() != null) {
                                     events = response.body().getEmbedded().getEvents();
+                                    LastSearchManager.getInstance().lastEvents = events;
                                 }
                                 handler.removeCallbacks(runnable);
-                                binding.fragmentResultText.setText(events.size() + " " + getString(R.string.result_founded_text));
-                                searchAdapter = new SearchAdapter(events,shouldCityShow);
+                                binding.fragmentResultText.setText(String.format("%d %s", events.size(), getString(R.string.result_founded_text)));
+                                searchAdapter = new SearchAdapter(events, shouldCityShow);
                                 binding.recyclerView.setAdapter(searchAdapter);
                             }
 
@@ -190,14 +223,14 @@ public class DisplayFragment extends Fragment implements FilterDialogFragment.Fi
                                 Log.e("API Error", errorMessage);
                                 Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
                             } catch (IOException e) {
-                                e.printStackTrace();
+                                System.out.println(e.getMessage());
                             }
                         }
                         searchAdapter.notifyDataSetChanged();
                     }
 
                     @Override
-                    public void onFailure(Call<EventResponse> call, Throwable t) {
+                    public void onFailure(@NonNull Call<EventResponse> call, @NonNull Throwable t) {
                         Toast.makeText(getContext(), getString(R.string.error_text) + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -210,6 +243,7 @@ public class DisplayFragment extends Fragment implements FilterDialogFragment.Fi
     }
 
     private void keywordMode(String keyword) {
+        localDataManager.updateStringData(getString(R.string.keyword_key),keyword);
         binding.displayKeywordText.setText(helper.capitalizeWords(keyword));
         binding.displayKeywordText.setVisibility(View.VISIBLE);
         binding.fragmentCategoryText.setVisibility(View.GONE);

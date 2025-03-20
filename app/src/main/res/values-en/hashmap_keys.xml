@@ -30,11 +30,14 @@
     <string name="event_id_key">eventID</string>
     <string name="event_name_key">eventName</string>
 
-    <string name="from_key">from</string>
+    <string name="from_api">fromAPI</string>
     <string name="from_display">display</string>
     <string name="from_favourite">favourite</string>
     <string name="from_home">home</string>
+    <string name="from_key">from</string>
+    <string name="from_keyword">fromKeyword</string>
     <string name="from_login_key">fromLogin</string>
+    <string name="from_recommended">fromRecommended</string>
 
     <string name="keyword_key">keyword</string>
 

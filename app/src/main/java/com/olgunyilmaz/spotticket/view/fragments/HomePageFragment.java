@@ -17,6 +17,7 @@
 
 package com.olgunyilmaz.spotticket.view.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,7 +29,6 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.olgunyilmaz.spotticket.util.CircleTransform;
 import com.olgunyilmaz.spotticket.R;
@@ -60,7 +60,7 @@ public class HomePageFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomePageBinding.inflate(getLayoutInflater(), container, false);
         return binding.getRoot();
@@ -89,7 +89,8 @@ public class HomePageFragment extends Fragment {
 
         }
 
-        binding.homeUsernameText.setText(UserManager.getInstance().name + " " + UserManager.getInstance().surname);
+        binding.homeUsernameText.setText(
+                String.format("%s %s", UserManager.getInstance().name, UserManager.getInstance().surname));
 
         binding.seeAllText.setOnClickListener(v -> seeAll());
 
@@ -123,6 +124,7 @@ public class HomePageFragment extends Fragment {
         helper.replaceFragment(new ProfileFragment());
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void displayUpcomingEvents(){
         EventAdapter eventAdapter = new EventAdapter(RecommendedEventManager.getInstance().recommendedEvents);
         binding.upcomingEventsRecyclerView.setAdapter(eventAdapter);
@@ -140,35 +142,32 @@ public class HomePageFragment extends Fragment {
 
     private void updateEvent(int frequency) {
         handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (isAdded()) {
-                    Random random = new Random();
-                    int randomID = random.nextInt(RecommendedEventManager.getInstance().recommendedEvents.size());
-                    EventResponse.Event event = RecommendedEventManager.getInstance().recommendedEvents.get(randomID);
+        runnable = () -> {
+            if (isAdded()) {
+                Random random = new Random();
+                int randomID = random.nextInt(RecommendedEventManager.getInstance().recommendedEvents.size());
+                EventResponse.Event event = RecommendedEventManager.getInstance().recommendedEvents.get(randomID);
 
-                    binding.recommendedEventName.setText(event.getName());
+                binding.recommendedEventName.setText(event.getName());
 
-                    Picasso.get()
-                            .load(event.getHighQualityImage())
-                            .resize(1024,1024)
-                            .onlyScaleDown() // if smaller don't resize
-                            .placeholder(R.drawable.loading)
-                            .error(R.drawable.error)
-                            .into(binding.recommendedEventImage);
+                Picasso.get()
+                        .load(event.getHighQualityImage())
+                        .resize(1024,1024)
+                        .onlyScaleDown() // if smaller don't resize
+                        .placeholder(R.drawable.loading)
+                        .error(R.drawable.error)
+                        .into(binding.recommendedEventImage);
 
-                    String date = event.getDates().getStart().getDateTime();
-                    binding.homeDateText.setText(detailsHelper.getFormattedDate(date,false));
+                String date = event.getDates().getStart().getDateTime();
+                binding.homeDateText.setText(detailsHelper.getFormattedDate(date,false));
 
 
-                    binding.recommendedEventLayout.setOnClickListener(v ->
-                            seeEventDetails(event.getId(), event.getHighQualityImage(), event.getDates().getStart().getDateTime()));
+                binding.recommendedEventLayout.setOnClickListener(v ->
+                        seeEventDetails(event.getId(), event.getHighQualityImage(), event.getDates().getStart().getDateTime()));
 
 
-                    handler.postDelayed(runnable, 1000L * frequency);
+                handler.postDelayed(runnable, 1000L * frequency);
 
-                }
             }
         };
         handler.post(runnable);

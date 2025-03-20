@@ -101,7 +101,7 @@ public class OnBoardingActivity extends AppCompatActivity {
 
             if (currentUser.getEmail() != null) {
 
-                String email = currentUser.getEmail().toString();
+                String email = currentUser.getEmail();
 
                 if (!email.isEmpty()) {
                     UserManager.getInstance().email = email;
@@ -113,17 +113,14 @@ public class OnBoardingActivity extends AppCompatActivity {
 
         binding.languageButton.setOnClickListener(v -> changeLanguage(helper.getLanguageData(null)));
 
-        binding.nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        binding.nextButton.setOnClickListener(v -> {
 
-                if (currentUser != null) {
-                    helper.goToActivity(MainActivity.class, eventName);
-                } else {
-                    helper.goToActivity(EmailPasswordActivity.class,"");
-                }
-                finish();
+            if (currentUser != null) {
+                helper.goToActivity(MainActivity.class, eventName);
+            } else {
+                helper.goToActivity(EmailPasswordActivity.class,"");
             }
+            finish();
         });
     }
 
@@ -172,20 +169,17 @@ public class OnBoardingActivity extends AppCompatActivity {
 
     private void downloadData(String email) {
         binding.nextButton.setEnabled(false);
-        helper.getUserData(email,this::updateLoadingText,db,localDataManager,this::letsGo);
+        helper.getUserData(email,this::updateLoadingText,db,this::letsGo);
     }
 
     private void updateLoadingText() {
         handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                pointCounter++;
-                int numPoint = pointCounter % 4;
-                String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
-                binding.getStartText.setText(getString(R.string.plain_loading_text) + numPointText);
-                handler.postDelayed(runnable, 1000);
-            }
+        runnable = () -> {
+            pointCounter++;
+            int numPoint = pointCounter % 4;
+            String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
+            binding.getStartText.setText(String.format("%s%s", getString(R.string.plain_loading_text), numPointText));
+            handler.postDelayed(runnable, 1000);
         };
         handler.post(runnable);
     }
