@@ -76,17 +76,10 @@ public class HomePageFragment extends Fragment {
 
         detailsHelper = new EventDetailsHelper(activity);
 
-        if(UserManager.getInstance().ppUrl.isEmpty()){
+        if(UserManager.getInstance().profileImage == null){
             binding.homeProfileImage.setImageResource(R.drawable.sample_profile_image);
         }else{
-            Picasso.get().load(UserManager.getInstance().ppUrl)
-                    .resize(1024,1024)
-                    .onlyScaleDown() // if smaller don't resize
-                    .placeholder(R.drawable.loading)
-                    .error(R.drawable.error)
-                    .transform(new CircleTransform())
-                    .into(binding.homeProfileImage);
-
+            binding.homeProfileImage.setImageBitmap(UserManager.getInstance().profileImage);
         }
 
         binding.homeUsernameText.setText(

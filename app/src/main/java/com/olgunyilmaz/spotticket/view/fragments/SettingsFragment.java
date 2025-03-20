@@ -82,17 +82,10 @@ public class SettingsFragment extends Fragment {
 
         fragmentManager = activity.getSupportFragmentManager();
 
-        if(UserManager.getInstance().ppUrl.isEmpty()){
+        if(UserManager.getInstance().profileImage == null){
             binding.settingsProfileImage.setImageResource(R.drawable.sample_profile_image);
         }else{
-            Picasso.get().load(UserManager.getInstance().ppUrl)
-                    .resize(1024,1024)
-                    .onlyScaleDown() // if smaller don't resize
-                    .placeholder(R.drawable.loading)
-                    .error(R.drawable.error)
-                    .transform(new CircleTransform())
-                    .into(binding.settingsProfileImage);
-
+            binding.settingsProfileImage.setImageBitmap(UserManager.getInstance().profileImage);
         }
 
         binding.settingsNameText.setText(UserManager.getInstance().name);
@@ -164,7 +157,7 @@ public class SettingsFragment extends Fragment {
         localDataManager.deleteData(getString(R.string.city_key));
         localDataManager.deleteData(getString(R.string.category_key));
 
-        UserManager.getInstance().ppUrl = ""; // clean for next user
+        UserManager.getInstance().profileImage = null; // clean for next user
     }
 
 

@@ -18,16 +18,18 @@
 package com.olgunyilmaz.spotticket.util;
 
 
+import android.graphics.Bitmap;
+
 public class UserManager {
     private static UserManager instance;
-    public String ppUrl;
+    public Bitmap profileImage;
     public String name;
     public String surname;
     public String city;
     public String email;
 
     private UserManager(){
-        ppUrl = "";
+        profileImage = null;
         name = "";
         city = "";
         email = "";

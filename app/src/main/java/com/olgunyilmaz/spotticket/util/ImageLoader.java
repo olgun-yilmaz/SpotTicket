@@ -100,6 +100,7 @@ public class ImageLoader { // makes image saving operations
             FileOutputStream out = new FileOutputStream(file);
             assert bitmap != null;
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            UserManager.getInstance().profileImage = new CircleTransform().transform(bitmap); // save it
             out.flush();
             out.close();
         } catch (IOException e) {

@@ -183,8 +183,7 @@ public class ProfileFragment extends Fragment {
 
                 imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                     updateProfileImage(UserManager.getInstance().email, uri.toString());
-                    UserManager.getInstance().ppUrl = imgUri.toString();
-                    binding.profileImage.setImageURI(imgUri);
+                    binding.profileImage.setImageBitmap(UserManager.getInstance().profileImage);
                     imgUri = null; // reset uri for next
                 });
 
