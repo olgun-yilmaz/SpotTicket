@@ -37,15 +37,13 @@ import android.view.ViewGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.olgunyilmaz.spotticket.model.Language;
-import com.olgunyilmaz.spotticket.util.CircleTransform;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentSettingsBinding;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
-import com.olgunyilmaz.spotticket.util.MainHelper;
+import com.olgunyilmaz.spotticket.helper.MainHelper;
 import com.olgunyilmaz.spotticket.helper.OnBoardingHelper;
 import com.olgunyilmaz.spotticket.util.UserManager;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Locale;

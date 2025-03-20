@@ -42,6 +42,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.R;
+import com.olgunyilmaz.spotticket.util.UserManager;
 import com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity;
 
 public class ReAuthenticateDialogFragment extends DialogFragment {
@@ -158,6 +159,7 @@ public class ReAuthenticateDialogFragment extends DialogFragment {
 
                     LocalDataManager localDataManager = new LocalDataManager(requireActivity());
                     localDataManager.deleteAllData();
+                    UserManager.getInstance().profileImage = null;
 
                     dialog.dismiss();
                     goBackToOnBoarding();

@@ -48,12 +48,6 @@ public class HomePageHelper {
         this.binding = binding;
     }
 
-    public void setEnableHomeButton(){
-        MainActivity activity = (MainActivity) context;
-        activity.binding.displayButton.setEnabled(false);
-        activity.binding.homeButton.setEnabled(true);
-    }
-
     public ArrayList<View> getHomeViews(){
         if(binding != null){
             return new ArrayList<>(Arrays.asList(
@@ -85,7 +79,7 @@ public class HomePageHelper {
         }
         return null;
     }
-    
+
     public void replaceFragment(Fragment fragment){
         MainActivity activity = (MainActivity) context;
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
@@ -99,7 +93,8 @@ public class HomePageHelper {
         if (keyword.length() >= 3) {
             DisplayFragment fragment = new DisplayFragment();
 
-            setEnableHomeButton();
+            MainActivity activity = (MainActivity) context;
+            activity.binding.displayButton.setChecked(true);
 
             Bundle args = new Bundle();
             args.putBoolean(context.getString(R.string.search_by_keyword_key), true);

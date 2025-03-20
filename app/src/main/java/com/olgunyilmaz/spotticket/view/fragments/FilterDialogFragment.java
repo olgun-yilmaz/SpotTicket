@@ -93,9 +93,9 @@ public class FilterDialogFragment extends DialogFragment implements SelectCityFr
 
         binding.selectCityButton.setText(dataManager.getStringData(getString(R.string.city_key), UserManager.getInstance().city));
 
-        binding.btnDate.setText(dataManager.getStringData(getString(R.string.event_date_key),"Seç..."));
+        binding.btnDate.setText(dataManager.getStringData(getString(R.string.event_date_key),getString(R.string.select_text)));
 
-        String categoryData = dataManager.getStringData( getString(R.string.category_key), "");
+        String categoryData = dataManager.getStringData( getString(R.string.category_key), getString(R.string.all_categories));
 
         if (!categoryData.isEmpty()) {
             SpinnerAdapter adapter = binding.spinnerCategory.getAdapter();
@@ -141,8 +141,11 @@ public class FilterDialogFragment extends DialogFragment implements SelectCityFr
 
         ArrayList<String> categoryList = new ArrayList<>(categories.CATEGORIES.keySet());
         Collections.sort(categoryList);
+        categoryList.remove(getString(R.string.all_categories));
+        categoryList.add(0,getString(R.string.all_categories)); // all categories on top
 
-        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, categoryList);
+        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>
+                (requireContext(), android.R.layout.simple_spinner_dropdown_item, categoryList);
 
         binding.selectCityButton.setOnClickListener(v -> showCityPicker(cities));
         binding.spinnerCategory.setAdapter(categoryAdapter);

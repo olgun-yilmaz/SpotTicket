@@ -103,6 +103,7 @@
     <string name="search_events_text">Etkinlik Ara . . .</string>
     <string name="searching_text">Aranıyor . . .</string>
     <string name="see_all_text">Daha fazla</string>
+    <string name="select_text">Seç...</string>
     <string name="send_password_reset_link">Şifrenizi gönderilen linkten sıfırlayabilirsiniz.</string>
     <string name="sign_up_text">KAYIT OL</string>
     <string name="surname_text">Soy isim :</string>

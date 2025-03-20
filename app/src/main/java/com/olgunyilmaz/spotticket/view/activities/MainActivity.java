@@ -42,7 +42,7 @@ import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityMainBinding;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.notification.NotificationHelper;
-import com.olgunyilmaz.spotticket.util.MainHelper;
+import com.olgunyilmaz.spotticket.helper.MainHelper;
 import com.olgunyilmaz.spotticket.util.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.view.fragments.DisplayFragment;
@@ -136,8 +136,8 @@ public class MainActivity extends AppCompatActivity {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, permission)) {
                     Snackbar.make(view, getString(R.string.notification_permission_text),
                             Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.give_permission_text), v -> {
-                                permissionLauncher.launch(permission); // ask permission
-                            }).show();
+                        permissionLauncher.launch(permission); // ask permission
+                    }).show();
                 }else{
                     permissionLauncher.launch(permission); // ask permission
                 }

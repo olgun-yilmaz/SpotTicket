@@ -81,7 +81,6 @@ public class OnBoardingHelper {
         if (eventName != null) {
             intent.putExtra(context.getString(R.string.event_name_key), eventName);
         }
-
         context.startActivity(intent);
     }
 
@@ -92,7 +91,6 @@ public class OnBoardingHelper {
                 .whereEqualTo(context.getString(R.string.email_key), email).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        getFavoriteEvents(email, db, letsGo);
                         QuerySnapshot result = task.getResult();
                         if (result != null && !result.isEmpty()) {
 
@@ -102,96 +100,101 @@ public class OnBoardingHelper {
                             String surname = document.getString(context.getString(R.string.surname_key));
                             String city = document.getString(context.getString(R.string.city_key));
 
-                            if (ppUrl != null) { // just pp is nullable
-                                loadImageToBitmap(ppUrl,name,surname,city);
+                            UserManager.getInstance().name = name;
+                            UserManager.getInstance().surname = surname;
+                            UserManager.getInstance().city = city;
+
+                            if (ppUrl != null) {
+                                loadImageToBitmap(ppUrl,email,db,letsGo);
+                            }else{
+                                getFavoriteEvents(email, db, letsGo);
                             }
                         }
                     }
                 });
     }
 
-    private void loadImageToBitmap(String imageUrl, String name,String surname, String city) {
-        Picasso.get().load(imageUrl)
-                .resize(1024,1024)
-                .onlyScaleDown() // if smaller don't resize
-                .placeholder(R.drawable.loading)
-                .error(R.drawable.error)
-                .transform(new CircleTransform())
-                .into(new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                UserManager.getInstance().profileImage = bitmap;
-                UserManager.getInstance().name = name;
-                UserManager.getInstance().surname = surname;
-                UserManager.getInstance().city = city;
-            }
+    private void loadImageToBitmap(String imageUrl,String email, FirebaseFirestore db, Runnable letsGo) {
+        if (!imageUrl.isEmpty()) {
+            Picasso.get().load(imageUrl)
+                    .resize(1024, 1024)
+                    .onlyScaleDown() // if smaller don't resize
+                    .placeholder(R.drawable.loading)
+                    .error(R.drawable.error)
+                    .transform(new CircleTransform())
+                    .into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            UserManager.getInstance().profileImage = bitmap;
+                            getFavoriteEvents(email, db, letsGo);
+                        }
 
-            @Override
-            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                // Resim yükleme hatası durumunda yapılacak işlemler
-                Log.e("Picasso", "Resim yükleme hatası: " + e.getMessage());
-            }
+                        @Override
+                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                            Log.e("Picasso", String.format("%s", e.getMessage()));
+                        }
 
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                System.out.println("");
-            }
-        });
-    }
-
-        private void getFavoriteEvents (String userEmail, FirebaseFirestore db, Runnable letsGo)
-        { // download 2
-
-            String path = userEmail + context.getString(R.string.my_events_key);
-            db.collection(path).orderBy(context.getString(R.string.event_date_key)).get() // order by date
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            if (UserFavoritesManager.getInstance().userFavorites != null) {
-                                UserFavoritesManager.getInstance().userFavorites.clear();
-                            }
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-
-                                String eventID = (String) document.get(context.getString(R.string.event_id_key));
-                                String imageUrl = (String) document.get(context.getString(R.string.image_url_key));
-                                String eventName = (String) document.get(context.getString(R.string.event_name_key));
-                                String eventDate = (String) document.get(context.getString(R.string.event_date_key));
-                                Long categoryIcon = (Long) document.get(context.getString(R.string.category_icon_key));
-
-                                FavoriteEventModel myEventModel = new FavoriteEventModel
-                                        (eventID, eventName, imageUrl, eventDate, categoryIcon);
-
-                                UserFavoritesManager.getInstance().addFavorite(myEventModel);
-                            }
-                            getRecommendedEvents(letsGo);
-                        } else {
-                            Toast.makeText(context, context.getString(R.string.error_text), Toast.LENGTH_LONG).show();
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+                            System.out.println();
                         }
                     });
+        }else{
+            getFavoriteEvents(email, db, letsGo);
         }
+    }
 
-        private void getRecommendedEvents (Runnable letsGo){ // download 3
-            String city = UserManager.getInstance().city;
+    private void getFavoriteEvents(String userEmail, FirebaseFirestore db, Runnable letsGo) { // download 2
 
-            TicketmasterApiService apiService = RetrofitClient.getApiService();
-            apiService.getEvents(TICKETMASTER_API_KEY, city, "", "", "")
-                    .enqueue(new Callback<>() {
-                        @Override
-                        public void onResponse(@NonNull Call<EventResponse> call, @NonNull Response<EventResponse> response) {
-                            if (response.isSuccessful()) {
-                                if (response.body() != null) {
-                                    if (response.body().getEmbedded() != null) {
-                                        RecommendedEventManager.getInstance().recommendedEvents = response.body().getEmbedded().getEvents();
-                                    }
+        String path = userEmail + context.getString(R.string.my_events_key);
+        db.collection(path).orderBy(context.getString(R.string.event_date_key)).get() // order by date
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (UserFavoritesManager.getInstance().userFavorites != null) {
+                            UserFavoritesManager.getInstance().userFavorites.clear();
+                        }
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+
+                            String eventID = (String) document.get(context.getString(R.string.event_id_key));
+                            String imageUrl = (String) document.get(context.getString(R.string.image_url_key));
+                            String eventName = (String) document.get(context.getString(R.string.event_name_key));
+                            String eventDate = (String) document.get(context.getString(R.string.event_date_key));
+                            Long categoryIcon = (Long) document.get(context.getString(R.string.category_icon_key));
+
+                            FavoriteEventModel myEventModel = new FavoriteEventModel
+                                    (eventID, eventName, imageUrl, eventDate, categoryIcon);
+
+                            UserFavoritesManager.getInstance().addFavorite(myEventModel);
+                        }
+                        getRecommendedEvents(letsGo);
+                    } else {
+                        Toast.makeText(context, context.getString(R.string.error_text), Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    private void getRecommendedEvents(Runnable letsGo) { // download 3
+        String city = UserManager.getInstance().city;
+
+        TicketmasterApiService apiService = RetrofitClient.getApiService();
+        apiService.getEvents(TICKETMASTER_API_KEY, city, "", "", "")
+                .enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(@NonNull Call<EventResponse> call, @NonNull Response<EventResponse> response) {
+                        if (response.isSuccessful()) {
+                            if (response.body() != null) {
+                                if (response.body().getEmbedded() != null) {
+                                    RecommendedEventManager.getInstance().recommendedEvents = response.body().getEmbedded().getEvents();
                                 }
                             }
-                            letsGo.run();
                         }
+                        letsGo.run();
+                    }
 
-                        @Override
-                        public void onFailure(@NonNull Call<EventResponse> call, @NonNull Throwable t) {
-                            letsGo.run();
-                            Log.d(TAG, "onFailure: " + t.getLocalizedMessage());
-                        }
-                    });
-        }
+                    @Override
+                    public void onFailure(@NonNull Call<EventResponse> call, @NonNull Throwable t) {
+                        Log.d(TAG, "onFailure: " + t.getLocalizedMessage());
+                    }
+                });
     }
+}

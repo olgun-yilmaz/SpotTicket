@@ -180,8 +180,6 @@ public class HomePageFragment extends Fragment {
 
 
     private void writingMode() {
-        helper.setEnableHomeButton();
-
         for(View view : helper.getHomeViews()){
             view.setVisibility(View.INVISIBLE);
         }

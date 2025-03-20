@@ -36,7 +36,6 @@ import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.olgunyilmaz.spotticket.view.fragments.ReAuthenticateDialogFragment;
 import com.olgunyilmaz.spotticket.view.fragments.SelectCityFragment;
 import com.olgunyilmaz.spotticket.view.fragments.SettingsFragment;
-import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

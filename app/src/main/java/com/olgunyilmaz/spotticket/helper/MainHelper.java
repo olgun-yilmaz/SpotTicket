@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.olgunyilmaz.spotticket.util;
+package com.olgunyilmaz.spotticket.helper;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -28,6 +28,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
+import com.olgunyilmaz.spotticket.util.UserFavoritesManager;
 import com.olgunyilmaz.spotticket.view.activities.EmailPasswordActivity;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.olgunyilmaz.spotticket.view.fragments.EventDetailsFragment;
