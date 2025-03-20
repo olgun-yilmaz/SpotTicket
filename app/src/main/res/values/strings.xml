@@ -28,6 +28,8 @@
     <string name="back_to_login_text">Giriş Ekranına Dön</string>
     <string name="buy_text">Satın Al</string>
 
+    <string name="change_text">DEĞİŞTİR</string>
+    <string name="check_text">KONTROL ET</string>
     <string name="creation_date_text">Kayıt Tarihi : </string>
 
     <string name="date_text">Tarih :</string>
@@ -65,6 +67,7 @@
     <string name="gallery_permission_text">Galeri için izin gerekli!</string>
     <string name="give_permission_text">İzin ver</string>
 
+    <string name="successfully_change_password_text">Şifre başarıyla değiştirildi!</string>
     <string name="successfully_city_updated_text">Şehir bilgisi başarıyla güncellendi!</string>
     <string name="successfully_delete_account_text">Hesabınız başarıyla silindi!</string>
     <string name="successfully_image_change_text">Fotoğraf başarıyla değiştirildi!</string>
@@ -81,7 +84,10 @@
     <string name="notification_last_day_content">Bugün günlerden %s ! Haydi, etkinliğini kaçırma...</string>
     <string name="notification_permission_text">Spot Ticket size bildirim göndersin mi?</string>
 
+    <string name="old_password_text">Eski Şifre :</string>
+
     <string name="password_text">Şifre :</string>
+    <string name="password_must_be_different">Yeni şifreniz eski şifrenizden farklı olmalıdır!</string>
     <string name="plain_loading_text">Yükleniyor </string>
     <string name="please_check_your_info_text">Lütfen girdiğiniz bilgileri kontrol edin!</string>
     <string name="please_select_your_city_text">Lütfen şehrinizi seçin . . .</string>
@@ -104,7 +110,7 @@
     <string name="upcoming_events_text">Yaklaşan Etkinlikler</string>
     <string name="username_text">Kullanıcı Adı : </string>
 
-    <string name="valid_password_text">Şifre Tekrar</string>
+    <string name="valid_password_text">Şifre Tekrar :</string>
     <string name="validation_email_send_text">Doğrulama e-postası gönderildi!</string>
     <string name="validation_error_text">Kimlik doğrulama başarısız!</string>
 

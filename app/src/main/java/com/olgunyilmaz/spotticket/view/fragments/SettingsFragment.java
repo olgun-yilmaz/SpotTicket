@@ -61,7 +61,6 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -99,14 +98,14 @@ public class SettingsFragment extends Fragment {
         binding.settingsNameText.setText(UserManager.getInstance().name);
         binding.settingsCityText.setText(UserManager.getInstance().city);
 
-        binding.settingsEditButton.setOnClickListener(v -> goToProfile());
+        binding.settingsEditButton.setOnClickListener(v -> replaceFragment(new ProfileFragment()));
+        binding.settingsPasswordLayout.setOnClickListener(v -> replaceFragment(new ChangePasswordFragment()));
         binding.settingsLanguageLayout.setOnClickListener(v -> changeLanguage(helper.getLanguageData(null)));
         binding.settingsLogOutLayout.setOnClickListener(v ->signOut());
     }
 
-    private void goToProfile() {
+    private void replaceFragment(Fragment fragment){
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        ProfileFragment fragment = new ProfileFragment();
         transaction.replace(R.id.fragmentContainerView,fragment).commit();
     }
 

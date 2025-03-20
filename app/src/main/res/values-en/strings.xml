@@ -28,6 +28,8 @@
     <string name="back_to_login_text">Back to Login</string>
     <string name="buy_text">Purchase</string>
 
+    <string name="change_text">CHANGE</string>
+    <string name="check_text">CHECK</string>
     <string name="creation_date_text">Creation Date : </string>
 
     <string name="date_text">Date :</string>
@@ -65,6 +67,7 @@
     <string name="gallery_permission_text">Permission needed for gallery!</string>
     <string name="give_permission_text">Give permission</string>
 
+    <string name="successfully_change_password_text">Password changed successfully!</string>
     <string name="successfully_city_updated_text">City information updated successfully!</string>
     <string name="successfully_delete_account_text">Your account has been deleted successfully!</string>
     <string name="successfully_image_change_text">Profile photo has been changed successfully!</string>
@@ -81,7 +84,10 @@
     <string name="notification_last_day_content">Today is the day of the %s ! Come on, dont miss the event...</string>
     <string name="notification_permission_text">Should Spot Ticket send you notifications?</string>
 
+    <string name="old_password_text">Old Password :</string>
+
     <string name="password_text">Password :</string>
+    <string name="password_must_be_different">Your new password must be different from your old password!</string>
     <string name="plain_loading_text">Loading </string>
     <string name="please_check_your_info_text">Please check the information you entered!</string>
     <string name="please_select_your_city_text">Please select your city . . .</string>
@@ -104,7 +110,7 @@
     <string name="upcoming_events_text">Upcoming Events</string>
     <string name="username_text">Username : </string>
 
-    <string name="valid_password_text">Password Again</string>
+    <string name="valid_password_text">Password Again :</string>
     <string name="validation_email_send_text">Verification email sent!</string>
     <string name="validation_error_text">Authentication failed!</string>
 
