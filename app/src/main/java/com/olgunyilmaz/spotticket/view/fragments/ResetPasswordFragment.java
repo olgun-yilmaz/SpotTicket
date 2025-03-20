@@ -30,8 +30,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentResetPasswordBinding;
@@ -49,7 +47,7 @@ public class ResetPasswordFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding =FragmentResetPasswordBinding.inflate(getLayoutInflater(),container,false);
         return binding.getRoot();
@@ -58,7 +56,7 @@ public class ResetPasswordFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager = requireActivity().getSupportFragmentManager();
         auth = FirebaseAuth.getInstance();
 
         String countryKey = getString(R.string.language_code_key);
@@ -66,36 +64,29 @@ public class ResetPasswordFragment extends Fragment {
 
         auth.setLanguageCode(countryCode);
 
-        binding.resetPasswordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                resetPassword(view);
-            }
-        });
+        binding.resetPasswordButton.setOnClickListener(this::resetPassword);
+
+        binding.backButton.setOnClickListener(v -> replaceFragment(new LoginFragment()));
     }
 
     private void resetPassword(View view){
         String emailAddress = binding.resetEmailText.getText().toString();
 
         auth.sendPasswordResetEmail(emailAddress)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        String msg;
-                        if (task.isSuccessful()) {
-                             msg = getString(R.string.send_password_reset_link);
-                            login(view);
-                        }else{
-                            msg = getString(R.string.error_text);
-                        }
-                        Toast.makeText(getContext(),msg,Toast.LENGTH_LONG).show();
+                .addOnCompleteListener(task -> {
+                    String msg;
+                    if (task.isSuccessful()) {
+                         msg = getString(R.string.send_password_reset_link);
+                         replaceFragment(new EmailSentFragment());
+                    }else{
+                        msg = getString(R.string.error_text);
                     }
+                    Toast.makeText(getContext(),msg,Toast.LENGTH_LONG).show();
                 });
     }
 
-    private void login(View view) {
+    private void replaceFragment(Fragment fragment){
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        LoginFragment loginFragment = new LoginFragment();
-        fragmentTransaction.replace(R.id.loginFragmentContainer, loginFragment).commit();
+        fragmentTransaction.replace(R.id.loginFragmentContainer, fragment).commit();
     }
 }

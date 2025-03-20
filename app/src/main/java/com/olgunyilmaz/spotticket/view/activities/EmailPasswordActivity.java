@@ -17,11 +17,15 @@
 
 package com.olgunyilmaz.spotticket.view.activities;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityEmailPasswordBinding;
 
 public class EmailPasswordActivity extends AppCompatActivity {
@@ -33,5 +37,22 @@ public class EmailPasswordActivity extends AppCompatActivity {
         binding = ActivityEmailPasswordBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        OnBackPressedDispatcher dispatcher = getOnBackPressedDispatcher();
+        dispatcher.addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                showExitDialog();
+            }
+        });
+    }
+
+    private void showExitDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.exit_text))
+                .setMessage(getString(R.string.exit_question_text))
+                .setPositiveButton(getString(R.string.answer_yes), (dialog, which) -> finish())
+                .setNegativeButton(getString(R.string.answer_no), null)
+                .show();
     }
 }

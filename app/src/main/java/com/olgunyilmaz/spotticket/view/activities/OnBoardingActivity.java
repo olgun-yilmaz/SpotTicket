@@ -33,9 +33,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityOnBoardingBinding;
 import com.olgunyilmaz.spotticket.util.Constants;
-import com.olgunyilmaz.spotticket.util.OnBoardingHelper;
+import com.olgunyilmaz.spotticket.helper.OnBoardingHelper;
 import com.olgunyilmaz.spotticket.model.Language;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
+import com.olgunyilmaz.spotticket.util.UserManager;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -49,7 +50,6 @@ public class OnBoardingActivity extends AppCompatActivity {
     private Handler handler;
     private OnBoardingHelper helper;
     private LocalDataManager localDataManager;
-    private ArrayList<Language> languageList;
     private Language selectedLanguage;
     private int pointCounter, languageCounter = 0;
 
@@ -57,8 +57,10 @@ public class OnBoardingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        helper = new OnBoardingHelper(OnBoardingActivity.this);
         localDataManager = new LocalDataManager(OnBoardingActivity.this);
-        getLanguageData();
+
+        helper.getLanguageData(this::selectLanguage);
         localDataManager.updateStringData(getString(R.string.language_code_key),selectedLanguage.getCode());
 
         binding = ActivityOnBoardingBinding.inflate(getLayoutInflater());
@@ -75,8 +77,6 @@ public class OnBoardingActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-        helper = new OnBoardingHelper(OnBoardingActivity.this);
-
         boolean isFromLogin = getIntent().getBooleanExtra(getString(R.string.from_login_key), false);
 
         boolean isRemember = localDataManager.getBooleanData(getString(R.string.remember_me_key));
@@ -86,6 +86,8 @@ public class OnBoardingActivity extends AppCompatActivity {
         if (isFromLogin) {
             String email = getIntent().getStringExtra(getString(R.string.user_email_key));
             isRemember = true; // dont update data just give permission for login
+
+            UserManager.getInstance().email = email;
 
             downloadData(email);
         }
@@ -99,33 +101,31 @@ public class OnBoardingActivity extends AppCompatActivity {
 
             if (currentUser.getEmail() != null) {
 
-                String email = currentUser.getEmail().toString();
+                String email = currentUser.getEmail();
 
                 if (!email.isEmpty()) {
+                    UserManager.getInstance().email = email;
                     downloadData(email);
                 }
 
             }
         }
 
-        binding.languageButton.setOnClickListener(v -> changeLanguage());
+        binding.languageButton.setOnClickListener(v -> changeLanguage(helper.getLanguageData(null)));
 
-        binding.nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        binding.nextButton.setOnClickListener(v -> {
 
-                if (currentUser != null) {
-                    helper.goToActivity(MainActivity.class, eventName);
-                    finish(); // if user in app, won't back by intent
-                } else {
-                    helper.goToActivity(EmailPasswordActivity.class,"");
-                }
+            if (currentUser != null) {
+                helper.goToActivity(MainActivity.class, eventName);
+            } else {
+                helper.goToActivity(EmailPasswordActivity.class,"");
             }
+            finish();
         });
     }
 
     @SuppressLint("ObsoleteSdkInt")
-    private void selectLanguage(){
+    private void selectLanguage(ArrayList<Language> languageList){
         languageCounter = localDataManager.getIntegerData(getString(R.string.language_counter_key),0);
 
         int selectedId = languageCounter % languageList.size();
@@ -145,7 +145,7 @@ public class OnBoardingActivity extends AppCompatActivity {
         }
     }
 
-    private void changeLanguage(){
+    public void changeLanguage(ArrayList<Language> languageList){
         languageCounter = localDataManager.getIntegerData(getString(R.string.language_counter_key),0);
 
         languageCounter += 1;
@@ -160,19 +160,6 @@ public class OnBoardingActivity extends AppCompatActivity {
 
     }
 
-    private void getLanguageData(){
-        languageList = new ArrayList<>();
-        languageList.add(new Language(R.drawable.icon_tr,"tr","Türkçe"));
-        languageList.add(new Language(R.drawable.icon_en,"en","English"));
-        languageList.add(new Language(R.drawable.icon_de,"de","Deutsch"));
-        languageList.add(new Language(R.drawable.icon_fr,"fr","Français"));
-        languageList.add(new Language(R.drawable.icon_it,"it","Italiano"));
-        languageList.add(new Language(R.drawable.icon_ko,"ko","한국인"));
-        languageList.add(new Language(R.drawable.icon_es,"es","Español"));
-        languageList.add(new Language(R.drawable.icon_ru,"ru","Русский"));
-
-        selectLanguage(); // after get data select language
-    }
 
     private void letsGo() { // end process
         binding.nextButton.setEnabled(true); // u can go
@@ -182,20 +169,17 @@ public class OnBoardingActivity extends AppCompatActivity {
 
     private void downloadData(String email) {
         binding.nextButton.setEnabled(false);
-        helper.getPp(email,this::updateLoadingText,db,localDataManager,this::letsGo);
+        helper.getUserData(email,this::updateLoadingText,db,this::letsGo);
     }
 
     private void updateLoadingText() {
         handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                pointCounter++;
-                int numPoint = pointCounter % 4;
-                String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
-                binding.getStartText.setText(getString(R.string.plain_loading_text) + numPointText);
-                handler.postDelayed(runnable, 1000);
-            }
+        runnable = () -> {
+            pointCounter++;
+            int numPoint = pointCounter % 4;
+            String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
+            binding.getStartText.setText(String.format("%s%s", getString(R.string.plain_loading_text), numPointText));
+            handler.postDelayed(runnable, 1000);
         };
         handler.post(runnable);
     }

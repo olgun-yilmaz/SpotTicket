@@ -1,0 +1,129 @@
+<!--
+   Project: SpotTicket
+   Copyright 2025 Olgun Yılmaz
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/searchEventLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/sign_up_background"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:layout_marginBottom="40dp">
+
+    <ImageView
+        android:id="@+id/eventImage"
+
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+        app:layout_constraintVertical_bias="0"
+
+        app:layout_constraintHeight_percent="0.7"
+
+        android:scaleType="centerCrop"
+
+        android:background="@color/event_name_gray"
+        android:src="@drawable/loading"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/eventRowLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/eventImage">
+
+        <TextView
+            android:id="@+id/eventName"
+
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:gravity="left"
+
+            android:text="@string/loading_text"
+
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textStyle="bold"
+            android:textColor="@color/event_name_gray"
+
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toTopOf="parent"
+
+            />
+
+        <TextView
+            android:id="@+id/eventDate"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="@string/loading_text"
+            android:textSize="20sp"
+            android:textColor="@color/event_name_gray"
+
+            app:layout_constraintBottom_toBottomOf="@id/eventCity"
+            app:layout_constraintTop_toTopOf="@id/eventCity"
+
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/eventCity"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintWidth_percent="0.4"
+
+            app:layout_constraintVertical_bias="0.8"
+            android:backgroundTint="@color/natural_gray"
+
+            android:text="@string/review_text"
+            android:textSize="15sp"
+            android:textColor="@color/black"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintTop_toTopOf="parent"
+
+            />
+
+        <ImageView
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:src="@drawable/line"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

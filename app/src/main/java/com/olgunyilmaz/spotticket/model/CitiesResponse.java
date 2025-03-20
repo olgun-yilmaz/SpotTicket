@@ -20,7 +20,11 @@ package com.olgunyilmaz.spotticket.model;
 import java.util.ArrayList;
 
 public class CitiesResponse {
-    private ArrayList<String> cities;
+    private final ArrayList<String> cities;
+
+    public CitiesResponse(ArrayList<String> cities) {
+        this.cities = cities;
+    }
 
     public ArrayList<String> getCities() {
         return cities;

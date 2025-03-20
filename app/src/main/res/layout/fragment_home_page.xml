@@ -23,40 +23,114 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".view.fragments.HomePageFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:id="@+id/searchEventLayout"
+        android:id="@+id/profileLayout"
 
-        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintVertical_bias="0.03"
+        app:layout_constraintWidth_percent="0.99"
 
-        app:layout_constraintVertical_bias="0"
+        app:layout_constraintHeight_percent="0.09"
+        app:layout_constraintHorizontal_bias="0.1"
 
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/homeSearchEditText"
+
+        <TextView
+            android:id="@+id/welcomeBackText"
             android:layout_width="0dp"
             android:layout_height="0dp"
 
-            app:layout_constraintWidth_percent="0.8"
+            android:fontFamily="@font/lexend"
 
-            android:hint="@string/search_events_text"
-            android:textSize="15sp"
-            android:textAlignment="center"
+            app:layout_constraintHorizontal_bias="0.15"
+            app:layout_constraintVertical_bias="0.3"
 
+            android:text="@string/welcome_message"
+            android:textColor="@color/welcome_back_text_color"
+
+            android:textSize="14sp"
+
+            app:layout_constraintHeight_percent="0.4"
+
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/homeProfileImage"
             app:layout_constraintBottom_toBottomOf="parent"
 
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintWidth_percent="0.6">
 
-        </EditText>
+        </TextView>
+
+        <TextView
+            android:id="@+id/homeUsernameText"
+
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            app:layout_constraintHeight_percent="0.5"
+
+            app:layout_constraintHorizontal_bias="0.55"
+            app:layout_constraintVertical_bias="0.9"
+
+            android:fontFamily="@font/lexend_medium"
+            android:gravity="left"
+            android:text="Olgun Yılmaz"
+            android:textColor="@color/white"
+
+            android:textSize="24sp"
+
+            app:layout_constraintTop_toTopOf="@id/homeProfileImage"
+            app:layout_constraintBottom_toBottomOf="@id/homeProfileImage"
+            app:layout_constraintEnd_toEndOf="@+id/welcomeBackText"
+            app:layout_constraintStart_toStartOf="@id/welcomeBackText" />
+
+        <ImageView
+            android:id="@+id/homeProfileImage"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+            app:layout_constraintWidth_percent="0.19"
+
+            android:src="@drawable/sample_profile_image"
+            android:background="@drawable/circular_image"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toEndOf="@id/welcomeBackText"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+        </ImageView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/searchEventLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:background="@drawable/bar_search_event"
+
+        app:layout_constraintBottom_toTopOf="@+id/recommendedEventLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHeight_percent="0.07"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profileLayout"
+
+        app:layout_constraintWidth_percent="0.95">
 
         <ImageView
             android:id="@+id/homeSearchIcon"
@@ -64,21 +138,47 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
 
-            app:layout_constraintHeight_percent="0.5"
-
             android:src="@drawable/search_icon"
 
-            app:layout_constraintStart_toEndOf="@+id/homeSearchEditText"
-            app:layout_constraintEnd_toEndOf="parent"
-
             app:layout_constraintBottom_toBottomOf="@id/homeSearchEditText"
-            app:layout_constraintTop_toTopOf="@id/homeSearchEditText">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.4"
+
+            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toTopOf="@id/homeSearchEditText"
+            app:layout_constraintWidth_percent="0.08">
 
         </ImageView>
 
+        <EditText
+            android:id="@+id/homeSearchEditText"
+
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:background="@android:color/transparent"
 
 
+            android:fontFamily="@font/lexend_light"
+            android:hint="@string/search_events_text"
 
+            android:textColor="@color/white"
+
+            android:textColorHint="@color/search_event_hint_color"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintHeight_percent="0.8"
+            app:layout_constraintHorizontal_bias="0.8"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.7">
+
+        </EditText>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -87,140 +187,210 @@
         android:layout_height="0dp"
         android:id="@+id/recommendedEventLayout"
 
-        app:layout_constraintHeight_percent="0.4"
+        app:layout_constraintHeight_percent="0.3"
 
-        app:layout_constraintVertical_bias="0.19"
+        app:layout_constraintVertical_bias="0.35"
 
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/searchEventLayout"
 
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/searchEventLayout"
         app:layout_constraintTop_toTopOf="parent">
 
-
-        <ImageView
-            android:id="@+id/recommendedEventImage"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/homeCardView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-
-            android:src="@drawable/loading"
-
-            android:scaleType="centerCrop"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-
-            app:layout_constraintEnd_toEndOf="parent"
-
-            app:layout_constraintHeight_percent="0.85"
-            app:layout_constraintStart_toStartOf="parent"
-
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0">
-
-        </ImageView>
-
-        <TextView
-            android:id="@+id/recommendedEventName"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-
-            app:layout_constraintVertical_bias="1"
-
-            app:layout_constraintWidth_percent="0.7"
-            app:layout_constraintHeight_percent="0.15"
-
-            android:gravity="center"
-            android:text="@string/loading_text"
-            android:textSize="17sp"
+            android:layout_margin="10dp"
+            android:clipToOutline="true"
+            app:cardCornerRadius="30dp"
+            app:cardElevation="4dp"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            >
+            app:layout_constraintTop_toTopOf="parent">
 
-        </TextView>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/homeImageContainer"
+                android:layout_width="match_parent"
+                android:background="@color/black"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/recommendedEventImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/sample_image"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:elevation="8dp"
+            android:id="@+id/eventRowInnerLayout"
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/homeBookmarkIcon"
+                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:src="@drawable/bookmark_icon"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.15"
+                app:layout_constraintHorizontal_bias="0.9"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.1"
+                app:layout_constraintWidth_percent="0.15" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dateLayout"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+
+                android:background="@drawable/date_layout"
+
+                app:layout_constraintWidth_percent="0.28"
+                app:layout_constraintHeight_percent="0.14"
+
+                app:layout_constraintHorizontal_bias="0.05"
+                app:layout_constraintVertical_bias="0.1"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/homeDateText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    app:layout_constraintHorizontal_bias="0.9"
+
+                    android:text="08 OCT 2024"
+                    android:fontFamily="@font/lexend_light"
+                    android:textColor="@color/date_text_color"
+                    android:textSize="12sp"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:fontFamily="@font/lexend_medium"
+                android:gravity="center"
+                android:id="@+id/recommendedEventName"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:text="Harmony Unleashed: A Fusion of Genres"
+                android:textColor="@color/event_name_gray"
+                android:textSize="14sp"
+                app:layout_constraintWidth_percent="0.6"
+
+                app:layout_constraintVertical_bias="0.9"
+                app:layout_constraintHorizontal_bias="0.2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/categoryRecyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-
-        app:layout_constraintHeight_percent="0.3"
-
-        app:layout_constraintVertical_bias="0.79"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:id="@+id/cityLayout"
+        android:id="@+id/upcomingEventsLayout"
 
-        app:layout_constraintVertical_bias="0.95"
-        app:layout_constraintWidth_percent="0.7"
+        app:layout_constraintVertical_bias="0.45"
+        app:layout_constraintWidth_percent="0.99"
 
-        app:layout_constraintHeight_percent="0.07"
-        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintHeight_percent="0.04"
 
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
 
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-
-
-        <ImageView
-            android:id="@+id/selectCityButton"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-
-            app:layout_constraintWidth_percent="0.3"
-            app:layout_constraintHorizontal_bias="0"
-
-            android:src="@drawable/placeholder"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-        >
-
-        </ImageView>
+        app:layout_constraintStart_toStartOf="@id/recommendedEventLayout"
+        app:layout_constraintTop_toTopOf="@id/recommendedEventLayout">
 
         <TextView
-            android:id="@+id/selectCityText"
+            android:id="@+id/upcomingEventsText"
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+            android:fontFamily="@font/lexend"
+
+            android:text="@string/upcoming_events_text"
+
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.6" />
+
+
+        <TextView
+            android:id="@+id/seeAllText"
             android:layout_width="0dp"
             android:layout_height="0dp"
 
-            app:layout_constraintWidth_percent="0.7"
+            android:fontFamily="@font/lexend_light"
 
-            app:layout_constraintHorizontal_bias="1"
-
+            android:text="@string/see_all_text"
+            android:textColor="@color/welcome_back_text_color"
             android:gravity="center"
-            android:textSize="24sp"
 
+            android:textSize="14sp"
 
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/upcomingEventsText"
             app:layout_constraintEnd_toEndOf="parent"
-
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            >
+            app:layout_constraintStart_toEndOf="@id/upcomingEventsText"
+            app:layout_constraintTop_toTopOf="@id/upcomingEventsText">
 
         </TextView>
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/upcomingEventsRecyclerView"
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        app:layout_constraintHeight_percent="0.35"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/upcomingEventsLayout"
+        app:layout_constraintStart_toStartOf="@id/upcomingEventsLayout"
+        app:layout_constraintTop_toBottomOf="@+id/upcomingEventsLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

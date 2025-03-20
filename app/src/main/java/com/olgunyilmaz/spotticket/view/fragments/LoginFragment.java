@@ -28,21 +28,22 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Handler;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.FragmentLoginBinding;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.view.activities.OnBoardingActivity;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class LoginFragment extends Fragment {
     private FragmentLoginBinding binding;
@@ -51,11 +52,8 @@ public class LoginFragment extends Fragment {
     private Runnable runnable;
     private Handler handler;
     private LocalDataManager localDataManager;
+    private ArrayList<View> allViews;
     int counter = 0;
-
-    public LoginFragment() {
-    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,7 +61,7 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentLoginBinding.inflate(getLayoutInflater(), container, false);
         return binding.getRoot();
@@ -77,39 +75,53 @@ public class LoginFragment extends Fragment {
         localDataManager = new LocalDataManager(requireActivity());
 
         auth = FirebaseAuth.getInstance();
-        String countryCode = localDataManager.getStringData(getString(R.string.language_code_key),"tr");
+        String countryCode = localDataManager.getStringData(getString(R.string.language_code_key), "tr");
 
         auth.setLanguageCode(countryCode);
 
         String lastUserEmail = localDataManager.getStringData(getString(R.string.user_email_key), "");
 
+        getAllViews();
+
         binding.loginEmailText.setText(lastUserEmail);
 
         binding.loginButton.setOnClickListener(v -> login());
 
-        binding.loginSignUpButton.setOnClickListener(v -> signUp());
+        binding.loginSignUpButton.setOnClickListener(v -> replaceFragment(new SignUpFragment()));
 
-        binding.resetPasswordText.setOnClickListener(v -> resetPassword());
+        binding.resetPasswordText.setOnClickListener(v -> replaceFragment(new ResetPasswordFragment()));
+
+        binding.passwordIcon.setOnCheckedChangeListener((button, isChecked) -> {
+            if (isChecked) {
+                binding.loginPasswordText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                binding.passwordIcon.setButtonDrawable(R.drawable.show_password);
+            } else {
+                binding.loginPasswordText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                binding.passwordIcon.setButtonDrawable(R.drawable.hide_password);
+            }
+            binding.loginPasswordText.setSelection(binding.loginPasswordText.getText().length());  // move cursor to end
+        });
+
     }
 
-    private void updateRememberMe() {
-        if (binding.rememberMeButton.isChecked()) {
-            localDataManager.updateBooleanData(getString(R.string.remember_me_key), true);
-        } else {
-            localDataManager.updateBooleanData(getString(R.string.remember_me_key), false);
-        }
-
+    private void getAllViews() {
+        allViews = new ArrayList<>(Arrays.asList(
+                binding.loginEmailText,
+                binding.loginSignUpButton,
+                binding.loginButton,
+                binding.loginPasswordText,
+                binding.rememberMeButton,
+                binding.alreadyAccountText,
+                binding.passwordIcon
+        ));
     }
-
     private void normalMode() {
         binding.resetPasswordText.setText(getText(R.string.forgot_password_text));
         binding.resetPasswordText.setEnabled(true);
 
-        binding.loginEmailText.setVisibility(View.VISIBLE);
-        binding.loginSignUpButton.setVisibility(View.VISIBLE);
-        binding.loginButton.setVisibility(View.VISIBLE);
-        binding.loginPasswordText.setVisibility(View.VISIBLE);
-        binding.rememberMeButton.setVisibility(View.VISIBLE);
+        for (View view : allViews) {
+            view.setVisibility(View.VISIBLE);
+        }
 
         handler.removeCallbacks(runnable);
 
@@ -119,11 +131,9 @@ public class LoginFragment extends Fragment {
         updateLoadingText();
         binding.resetPasswordText.setEnabled(false);
 
-        binding.loginEmailText.setVisibility(View.INVISIBLE);
-        binding.loginSignUpButton.setVisibility(View.INVISIBLE);
-        binding.loginButton.setVisibility(View.INVISIBLE);
-        binding.loginPasswordText.setVisibility(View.INVISIBLE);
-        binding.rememberMeButton.setVisibility(View.INVISIBLE);
+        for (View view : allViews) {
+            view.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void login() {
@@ -134,46 +144,38 @@ public class LoginFragment extends Fragment {
             loadingMode();
 
             auth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (isAdded()) {
-                                if (task.isSuccessful()) {
-                                    FirebaseUser currentUser = auth.getCurrentUser();
+                    .addOnCompleteListener(requireActivity(), task -> {
+                        if (isAdded()) {
+                            if (task.isSuccessful()) {
+                                FirebaseUser currentUser = auth.getCurrentUser();
 
-                                    if (currentUser != null) {
-                                        String msg;
+                                if (currentUser != null) {
+                                    if (currentUser.isEmailVerified()) {
+                                        localDataManager.updateStringData(getString(R.string.user_email_key), email);
+                                        localDataManager.updateBooleanData(getString(R.string.remember_me_key), binding.rememberMeButton.isChecked());
 
-                                        if (currentUser.isEmailVerified()) {
-                                            localDataManager.updateStringData(getString(R.string.user_email_key), email);
-                                            updateRememberMe();
+                                        Intent intent = new Intent(requireActivity(), OnBoardingActivity.class); // for download the user data
+                                        intent.putExtra(getString(R.string.from_login_key), true);
+                                        intent.putExtra(getString(R.string.user_email_key), email);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+                                        requireActivity().finish();
+                                    } else {
+                                        normalMode();
 
-                                            Intent intent = new Intent(requireActivity(), OnBoardingActivity.class); // for download the user data
-                                            intent.putExtra(getString(R.string.from_login_key), true);
-                                            intent.putExtra(getString(R.string.user_email_key), email);
-                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                            startActivity(intent);
-                                            requireActivity().finish();
-                                            msg = getString(R.string.welcome_message) + " " + currentUser.getDisplayName();
-
-                                        } else {
-                                            normalMode();
-                                            msg = getString(R.string.email_verification_message);
-                                        }
-                                        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show();
-
-
+                                        Bundle args = new Bundle();
+                                        args.putBoolean(getString(R.string.from_login_key), true);
+                                        EmailSentFragment fragment = new EmailSentFragment();
+                                        fragment.setArguments(args);
+                                        replaceFragment(fragment);
                                     }
                                 }
                             }
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            if (isAdded()) {
-                                normalMode();
-                                Toast.makeText(requireContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                            }
+                    }).addOnFailureListener(e -> {
+                        if (isAdded()) {
+                            normalMode();
+                            Toast.makeText(requireContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
 
@@ -184,16 +186,13 @@ public class LoginFragment extends Fragment {
 
     private void updateLoadingText() {
         handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (isAdded()) {
-                    counter++;
-                    int numPoint = counter % 4;
-                    String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
-                    binding.resetPasswordText.setText(getString(R.string.please_wait_text) + numPointText);
-                    handler.postDelayed(runnable, 1000);
-                }
+        runnable = () -> {
+            if (isAdded()) {
+                counter++;
+                int numPoint = counter % 4;
+                String numPointText = " .".repeat(numPoint) + "  ".repeat(4 - numPoint);
+                binding.resetPasswordText.setText(String.format("%s%s", getString(R.string.please_wait_text), numPointText));
+                handler.postDelayed(runnable, 1000);
             }
         };
         handler.post(runnable);
@@ -207,17 +206,8 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    private void signUp() {
+    private void replaceFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        SignUpFragment signUpFragment = new SignUpFragment();
-        fragmentTransaction.replace(R.id.loginFragmentContainer, signUpFragment).commit();
-
+        fragmentTransaction.replace(R.id.loginFragmentContainer, fragment).commit();
     }
-
-    private void resetPassword() {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        ResetPasswordFragment resetPasswordFragment = new ResetPasswordFragment();
-        fragmentTransaction.replace(R.id.loginFragmentContainer, resetPasswordFragment).commit();
-    }
-
 }

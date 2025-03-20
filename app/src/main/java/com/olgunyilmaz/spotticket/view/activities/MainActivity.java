@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.OnBackPressedDispatcher;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +36,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.olgunyilmaz.spotticket.view.fragments.SettingsFragment;
 import com.olgunyilmaz.spotticket.notification.NotificationScheduler;
 import com.olgunyilmaz.spotticket.R;
 import com.olgunyilmaz.spotticket.databinding.ActivityMainBinding;
@@ -44,11 +44,9 @@ import com.olgunyilmaz.spotticket.model.FavoriteEventModel;
 import com.olgunyilmaz.spotticket.notification.NotificationHelper;
 import com.olgunyilmaz.spotticket.util.MainHelper;
 import com.olgunyilmaz.spotticket.util.UserFavoritesManager;
-import com.olgunyilmaz.spotticket.util.UserManager;
 import com.olgunyilmaz.spotticket.util.LocalDataManager;
 import com.olgunyilmaz.spotticket.view.fragments.DisplayFragment;
 import com.olgunyilmaz.spotticket.view.fragments.FavoritesFragment;
-import com.olgunyilmaz.spotticket.view.fragments.ProfileFragment;
 import com.olgunyilmaz.spotticket.view.fragments.HomePageFragment;
 
 import java.util.ArrayList;
@@ -58,7 +56,6 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
     public ActivityMainBinding binding;
     private FragmentManager fragmentManager;
-    private FirebaseAuth auth;
     private ActivityResultLauncher<String> permissionLauncher;
     private LocalDataManager localDataManager;
     private final ArrayList<HashMap<String, Object>> pendingNotifications = new ArrayList<>();
@@ -83,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        auth = FirebaseAuth.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
 
         localDataManager = new LocalDataManager(this);
 
@@ -92,34 +89,20 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
 
-        binding.homeButton.setEnabled(false); // first page button disabled
-
         setNotificationAlert();
 
         String eventName = getIntent().getStringExtra(getString(R.string.event_name_key)); // if it comes from notification
 
         helper.directToEventDetails(eventName, fragmentManager);
 
-        binding.displayButton.setOnClickListener(v -> helper.replaceFragment(new DisplayFragment(), v, fragmentManager));
+        binding.displayButton.setOnClickListener(v -> helper.replaceFragment(new DisplayFragment(), fragmentManager));
 
-        binding.homeButton.setOnClickListener(v -> helper.replaceFragment(new HomePageFragment(), v, fragmentManager));
+        binding.homeButton.setOnClickListener(v -> helper.replaceFragment(new HomePageFragment(), fragmentManager));
 
-        binding.myEventsButton.setOnClickListener(v -> helper.replaceFragment(new FavoritesFragment(), v, fragmentManager));
+        binding.myEventsButton.setOnClickListener(v -> helper.replaceFragment(new FavoritesFragment(), fragmentManager));
     }
-
-    public void signOut(View view) {
-        auth.signOut();
-        helper.goToLoginActivity();
-
-        LocalDataManager localDataManager = new LocalDataManager(MainActivity.this);
-        localDataManager.deleteData(getString(R.string.city_key));
-        localDataManager.deleteData(getString(R.string.category_key));
-
-        UserManager.getInstance().ppUrl = ""; // clean for next user
-    }
-
-    public void goToProfileScreen(View view) {
-        helper.replaceFragment(new ProfileFragment(), view, fragmentManager);
+    public void goToSettingsScreen(View v) {
+        helper.replaceFragment(new SettingsFragment(), fragmentManager);
     }
 
     private void setNotificationAlert() {
@@ -152,12 +135,8 @@ public class MainActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(MainActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, permission)) {
                     Snackbar.make(view, getString(R.string.notification_permission_text),
-                            Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.give_permission_text),
-                            new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    permissionLauncher.launch(permission); // ask permission
-                                }
+                            Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.give_permission_text), v -> {
+                                permissionLauncher.launch(permission); // ask permission
                             }).show();
                 }else{
                     permissionLauncher.launch(permission); // ask permission
@@ -172,14 +151,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void registerLauncher() {
-        permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
-            @Override
-            public void onActivityResult(Boolean result) {
-                if (result) {
-                    sendAllNotifications();
-                } else {
-                    Toast.makeText(MainActivity.this, getString(R.string.notification_permission_text), Toast.LENGTH_LONG).show();
-                }
+        permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), result -> {
+            if (result) {
+                sendAllNotifications();
+            } else {
+                Toast.makeText(MainActivity.this, getString(R.string.notification_permission_text), Toast.LENGTH_LONG).show();
             }
         });
     }

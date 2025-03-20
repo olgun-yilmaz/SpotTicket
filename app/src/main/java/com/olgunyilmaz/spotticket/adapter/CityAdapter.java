@@ -17,6 +17,7 @@
 
 package com.olgunyilmaz.spotticket.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -47,7 +48,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityHolder> {
     @Override
     public CityHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         CityRowBinding binding = CityRowBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new CityAdapter.CityHolder(binding);
+        return new CityHolder(binding);
     }
 
     @Override
@@ -63,8 +64,8 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityHolder> {
         return filteredCities.size();
     }
 
-    public class CityHolder extends RecyclerView.ViewHolder {
-        private CityRowBinding binding;
+    public static class CityHolder extends RecyclerView.ViewHolder {
+        private final CityRowBinding binding;
 
         public CityHolder(CityRowBinding binding) {
             super(binding.getRoot());
@@ -72,6 +73,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityHolder> {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void filter(String query) {
         filteredCities.clear();
         if (query.isEmpty()) {

@@ -1,5 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+   Project: SpotTicket
+   Copyright 2025 Olgun Yılmaz
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="welcome_back_text_color">#94A3B8</color>
+    <color name="search_event_hint_color">#666666</color>
+    <color name="natural_gray">#E2E8F0</color>
+    <color name="event_name_gray">#F8FAFC</color>
+    <color name="date_text_color">#CBD5E1</color>
+    <color name="description_text_color">#F8FAFC</color>
+    <color name="sign_up_background">#010827</color>
+    <color name="hint">#928787</color>
+    <color name="settings_name_color">#E0F1FF</color>
+    <color name="settings_edit_color">#D7E2FF</color>
+    <color name="settings_city_color">#A8ADBD</color>
+
 </resources>

@@ -19,7 +19,6 @@ package com.olgunyilmaz.spotticket.adapter;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -60,33 +59,33 @@ public class FavoriteEventAdapter extends RecyclerView.Adapter<FavoriteEventAdap
         if (!favoriteEvent.getImageUrl().isEmpty()) {
             Picasso.get()
                     .load(favoriteEvent.getImageUrl())
+                    .resize(1024,1024)
+                    .onlyScaleDown()
                     .placeholder(R.drawable.loading)
                     .error(R.drawable.error)
                     .into(holder.binding.favoriteEventImage);
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EventDetailsFragment fragment = new EventDetailsFragment();
+        holder.itemView.setOnClickListener(view -> {
+            EventDetailsFragment fragment = new EventDetailsFragment();
 
-                Bundle args = new Bundle();
+            Bundle args = new Bundle();
 
-                args.putString(activity.getString(R.string.event_id_key), favoriteEvent.getEventId());
-                args.putString(activity.getString(R.string.image_url_key), favoriteEvent.getImageUrl());
-                args.putString(activity.getString(R.string.event_name_key), favoriteEvent.getEventName());
-                args.putString(activity.getString(R.string.event_date_key), favoriteEvent.getDate());
-                args.putLong(activity.getString(R.string.category_icon_key),favoriteEvent.getCategoryIcon());
+            args.putString(activity.getString(R.string.event_id_key), favoriteEvent.getEventId());
+            args.putString(activity.getString(R.string.image_url_key), favoriteEvent.getImageUrl());
+            args.putString(activity.getString(R.string.event_name_key), favoriteEvent.getEventName());
+            args.putString(activity.getString(R.string.event_date_key), favoriteEvent.getDate());
+            args.putLong(activity.getString(R.string.category_icon_key),favoriteEvent.getCategoryIcon());
+            args.putString(activity.getString(R.string.from_key), activity.getString(R.string.from_favourite));
 
-                fragment.setArguments(args);
+            fragment.setArguments(args);
 
-                ((MainActivity) holder.itemView.getContext())
-                        .getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainerView, fragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
+            ((MainActivity) holder.itemView.getContext())
+                    .getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainerView, fragment)
+                    .addToBackStack(null)
+                    .commit();
         });
 
     }
@@ -99,8 +98,8 @@ public class FavoriteEventAdapter extends RecyclerView.Adapter<FavoriteEventAdap
         return favoriteEventList.size();
     }
 
-    public class FavoriteEventHolder extends RecyclerView.ViewHolder {
-        private FavoriteRowBinding binding;
+    public static class FavoriteEventHolder extends RecyclerView.ViewHolder {
+        private final FavoriteRowBinding binding;
 
         public FavoriteEventHolder(FavoriteRowBinding binding) {
             super(binding.getRoot());

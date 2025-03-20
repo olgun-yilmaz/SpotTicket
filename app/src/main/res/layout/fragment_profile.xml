@@ -21,27 +21,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/sign_up_background"
     tools:context=".view.fragments.ProfileFragment">
+
+    <ImageView
+        android:id="@+id/profileBackButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        app:layout_constraintWidth_percent="0.153"
+        app:layout_constraintHeight_percent="0.071"
+
+        app:layout_constraintVertical_bias="0.04"
+        app:layout_constraintHorizontal_bias="0.05"
+
+        android:background="@drawable/button_background"
+        android:src="@drawable/back_button"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/editButton"
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.153"
+        app:layout_constraintHeight_percent="0.076"
+
+        app:layout_constraintHorizontal_bias="0.95"
+
+        android:src="@drawable/edit_icon"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintBottom_toBottomOf="@id/profileBackButton"
+        app:layout_constraintTop_toTopOf="@id/profileBackButton">
+
+    </ImageView>
 
 
     <ImageView
         android:id="@+id/profileImage"
 
+        android:background="@color/white"
+
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.35"
+        app:layout_constraintHeight_percent="0.25"
 
-        app:layout_constraintWidth_percent="0.8"
+        android:scaleType="centerCrop"
 
         app:layout_constraintVertical_bias="0.05"
+
+        app:layout_constraintWidth_percent="0.625"
 
         android:src="@drawable/sample_profile_image"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@id/deleteMyAccountButton"
+        app:layout_constraintTop_toBottomOf="@id/profileBackButton" />
 
 
 
@@ -50,63 +95,95 @@
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintHeight_percent="0.04"
 
-        app:layout_constraintVertical_bias="0.45"
+        android:background="@drawable/rounded_corners"
+
+        app:layout_constraintVertical_bias="0.1"
 
         android:text="@string/username_text"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:textAlignment="center"
-
+        android:textColor="@color/settings_edit_color"
 
         app:layout_constraintEnd_toEndOf="@id/profileImage"
         app:layout_constraintStart_toStartOf="@id/profileImage"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"  />
+        app:layout_constraintBottom_toTopOf="@id/deleteMyAccountButton"
+        app:layout_constraintTop_toBottomOf="@id/profileImage"  />
 
     <TextView
         android:id="@+id/emailText"
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintHeight_percent="0.04"
 
-        app:layout_constraintVertical_bias="0.55"
+        android:background="@drawable/rounded_corners"
+
+        app:layout_constraintVertical_bias="0.3"
 
         android:text="@string/email_text"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:textAlignment="center"
+        android:textColor="@color/settings_edit_color"
 
         app:layout_constraintEnd_toEndOf="@id/usernameText"
         app:layout_constraintStart_toStartOf="@id/usernameText"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@id/deleteMyAccountButton"
+        app:layout_constraintTop_toBottomOf="@id/profileImage" />
+
+    <Button
+        android:id="@+id/cityButton"
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:textSize="18sp"
+
+        app:layout_constraintHeight_percent="0.07"
+
+        android:hint="@string/please_select_your_city_text"
+
+        app:layout_constraintVertical_bias="0.6"
+
+        android:padding="10dp"
+        android:background="@drawable/rounded_corners"
+
+        android:textColor="@color/white"
+        android:textColorHint="@color/hint"
+
+        app:layout_constraintEnd_toEndOf="@id/usernameText"
+        app:layout_constraintStart_toStartOf="@id/usernameText"
+
+        app:layout_constraintBottom_toTopOf="@id/deleteMyAccountButton"
+        app:layout_constraintTop_toBottomOf="@id/profileImage" />
 
     <TextView
         android:id="@+id/creationDateText"
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintHeight_percent="0.04"
 
-        app:layout_constraintVertical_bias="0.65"
+        android:background="@drawable/rounded_corners"
+
+        app:layout_constraintVertical_bias="0.9"
 
         android:text="@string/creation_date_text"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:textAlignment="center"
+        android:textColor="@color/settings_edit_color"
 
         app:layout_constraintEnd_toEndOf="@id/usernameText"
         app:layout_constraintStart_toStartOf="@id/usernameText"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        >
+        app:layout_constraintBottom_toTopOf="@id/deleteMyAccountButton"
+        app:layout_constraintTop_toBottomOf="@id/profileImage">
 
     </TextView>
 
@@ -119,7 +196,7 @@
 
         app:layout_constraintVertical_bias="0.8"
 
-        android:visibility="invisible"
+        android:visibility="gone"
 
         android:text="Kaydet"
 
@@ -130,41 +207,22 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
-    <ImageView
-        android:id="@+id/editButton"
-
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.1"
-
-        app:layout_constraintVertical_bias="0.8"
-
-        android:src="@drawable/edit_icon"
-
-        app:layout_constraintEnd_toEndOf="@id/creationDateText"
-        app:layout_constraintStart_toStartOf="@id/creationDateText"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        >
-
-    </ImageView>
-
     <Button
         android:id="@+id/deleteMyAccountButton"
 
         android:layout_width="0dp"
         android:layout_height="0dp"
 
-        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintHeight_percent="0.08"
 
-        app:layout_constraintVertical_bias="0.95"
+        app:layout_constraintVertical_bias="0.83"
 
         app:layout_constraintEnd_toEndOf="@id/creationDateText"
         app:layout_constraintStart_toStartOf="@id/creationDateText"
 
         android:text="@string/delete_my_account"
+        android:textColor="@color/natural_gray"
+        android:textSize="20sp"
 
         android:backgroundTint="#F2BA0707"
 
@@ -172,8 +230,5 @@
         app:layout_constraintTop_toTopOf="parent">
 
     </Button>
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

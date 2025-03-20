@@ -19,13 +19,13 @@ package com.olgunyilmaz.spotticket.adapter;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.olgunyilmaz.spotticket.databinding.EventRowBinding;
-import com.olgunyilmaz.spotticket.util.EventDetailsHelper;
+import com.olgunyilmaz.spotticket.helper.EventDetailsHelper;
 import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.olgunyilmaz.spotticket.view.fragments.EventDetailsFragment;
 import com.olgunyilmaz.spotticket.R;
@@ -36,14 +36,15 @@ import java.util.List;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
 
-    private List<EventResponse.Event> eventList;
+    private final List<EventResponse.Event> eventList;
 
     public EventAdapter(List<EventResponse.Event> eventList) {
         this.eventList = eventList;
     }
 
+    @NonNull
     @Override
-    public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         EventRowBinding binding = EventRowBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new EventViewHolder(binding);
     }
@@ -53,41 +54,38 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         MainActivity activity = (MainActivity) holder.itemView.getContext();
 
         EventResponse.Event event = eventList.get(position);
-        holder.binding.eventName.setText(event.getName());
+        holder.binding.rowEventName.setText(event.getName());
 
         EventDetailsHelper helper = new EventDetailsHelper(activity);
-        String formattedDate = helper.getFormattedDate(event.getDates().getStart().getDateTime());
-        holder.binding.eventDate.setText(formattedDate);
 
-        if(event.getHighQualityImage() != null){
-            Picasso.get()
-                    .load(event.getHighQualityImage())
-                    .placeholder(R.drawable.loading)
-                    .error(R.drawable.error)
-                    .into(holder.binding.eventImage);
-        }
+        Picasso.get().load(event.getHighQualityImage())
+                .resize(1024,1024)
+                .onlyScaleDown() // if smaller don't resize
+                .placeholder(R.drawable.loading)
+                .error(R.drawable.error)
+                .into(holder.binding.eventBackgroundImage);
 
-        holder.binding.bookButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EventDetailsFragment fragment = new EventDetailsFragment();
-                Bundle args = new Bundle();
-                args.putString(activity.getString(R.string.event_id_key), event.getId());
-                args.putString(activity.getString(R.string.image_url_key), event.getHighQualityImage());
-                args.putString(activity.getString(R.string.event_name_key), event.getName());
-                args.putString(activity.getString(R.string.event_date_key),event.getDates().getStart().getDateTime());
 
-                String category = helper.getEventSegmentInfo(event,event.getClassifications());
+        holder.binding.eventRowInnerLayout.setOnClickListener(view -> {
 
-                args.putLong(activity.getString(R.string.category_icon_key),helper.getCategoryIconId(category));
-                fragment.setArguments(args);
+            EventDetailsFragment fragment = new EventDetailsFragment();
+            Bundle args = new Bundle();
+            args.putString(activity.getString(R.string.event_id_key), event.getId());
+            args.putString(activity.getString(R.string.image_url_key), event.getHighQualityImage());
+            args.putString(activity.getString(R.string.event_name_key), event.getName());
+            args.putString(activity.getString(R.string.event_date_key), event.getDates().getStart().getDateTime());
+            args.putString(activity.getString(R.string.from_key), activity.getString(R.string.from_home));
 
-                activity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainerView, fragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
+            String category = helper.getEventSegmentInfo(event, event.getClassifications());
+
+            args.putLong(activity.getString(R.string.category_icon_key), helper.getCategoryIconId(category));
+            fragment.setArguments(args);
+
+            activity.getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainerView, fragment)
+                    .addToBackStack(null)
+                    .commit();
         });
     }
 
@@ -96,7 +94,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         return eventList.size();
     }
 
-    public class EventViewHolder extends RecyclerView.ViewHolder {
+    public static class EventViewHolder extends RecyclerView.ViewHolder {
         private final EventRowBinding binding;
 
         public EventViewHolder(EventRowBinding binding) {

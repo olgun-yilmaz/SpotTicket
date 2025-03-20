@@ -20,8 +20,7 @@ package com.olgunyilmaz.spotticket.util;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
+import android.widget.RadioButton;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -34,27 +33,58 @@ import com.olgunyilmaz.spotticket.view.activities.MainActivity;
 import com.olgunyilmaz.spotticket.view.fragments.EventDetailsFragment;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Random;
 
 public class MainHelper {
     private final MainActivity activity;
-    private List<ImageView> menuButtons;
+    private ArrayList<RadioButton> menuButtons;
+    private HashMap<String,Integer> menuHashmap;
+    private final String selectedText = "Selected";
 
     public MainHelper(MainActivity activity) {
         this.activity = activity;
         getMenuButtons();
-    }
+        getMenuHashmap();
 
-    public void disableButton(View selectedButton) { // disable chosen button
-        for (ImageView button : menuButtons) {
-            if (button == selectedButton) {
-                button.setEnabled(false);
-            } else {
-                button.setEnabled(true);
+        activity.binding.fixedBar.setOnCheckedChangeListener((radioGroup, i) -> {
+            RadioButton selectedButton = radioGroup.findViewById(i);
+            for(RadioButton radioButton : menuButtons){
+                String key = radioButton.getText().toString();
+                boolean state = true;
+                if (radioButton == selectedButton){
+                    key += selectedText;
+                    state = false; // make it disable
+                }
+                radioButton.setBackgroundResource(menuHashmap.get(key));
+                radioButton.setEnabled(state);
             }
 
-        }
+        });
+    }
+
+    private void getMenuButtons(){
+        menuButtons = new ArrayList<>();
+        menuButtons.add(activity.binding.homeButton);
+        menuButtons.add(activity.binding.displayButton);
+        menuButtons.add(activity.binding.myEventsButton);
+        menuButtons.add(activity.binding.profileButton);
+    }
+
+    private void getMenuHashmap(){
+        menuHashmap = new HashMap<>();
+        menuHashmap.put(activity.getString(R.string.menu_home_key),R.drawable.home_icon);
+        menuHashmap.put(activity.getString(R.string.menu_home_key)+selectedText,R.drawable.home_selected);
+
+        menuHashmap.put(activity.getString(R.string.menu_display_key),R.drawable.display_icon);
+        menuHashmap.put(activity.getString(R.string.menu_display_key)+selectedText,R.drawable.display_selected);
+
+        menuHashmap.put(activity.getString(R.string.menu_my_events_key),R.drawable.bookmark_icon);
+        menuHashmap.put(activity.getString(R.string.menu_my_events_key)+selectedText,R.drawable.bookmark_selected);
+
+        menuHashmap.put(activity.getString(R.string.menu_settings_key),R.drawable.settings_icon);
+        menuHashmap.put(activity.getString(R.string.menu_settings_key)+selectedText,R.drawable.settings_selected);
+
     }
 
     public void goToLoginActivity() {
@@ -64,17 +94,7 @@ public class MainHelper {
         activity.finish();
     }
 
-    private void getMenuButtons() {
-        menuButtons = new ArrayList<>();
-        menuButtons.add(activity.binding.profileButton);
-        menuButtons.add(activity.binding.myEventsButton);
-        menuButtons.add(activity.binding.homeButton);
-        menuButtons.add(activity.binding.displayButton);
-        menuButtons.add(activity.binding.signOutButton);
-    }
-
-    public void replaceFragment(Fragment fragment, View sender, FragmentManager fragmentManager) {
-        disableButton(sender);
+    public void replaceFragment(Fragment fragment, FragmentManager fragmentManager) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainerView, fragment).commit();
     }
