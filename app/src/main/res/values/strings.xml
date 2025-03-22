@@ -99,6 +99,7 @@
     <string name="result_founded_text">SONUÇ BULUNDU</string>
     <string name="review_text">İNCELE</string>
 
+    <string name="save">Kaydet</string>
     <string name="search_city_text">Şehir ara . . .</string>
     <string name="search_events_text">Etkinlik Ara . . .</string>
     <string name="searching_text">Aranıyor . . .</string>

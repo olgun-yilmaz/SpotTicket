@@ -175,7 +175,7 @@
         app:layout_constraintStart_toStartOf="@id/settingsProfileLayout"
         app:layout_constraintTop_toTopOf="parent" >
 
-        <ImageView
+        <CheckBox
             android:id="@+id/notificationIcon"
 
             android:layout_width="0dp"
@@ -184,7 +184,8 @@
             app:layout_constraintWidth_percent="0.08"
             app:layout_constraintHeight_percent="0.6"
 
-            android:src="@drawable/notifications"
+            android:background="@drawable/button_background"
+            android:button="@drawable/off_notify"
 
             app:layout_constraintBottom_toBottomOf="parent"
 
@@ -211,6 +212,7 @@
 
             app:layout_constraintStart_toEndOf="@id/notificationIcon"
             app:layout_constraintTop_toTopOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

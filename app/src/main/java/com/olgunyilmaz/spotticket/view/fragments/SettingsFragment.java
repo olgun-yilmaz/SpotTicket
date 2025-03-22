@@ -19,18 +19,27 @@ package com.olgunyilmaz.spotticket.view.fragments;
 
 import static androidx.core.app.ActivityCompat.recreate;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +77,7 @@ public class SettingsFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -80,29 +90,53 @@ public class SettingsFragment extends Fragment {
 
         fragmentManager = activity.getSupportFragmentManager();
 
-        if(UserManager.getInstance().profileImage == null){
+        if (UserManager.getInstance().profileImage == null) {
             binding.settingsProfileImage.setImageResource(R.drawable.sample_profile_image);
-        }else{
+        } else {
             binding.settingsProfileImage.setImageBitmap(UserManager.getInstance().profileImage);
         }
 
         binding.settingsNameText.setText(UserManager.getInstance().name);
         binding.settingsCityText.setText(UserManager.getInstance().city);
 
+        binding.notificationIcon.setOnCheckedChangeListener((button, isChecked) -> {
+            if (isChecked) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    requestNotificationPermission();
+                } else {
+                    goSettingsForNotifications();
+                }
+            } else {
+                goSettingsForNotifications();
+            }
+        });
+
         binding.settingsEditButton.setOnClickListener(v -> replaceFragment(new ProfileFragment()));
         binding.settingsPasswordLayout.setOnClickListener(v -> replaceFragment(new ChangePasswordFragment()));
         binding.settingsLanguageLayout.setOnClickListener(v -> changeLanguage(helper.getLanguageData(null)));
-        binding.settingsLogOutLayout.setOnClickListener(v ->signOut());
+        binding.settingsLogOutLayout.setOnClickListener(v -> signOut());
     }
 
-    private void replaceFragment(Fragment fragment){
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateNotificationStatus();
+    }
+
+    private void updateNotificationStatus() {
+        boolean areNotificationsEnabled = NotificationManagerCompat.from(requireContext()).areNotificationsEnabled();
+        binding.notificationIcon.setChecked(areNotificationsEnabled);
+        binding.notificationIcon.setButtonDrawable(areNotificationsEnabled ? R.drawable.on_notify : R.drawable.off_notify);
+    }
+
+    private void replaceFragment(Fragment fragment) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.fragmentContainerView,fragment).commit();
+        transaction.replace(R.id.fragmentContainerView, fragment).commit();
     }
 
     @SuppressLint("ObsoleteSdkInt")
-    private void selectLanguage(ArrayList<Language> languages){
-        languageCounter = localDataManager.getIntegerData(getString(R.string.language_counter_key),0);
+    private void selectLanguage(ArrayList<Language> languages) {
+        languageCounter = localDataManager.getIntegerData(getString(R.string.language_counter_key), 0);
 
         int selectedId = languageCounter % languages.size();
 
@@ -158,5 +192,27 @@ public class SettingsFragment extends Fragment {
         UserManager.getInstance().profileImage = null; // clean for next user
     }
 
+    private void goSettingsForNotifications() {
+        Intent intent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            intent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+            intent.putExtra(Settings.EXTRA_APP_PACKAGE, requireActivity().getPackageName());
+        }else {
+            intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.setData(Uri.parse("package:" + requireActivity().getPackageName()));
+        }
+        startActivity(intent);
+        requireActivity().finish();
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    private void requestNotificationPermission() {
+        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(requireActivity(),
+                    new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                    101);
+        }
+    }
 }

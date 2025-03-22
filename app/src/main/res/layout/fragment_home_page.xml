@@ -222,7 +222,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/sample_image"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -286,7 +285,6 @@
 
                     app:layout_constraintHorizontal_bias="0.9"
 
-                    android:text="08 OCT 2024"
                     android:fontFamily="@font/lexend_light"
                     android:textColor="@color/date_text_color"
                     android:textSize="12sp"
@@ -306,7 +304,6 @@
                 android:id="@+id/recommendedEventName"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
-                android:text="Harmony Unleashed: A Fusion of Genres"
                 android:textColor="@color/event_name_gray"
                 android:textSize="14sp"
                 app:layout_constraintWidth_percent="0.6"

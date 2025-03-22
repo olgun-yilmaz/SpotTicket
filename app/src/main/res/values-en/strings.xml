@@ -99,6 +99,7 @@
     <string name="result_founded_text">RESULTS FOUND</string>
     <string name="review_text">REVIEW</string>
 
+    <string name="save">Save</string>
     <string name="search_city_text">Search City . . .</string>
     <string name="search_events_text">Search Event . . .</string>
     <string name="searching_text">Searching . . .</string>

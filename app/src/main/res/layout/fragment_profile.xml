@@ -198,7 +198,7 @@
 
         android:visibility="gone"
 
-        android:text="Kaydet"
+        android:text="@string/save"
 
         app:layout_constraintEnd_toEndOf="@id/creationDateText"
         app:layout_constraintStart_toStartOf="@id/creationDateText"
