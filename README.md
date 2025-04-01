@@ -1,4 +1,53 @@
-# SpotTicket
+# SpotTicket - Event Discovery and Management App
+
+## Features
+
+SpotTicket offers a seamless experience for discovering and managing events. Here are some of its key features:
+
+- Cloud-Based System – Access your account from any device.
+
+- Event Details & Location – View event venues directly on the map using Google Maps API.
+
+- Advanced Event Filtering – Search by keyword, category, date, or city.
+
+- Event Notifications – Get notified about upcoming events.
+
+- Favorite Events – Save your favorite events for easy access.
+
+- Multi-Language Support – Enjoy the app in multiple languages.
+
+- Profile Management – Create a profile and update your profile picture.
+
+- Ticket Purchase Links – Access direct links for ticket purchases.
+
+- City-Based Event Recommendations – Receive personalized event suggestions based on your city.
+
+## Screenshots
+
+<p align="center">
+  <img src="app/screenshots/on_boarding.jpg" width="150" height="300" />
+  <img src="app/screenshots/login.jpg" width="150" height="300" />
+  <img src="app/screenshots/sign_up.jpg" width="150" height="300" />
+  <img src="app/screenshots/forgot_password.jpg" width="150" height="300" />
+</p>
+
+<p align="center">
+  <img src="app/screenshots/main.jpg" width="150" height="300" />
+  <img src="app/screenshots/my_events.jpg" width="150" height="300" />
+  <img src="app/screenshots/details.jpg" width="150" height="300" />
+  <img src="app/screenshots/event_location.jpg" width="150" height="300" />
+</p>
+
+<p align="center">
+  <img src="app/screenshots/search_by_city.jpg" width="150" height="300" />
+  <img src="app/screenshots/search_by_keyword.jpg" width="150" height="300" />
+  <img src="app/screenshots/settings.jpg" width="150" height="300" />
+  <img src="app/screenshots/profile.jpg" width="150" height="300" />
+</p>
+
+<p align="center">
+  <img src="app/screenshots/notifications.png" width="612" height="306" />
+</p>
 
 ## Cloning the Project
 
@@ -93,4 +142,9 @@ If you would like to contribute to the project, please refer to the [CONTRIBUTIN
 
 This project is licensed under the Apache License 2.0. For more information, please check the `LICENSE` file.
 
----
+### UI Design & License  
+
+The user interface of SpotTicket was designed using **Figma**. The design is subject to the **Figma Community License**, meaning it can be used and modified under Figma's licensing terms.  
+
+For more details, please refer to the **[Figma Community License](https://www.figma.com/community/license)**.  
+
