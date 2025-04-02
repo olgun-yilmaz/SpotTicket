@@ -1,26 +1,36 @@
 # SpotTicket - Event Discovery and Management App
 
+SpotTicket is a mobile app that makes it easy for users to discover a wide range of events, from concerts to festivals. Whether you're looking for an event in your city or elsewhere, **SpotTicket** simplifies the discovery process and enhances your experience.
+
 ## Features
 
 SpotTicket offers a seamless experience for discovering and managing events. Here are some of its key features:
 
+- Advanced Event Filtering – Search by keyword, category, date, or city.
+
+
+- City-Based Event Recommendations – Receive personalized event suggestions based on your city.
+
+
 - Cloud-Based System – Access your account from any device.
+
 
 - Event Details & Location – View event venues directly on the map using Google Maps API.
 
-- Advanced Event Filtering – Search by keyword, category, date, or city.
 
 - Event Notifications – Get notified about upcoming events.
 
+
 - Favorite Events – Save your favorite events for easy access.
+
 
 - Multi-Language Support – Enjoy the app in multiple languages.
 
+
 - Profile Management – Create a profile and update your profile picture.
 
-- Ticket Purchase Links – Access direct links for ticket purchases.
 
-- City-Based Event Recommendations – Receive personalized event suggestions based on your city.
+- Ticket Purchase Links – Access direct links for ticket purchases.
 
 ## Screenshots
 
@@ -46,8 +56,9 @@ SpotTicket offers a seamless experience for discovering and managing events. Her
 </p>
 
 <p align="center">
-  <img src="app/screenshots/notifications.png" width="612" height="306" />
+  <img src="app/screenshots/notifications.png" width="610"/>
 </p>
+
 
 ## Cloning the Project
 
