@@ -1,0 +1,64 @@
+<!--
+   Project: SpotTicket
+   Copyright 2025 Olgun Yılmaz
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<resources>
+    <string name="all_categories">Alle Kategorien</string>
+
+    <string name="basketball">Basketball</string>
+    <string name="baseball">Baseball</string>
+    <string name="blues">Blues</string>
+
+    <string name="classical_music">Klassische Musik</string>
+    <string name="conference">Konferenz</string>
+
+    <string name="dancing">Tanzen</string>
+    <string name="disney">Disney</string>
+
+    <string name="electro">Electro</string>
+    <string name="entertainment">Unterhaltung</string>
+    <string name="exhibition">Ausstellung</string>
+
+    <string name="family">Familie</string>
+    <string name="folk">Volksmusik</string>
+    <string name="food">Food-Festival</string>
+
+    <string name="hip_hop">Hip-Hop/Rap</string>
+
+    <string name="jazz">Jazz</string>
+
+    <string name="cultural">Kulturfestival</string>
+
+    <string name="ice_hockey">Eishockey</string>
+
+    <string name="mma">MMA</string>
+    <string name="movie">Film</string>
+    <string name="music">Musik</string>
+    <string name="musical">Musical</string>
+
+    <string name="opera">Oper</string>
+
+    <string name="pop_music">Popmusik</string>
+
+    <string name="rb">R&amp;B</string>
+    <string name="rock">Rock</string>
+
+    <string name="tennis">Tennis</string>
+    <string name="theater">Theater</string>
+    <string name="theater_art">Theater &amp; Kunst</string>
+
+    <string name="sports">Sport</string>
+</resources>

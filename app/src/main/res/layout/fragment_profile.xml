@@ -29,8 +29,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
 
-        app:layout_constraintWidth_percent="0.153"
-        app:layout_constraintHeight_percent="0.071"
+        app:layout_constraintWidth_percent="0.11025"
+        app:layout_constraintHeight_percent="0.06"
 
         app:layout_constraintVertical_bias="0.04"
         app:layout_constraintHorizontal_bias="0.05"
@@ -49,8 +49,8 @@
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintWidth_percent="0.153"
-        app:layout_constraintHeight_percent="0.076"
+        app:layout_constraintWidth_percent="0.11025"
+        app:layout_constraintHeight_percent="0.06"
 
         app:layout_constraintHorizontal_bias="0.95"
 
@@ -65,37 +65,31 @@
     </ImageView>
 
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profileImage"
-
-        android:background="@color/white"
-
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.25"
-
         android:scaleType="centerCrop"
-
-        app:layout_constraintVertical_bias="0.05"
-
-        app:layout_constraintWidth_percent="0.625"
-
         android:src="@drawable/sample_profile_image"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/profileBackButton"
         app:layout_constraintBottom_toTopOf="@id/deleteMyAccountButton"
-        app:layout_constraintTop_toBottomOf="@id/profileBackButton" />
-
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintWidth_percent="0.42"
+        app:layout_constraintVertical_bias="0.05"
+        app:shapeAppearanceOverlay="@style/CircleImage" />
 
     <TextView
         android:id="@+id/usernameText"
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.04"
+        app:layout_constraintHeight_percent="0.06"
+        app:layout_constraintWidth_percent="0.8"
+
+        android:gravity="center"
 
         android:background="@drawable/rounded_corners"
 
@@ -107,8 +101,8 @@
         android:textAlignment="center"
         android:textColor="@color/settings_edit_color"
 
-        app:layout_constraintEnd_toEndOf="@id/profileImage"
-        app:layout_constraintStart_toStartOf="@id/profileImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
 
         app:layout_constraintBottom_toTopOf="@id/deleteMyAccountButton"
         app:layout_constraintTop_toBottomOf="@id/profileImage"  />
@@ -118,7 +112,9 @@
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.04"
+        app:layout_constraintHeight_percent="0.08"
+
+        android:gravity="center"
 
         android:background="@drawable/rounded_corners"
 
@@ -144,7 +140,7 @@
 
         android:textSize="18sp"
 
-        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintHeight_percent="0.12"
 
         android:hint="@string/please_select_your_city_text"
 
@@ -167,7 +163,8 @@
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.04"
+        app:layout_constraintHeight_percent="0.08"
+        android:gravity="center"
 
         android:background="@drawable/rounded_corners"
 
@@ -192,13 +189,15 @@
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.1"
 
-        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintHeight_percent="0.06"
+
+        app:layout_constraintVertical_bias="0.87"
 
         android:visibility="gone"
 
         android:text="@string/save"
+        android:textSize="15sp"
 
         app:layout_constraintEnd_toEndOf="@id/creationDateText"
         app:layout_constraintStart_toStartOf="@id/creationDateText"
@@ -213,16 +212,16 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
 
-        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintHeight_percent="0.06"
 
-        app:layout_constraintVertical_bias="0.83"
+        app:layout_constraintVertical_bias="0.87"
 
         app:layout_constraintEnd_toEndOf="@id/creationDateText"
         app:layout_constraintStart_toStartOf="@id/creationDateText"
 
         android:text="@string/delete_my_account"
         android:textColor="@color/natural_gray"
-        android:textSize="20sp"
+        android:textSize="15sp"
 
         android:backgroundTint="#F2BA0707"
 

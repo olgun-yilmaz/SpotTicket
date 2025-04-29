@@ -111,7 +111,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        binding.settingsEditButton.setOnClickListener(v -> replaceFragment(new ProfileFragment()));
+        binding.settingsEditLayout.setOnClickListener(v -> replaceFragment(new ProfileFragment()));
         binding.settingsPasswordLayout.setOnClickListener(v -> replaceFragment(new ChangePasswordFragment()));
         binding.settingsLanguageLayout.setOnClickListener(v -> changeLanguage(helper.getLanguageData(null)));
         binding.settingsLogOutLayout.setOnClickListener(v -> signOut());

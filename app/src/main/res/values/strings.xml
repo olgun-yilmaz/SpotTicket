@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
    Project: SpotTicket
    Copyright 2025 Olgun Yılmaz
@@ -37,7 +38,7 @@
 
     <string name="default_city_name">Amsterdam</string>
     <string name="default_category_name">Tüm Kategoriler</string>
-    <string name="default_venue_name">Ülker Stadyumu</string>
+    <string name="default_venue_name">Şükrü Saraçoğlu Stadyumu</string>
     <string name="default_venue_latitude">40.98780984859083</string>
 
     <string name="default_venue_longitude">29.03689029646077</string>

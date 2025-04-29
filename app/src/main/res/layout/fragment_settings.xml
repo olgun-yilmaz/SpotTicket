@@ -136,26 +136,119 @@
             app:layout_constraintVertical_bias="0.3"
             app:layout_constraintWidth_percent="0.2" />
 
-        <Button
-            android:id="@+id/settingsEditButton"
 
-            android:layout_width="wrap_content"
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_button_background"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/settingsEditLayout"
 
-            android:fontFamily="@font/roboto_medium"
-            android:src="@drawable/sample_profile_image"
-            android:text="@string/title_edit"
-            android:textColor="@color/settings_edit_color"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
 
-            android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="@id/settingsProfileLayout"
+
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintHorizontal_bias="0.0"
+
+        app:layout_constraintStart_toStartOf="@id/settingsProfileLayout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4">
+
+        <ImageView
+            android:id="@+id/editIcon"
+
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:background="@color/black"
+
+            android:src="@drawable/edit"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintHeight_percent="0.6"
+
+            app:layout_constraintStart_toStartOf="parent"
 
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.4" />
+            app:layout_constraintWidth_percent="0.08" />
 
+        <TextView
+            android:id="@+id/settingsEditText"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:fontFamily="@font/roboto"
+            android:text="@string/title_edit"
+            android:textColor="#E0F1FF"
+
+            android:textSize="16sp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.1"
+
+            app:layout_constraintStart_toEndOf="@id/editIcon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/settingsPasswordLayout"
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="@id/settingsProfileLayout"
+
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintHorizontal_bias="0.0"
+
+        app:layout_constraintStart_toStartOf="@id/settingsProfileLayout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5">
+
+        <ImageView
+            android:id="@+id/passwordIcon"
+
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:src="@drawable/lock"
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            app:layout_constraintHeight_percent="0.6"
+
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.08" />
+
+        <TextView
+            android:id="@+id/settingsPasswordText"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:fontFamily="@font/roboto"
+            android:text="@string/title_change_password"
+            android:textColor="#E0F1FF"
+
+            android:textSize="16sp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.1"
+
+            app:layout_constraintStart_toEndOf="@id/passwordIcon"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -167,7 +260,7 @@
 
         app:layout_constraintHeight_percent="0.05"
 
-        app:layout_constraintVertical_bias="0.4"
+        app:layout_constraintVertical_bias="0.6"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/settingsProfileLayout"
@@ -224,7 +317,7 @@
 
         app:layout_constraintHeight_percent="0.05"
 
-        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintVertical_bias="0.7"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/settingsProfileLayout"
@@ -272,61 +365,6 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/settingsPasswordLayout"
-
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-
-        app:layout_constraintEnd_toEndOf="@id/settingsProfileLayout"
-
-        app:layout_constraintHeight_percent="0.05"
-        app:layout_constraintHorizontal_bias="0.0"
-
-        app:layout_constraintStart_toStartOf="@id/settingsProfileLayout"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.6">
-
-        <ImageView
-            android:id="@+id/passwordIcon"
-
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-
-            android:src="@drawable/lock"
-            app:layout_constraintBottom_toBottomOf="parent"
-
-            app:layout_constraintHeight_percent="0.6"
-
-            app:layout_constraintStart_toStartOf="parent"
-
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.08" />
-
-        <TextView
-            android:id="@+id/settingsPasswordText"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:fontFamily="@font/roboto"
-            android:text="@string/title_change_password"
-            android:textColor="#E0F1FF"
-
-            android:textSize="16sp"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.1"
-
-            app:layout_constraintStart_toEndOf="@id/passwordIcon"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/settingsLogOutLayout"
 
         android:layout_width="0dp"
@@ -334,7 +372,7 @@
 
         app:layout_constraintHeight_percent="0.05"
 
-        app:layout_constraintVertical_bias="0.7"
+        app:layout_constraintVertical_bias="0.8"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/settingsProfileLayout"

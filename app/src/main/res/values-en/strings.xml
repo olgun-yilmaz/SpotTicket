@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
    Project: SpotTicket
    Copyright 2025 Olgun Yılmaz
@@ -14,7 +15,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-
 <resources>
     <string name="app_name">SpotTicket</string>
     <string name="app_motto">We are not the address of the event but we can give you the address of the event :)</string>
@@ -37,7 +37,7 @@
 
     <string name="default_city_name">Amsterdam</string>
     <string name="default_category_name">All Categories</string>
-    <string name="default_venue_name">Ulker Stadium</string>
+    <string name="default_venue_name">Sukru Saracoglu Stadium</string>
     <string name="default_venue_latitude">40.98780984859083</string>
 
     <string name="default_venue_longitude">29.03689029646077</string>

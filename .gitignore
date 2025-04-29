@@ -15,3 +15,7 @@
 local.properties
 /app/src/main/res/values/keys.xml
 /app/src/main/res/values-en/keys.xml
+/app/src/main/res/values-de/keys.xml
+/app/src/main/res/values-es/keys.xml
+/app/src/main/res/values-ko/keys.xml
+/app/notes.txt

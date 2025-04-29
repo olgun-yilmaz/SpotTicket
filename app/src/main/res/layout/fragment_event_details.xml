@@ -96,9 +96,9 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
 
-            app:layout_constraintWidth_percent="0.15"
+            app:layout_constraintWidth_percent="0.11025"
 
-            app:layout_constraintHorizontal_bias="0.05"
+            app:layout_constraintHorizontal_bias="0.03"
 
             android:background="@drawable/button_background"
             android:button="@drawable/back_button"
@@ -113,9 +113,9 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
 
-            app:layout_constraintWidth_percent="0.15"
+            app:layout_constraintWidth_percent="0.11025"
 
-            app:layout_constraintHorizontal_bias="0.95"
+            app:layout_constraintHorizontal_bias="0.97"
 
             android:background="@drawable/button_background"
             android:button="@drawable/fav_empty_icon"
