@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-   Project: SpotTicket
+   Project: EventBox
    Copyright 2025 Olgun Yılmaz
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
    limitations under the License.
 -->
 <resources>
-    <string name="app_name">SpotTicket</string>
+    <string name="app_name">EventBox</string>
     <string name="app_motto">We are not the address of the event but we can give you the address of the event :)</string>
 
     <string name="already_account_text">Already Account?</string>

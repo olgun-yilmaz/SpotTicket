@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-   Project: SpotTicket
+   Project: EventBox
    Copyright 2025 Olgun Yılmaz
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -85,7 +85,7 @@
     <string name="name_text">İsim : </string>
     <string name="notification_content">Favori etkinliğin yaklaşıyor. Son %d gün kaldı! Hatırlatmak istedik :)</string>
     <string name="notification_last_day_content">Bugün günlerden %s ! Haydi, etkinliğini kaçırma...</string>
-    <string name="notification_permission_text">Spot Ticket size bildirim göndersin mi?</string>
+    <string name="notification_permission_text">Bilet Kutusu size bildirim göndersin mi?</string>
 
     <string name="old_password_text">Eski Şifre :</string>
 

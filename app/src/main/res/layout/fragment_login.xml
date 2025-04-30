@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-   Project: SpotTicket
+   Project: EventBox
    Copyright 2025 Olgun Yılmaz
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,83 +26,22 @@
     android:background="@color/sign_up_background"
     tools:context=".view.fragments.SignUpFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/appTitleLayout"
+    <ImageView
+        android:id="@+id/appLogo"
 
         android:layout_width="0dp"
         android:layout_height="0dp"
 
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/logo"
 
-        app:layout_constraintEnd_toEndOf="@id/loginPasswordText"
+        app:layout_constraintBottom_toTopOf="@id/loginEmailText"
+
+        app:layout_constraintEnd_toEndOf="@id/loginEmailText"
 
         app:layout_constraintHeight_percent="0.23"
-        app:layout_constraintStart_toStartOf="@id/loginPasswordText"
+        app:layout_constraintStart_toStartOf="@id/loginEmailText"
 
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0">
-
-        <TextView
-            android:id="@+id/appNameText"
-
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-
-            android:fontFamily="@font/roboto_bold"
-            android:gravity="center"
-            android:text="@string/app_name"
-            android:textColor="@color/white"
-            android:textSize="41.58sp"
-
-            app:layout_constraintVertical_bias="0.13"
-
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-
-            app:layout_constraintHeight_percent="0.4"
-
-            app:layout_constraintEnd_toEndOf="parent"
-
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/appDescriptionText"
-
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-
-            android:fontFamily="@font/roboto_light"
-            android:gravity="center"
-
-            android:text="@string/app_motto"
-            android:textColor="@color/white"
-
-            app:layout_constraintHeight_percent="0.3"
-
-            app:layout_constraintVertical_bias="0.8"
-
-            android:textSize="18.28sp"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/line"
-
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-
-            android:src="@drawable/line"
-
-            app:layout_constraintHeight_percent="0.03"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/loginEmailText"

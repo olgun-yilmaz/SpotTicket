@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace 'com.olgunyilmaz.spotticket'
+    namespace 'com.olgunyilmaz.eventbox'
     compileSdk 35
 
     defaultConfig {
-        applicationId "com.olgunyilmaz.spotticket"
+        applicationId "com.olgunyilmaz.eventbox"
         minSdk 25
         targetSdk 35
         versionCode 1

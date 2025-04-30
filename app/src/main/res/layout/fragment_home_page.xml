@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-   Project: SpotTicket
+   Project: EventBox
    Copyright 2025 Olgun Yılmaz
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +34,7 @@
         app:layout_constraintVertical_bias="0.03"
         app:layout_constraintWidth_percent="0.99"
 
-        app:layout_constraintHeight_percent="0.09"
+        app:layout_constraintHeight_percent="0.085"
         app:layout_constraintHorizontal_bias="0.1"
 
         app:layout_constraintBottom_toBottomOf="parent"
@@ -98,7 +98,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
 
-            app:layout_constraintWidth_percent="0.19"
+            app:layout_constraintWidth_percent="0.18"
 
             android:src="@drawable/sample_profile_image"
             android:background="@drawable/circular_image"

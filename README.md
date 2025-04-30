@@ -1,10 +1,10 @@
-# SpotTicket - Event Discovery and Management App
+# EventBox - Event Discovery and Management App
 
-SpotTicket is a mobile app that makes it easy for users to discover a wide range of events, from concerts to festivals. Whether you're looking for an event in your city or elsewhere, **SpotTicket** simplifies the discovery process and enhances your experience.
+EventBox is a mobile app that makes it easy for users to discover a wide range of events, from concerts to festivals. Whether you're looking for an event in your city or elsewhere, **EventBox** simplifies the discovery process and enhances your experience.
 
 ## Features
 
-SpotTicket offers a seamless experience for discovering and managing events. Here are some of its key features:
+EventBox offers a seamless experience for discovering and managing events. Here are some of its key features:
 
 - Advanced Event Filtering – Search by keyword, category, date, or city.
 
@@ -62,7 +62,7 @@ SpotTicket offers a seamless experience for discovering and managing events. Her
 
 ## Cloning the Project
 
-This guide contains the necessary steps to clone and run the SpotTicket Android project.
+This guide contains the necessary steps to clone and run the EventBox Android project.
 
 ### Requirements
 
@@ -80,7 +80,7 @@ If Git is not installed, download and install the appropriate version for your o
 2. Use the following command to clone the project:
 
    ```bash
-   git clone https://github.com/olgun-yilmaz/SpotTicket.git
+   git clone https://github.com/olgun-yilmaz/EventBox.git
    ```
 
 ### Step 3: Open Android Studio
@@ -155,7 +155,7 @@ This project is licensed under the Apache License 2.0. For more information, ple
 
 ### UI Design & License  
 
-The user interface of SpotTicket was designed using **Figma**. The design is subject to the **Figma Community License**, meaning it can be used and modified under Figma's licensing terms.  
+The user interface of EventBox was designed using **Figma**. The design is subject to the **Figma Community License**, meaning it can be used and modified under Figma's licensing terms.  
 
 For more details, please refer to the **[Figma Community License](https://www.figma.com/community/license)**.  
 

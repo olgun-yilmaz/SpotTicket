@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-   Project: SpotTicket
+   Project: EventBox
    Copyright 2025 Olgun Yılmaz
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
    limitations under the License.
 -->
 <resources>
-    <string name="app_name">SpotTicket</string>
+    <string name="app_name">EventBox</string>
     <string name="app_motto">No somos la dirección del evento, pero podemos darte la dirección del evento :)</string>
 
     <string name="already_account_text">¿Ya tienes una cuenta?</string>
@@ -84,7 +84,7 @@
     <string name="name_text">Nombre: </string>
     <string name="notification_content">Tu evento favorito se acerca. ¡Quedan %d días! Solo queríamos recordártelo :)</string>
     <string name="notification_last_day_content">¡Hoy es el día del %s! Vamos, no te pierdas el evento...</string>
-    <string name="notification_permission_text">¿SpotTicket debería enviarte notificaciones?</string>
+    <string name="notification_permission_text">¿EventBox debería enviarte notificaciones?</string>
 
     <string name="old_password_text">Contraseña anterior:</string>
 
