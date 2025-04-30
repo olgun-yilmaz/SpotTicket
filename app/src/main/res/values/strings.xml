@@ -17,7 +17,7 @@
 -->
 
 <resources>
-    <string name="app_name">SpotTicket</string>
+    <string name="app_name">BiletKutusu</string>
     <string name="app_motto">Etkinliğin adresi değiliz ama etkinliğin adresini size verebiliriz :)</string>
 
     <string name="already_account_text">Hesabınız var mı?</string>
@@ -48,6 +48,8 @@
     <string name="delete_my_account">HESABIMI SİL</string>
     <string name="deleting_text">Siliniyor</string>
     <string name="deleting_data_text">Veriler Siliniyor</string>
+
+    <string name="do_you_have_an_account">Hesabınız yok mu?</string>
 
     <string name="email_text">E-Mail :</string>
     <string name="email_sent_text">%s e-maili gönderildi.</string>

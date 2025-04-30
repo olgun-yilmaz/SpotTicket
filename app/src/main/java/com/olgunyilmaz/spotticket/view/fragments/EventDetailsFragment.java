@@ -108,7 +108,7 @@ public class EventDetailsFragment extends Fragment {
 
             if (detailsHelper.isLiked(eventId)) {
                 binding.favCheckBox.setChecked(true);
-                binding.favCheckBox.setButtonDrawable(R.drawable.fav_filled_icon);
+                binding.favCheckBox.setBackgroundResource(R.drawable.fav_filled_icon);
             }
 
             binding.favCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -120,7 +120,7 @@ public class EventDetailsFragment extends Fragment {
                     imgId = R.drawable.fav_empty_icon;
                     removeFavorite(eventId);
                 }
-                binding.favCheckBox.setButtonDrawable(imgId);
+                binding.favCheckBox.setBackgroundResource(imgId);
             });
 
             binding.detailsBackButton.setOnClickListener(v -> detailsHelper.goBack(fromWhere));

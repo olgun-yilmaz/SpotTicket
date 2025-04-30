@@ -286,7 +286,7 @@
 
             android:fontFamily="@font/roboto_light"
             android:gravity="center"
-            android:text="Hesabınız yok mu?"
+            android:text="@string/do_you_have_an_account"
             android:textColor="@color/hint"
             android:textSize="15sp"
 

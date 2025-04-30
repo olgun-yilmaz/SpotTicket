@@ -48,6 +48,8 @@
     <string name="deleting_text">Eliminando</string>
     <string name="deleting_data_text">Los datos están siendo eliminados</string>
 
+    <string name="do_you_have_an_account">¿No tienes una cuenta?</string>
+
     <string name="email_text">Correo electrónico:</string>
     <string name="email_sent_text">Correo electrónico enviado a %s</string>
     <string name="enter_password_for_delete_account">Ingresa tu contraseña para eliminar tu cuenta.</string>

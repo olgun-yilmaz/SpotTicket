@@ -48,6 +48,8 @@
     <string name="deleting_text">삭제 중</string>
     <string name="deleting_data_text">데이터를 삭제하는 중입니다</string>
 
+    <string name="do_you_have_an_account">계정이 없나요?</string>
+
     <string name="email_text">이메일 :</string>
     <string name="email_sent_text">%s로 이메일이 전송되었습니다</string>
     <string name="enter_password_for_delete_account">계정을 삭제하려면 비밀번호를 입력하세요.</string>

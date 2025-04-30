@@ -48,6 +48,8 @@
     <string name="deleting_text">Deleting</string>
     <string name="deleting_data_text">Data is being deleted</string>
 
+    <string name="do_you_have_an_account">Dont you have an account?</string>
+
     <string name="email_text">E-Mail :</string>
     <string name="email_sent_text">E-mail sent to %s</string>
     <string name="enter_password_for_delete_account">Enter your password to delete your account.</string>

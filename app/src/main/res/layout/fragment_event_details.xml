@@ -58,10 +58,10 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:background="@color/white"
                     android:id="@+id/detailsImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/white"
                     android:scaleType="centerCrop"
                     android:src="@drawable/loading"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -83,8 +83,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
 
-        app:layout_constraintHeight_percent="0.075"
-        app:layout_constraintVertical_bias="0.02"
+        app:layout_constraintHeight_percent="0.063"
+        app:layout_constraintVertical_bias="0.04"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -96,12 +96,12 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
 
-            app:layout_constraintWidth_percent="0.11025"
+            app:layout_constraintWidth_percent="0.12"
 
             app:layout_constraintHorizontal_bias="0.03"
 
-            android:background="@drawable/button_background"
-            android:button="@drawable/back_button"
+            android:background="@drawable/back"
+            android:button="@null"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -113,12 +113,12 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
 
-            app:layout_constraintWidth_percent="0.11025"
+            android:button="@null"
+            app:layout_constraintWidth_percent="0.12"
 
             app:layout_constraintHorizontal_bias="0.97"
 
-            android:background="@drawable/button_background"
-            android:button="@drawable/fav_empty_icon"
+            android:background="@drawable/fav_empty_icon"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -156,8 +156,8 @@
         app:layout_constraintHeight_percent="0.05"
 
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/buyTicketButton"
+        app:layout_constraintStart_toStartOf="@id/buyTicketButton"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -170,7 +170,7 @@
 
             android:src="@drawable/placeholder"
 
-            app:layout_constraintHorizontal_bias="0.07"
+            app:layout_constraintHorizontal_bias="0"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -205,11 +205,11 @@
 
             android:padding="10dp"
 
-            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintHorizontal_bias="0.66"
 
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/detailsLocationText"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
@@ -221,6 +221,8 @@
 
             android:gravity="center"
 
+            app:layout_constraintHorizontal_bias="1"
+
             android:text="@string/loading_text"
             android:textColor="@color/welcome_back_text_color"
             android:textSize="16sp"
@@ -228,6 +230,7 @@
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/detailsDateIcon"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
 
