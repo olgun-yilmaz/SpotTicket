@@ -15,6 +15,9 @@ EventBox offers a seamless experience for discovering and managing events. Here 
 - Cloud-Based System – Access your account from any device.
 
 
+- Email-Based Account Services – Users receive emails for account verification, password resets, and other essential actions.
+
+
 - Event Details & Location – View event venues directly on the map using Google Maps API.
 
 
@@ -34,29 +37,13 @@ EventBox offers a seamless experience for discovering and managing events. Here 
 
 ## Screenshots
 
-<p align="center">
-  <img src="app/screenshots/on_boarding.jpg" width="150" height="300" />
-  <img src="app/screenshots/login.jpg" width="150" height="300" />
-  <img src="app/screenshots/sign_up.jpg" width="150" height="300" />
-  <img src="app/screenshots/forgot_password.jpg" width="150" height="300" />
+<p align="left">
+  <img src="app/screenshots/event_box.png" width="400" />
 </p>
 
-<p align="center">
-  <img src="app/screenshots/main.jpg" width="150" height="300" />
-  <img src="app/screenshots/my_events.jpg" width="150" height="300" />
-  <img src="app/screenshots/details.jpg" width="150" height="300" />
-  <img src="app/screenshots/event_location.jpg" width="150" height="300" />
-</p>
 
-<p align="center">
-  <img src="app/screenshots/search_by_city.jpg" width="150" height="300" />
-  <img src="app/screenshots/search_by_keyword.jpg" width="150" height="300" />
-  <img src="app/screenshots/settings.jpg" width="150" height="300" />
-  <img src="app/screenshots/profile.jpg" width="150" height="300" />
-</p>
-
-<p align="center">
-  <img src="app/screenshots/notifications.png" width="610"/>
+<p align="left">
+  <img src="app/screenshots/notifications.png" width="400"/>
 </p>
 
 
